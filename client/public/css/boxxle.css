@@ -1,0 +1,53 @@
+#game {
+    -webkit-transform-origin: center top;
+    -moz-transform-origin: center top;
+    -ms-transform-origin: center top;
+    -o-transform-origin: center top;
+    transform-origin: center top;
+    position: relative;
+    overflow: auto;
+    padding: 20px 5px 5px 5px;
+    border: 10px solid black;
+    margin: 0px auto;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #ccc;
+}
+
+#counter {
+  float: right;
+  display: inline-block;
+  border: 10px solid black;
+  margin: 0 300px 0 -50px;
+  max-width: 90%;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  background-color: #ccc;
+  color: black;
+}
+
+.current {
+  margin-top: 20px;
+}
+
+#winner {
+  text-align: center;
+  color: white;
+  font-size: 1.5em;
+}
+
+
+#container {
+  height: auto;
+  outline: none;
+  margin: 0 auto;
+}
+
+
+#container div, img {
+    background-color: black;
+    width: 32px;
+    height: 32px;
+    float: left;
+}
