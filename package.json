@@ -11,7 +11,7 @@
     "openshift"
   ],
     "scripts": {
-	  "start": "node src/www/index.js",
+	  "start": "node src/www",
 	  "dev": "gulp express-start",
 	  "test": "gulp test-all"
     },
@@ -107,5 +107,5 @@
     "typescript": "^1.7.5"
   },
   "bundleDependencies": [],
-  "main": "src/www/index.js"
+  "main": "src/www"
 }
