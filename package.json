@@ -11,7 +11,7 @@
     "openshift"
   ],
     "scripts": {
-	  "start": "node src/www",
+	  "start": "node src/www/index.js",
 	  "dev": "gulp express-start",
 	  "test": "gulp test-all"
     },

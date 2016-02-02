@@ -1,4 +1,3 @@
-#!/bin/env node
 "use strict";
 /* * * * * * * * * * * *
  * Module dependencies *
@@ -87,7 +86,7 @@ if (typeof ipaddress === "undefined") {
  * * * * * * * * * * * * * * * * * * * * * * * * * */
 if(ipaddress !==  "127.0.0.1") {
 	port = normalizePort( process.env.OPENSHIFT_NODEJS_PORT   ||
-    					  process.env.OPENSHIFT_INTERNAL_PORT || 8080 );
+						  process.env.OPENSHIFT_INTERNAL_PORT || 8080 );
 } else {          
 	port = normalizePort( process.env.PORT || 3000 );
 }
@@ -135,7 +134,7 @@ server = http.createServer( app );
  * Listen on provided port, on all network interfaces. *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-server.listen(port);
+server.listen(port, ipaddress, () => console.log( "Listening on " + ipaddress + ", server_port " + port ) );
 server.on('error', onError);
 server.on('listening', onListening);
 
