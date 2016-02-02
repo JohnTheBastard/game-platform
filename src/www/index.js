@@ -2,10 +2,10 @@
 console.log("Starting index.js ...");
 
 console.log("Environment variables",
-process.env.OPENSHIFT_NODEJS_IP,
-process.env.OPENSHIFT_INTERNAL_IP,
-process.env.OPENSHIFT_NODEJS_PORT,
-process.env.OPENSHIFT_INTERNAL_PORT);
+	process.env.OPENSHIFT_NODEJS_IP,
+	process.env.OPENSHIFT_INTERNAL_IP,
+	process.env.OPENSHIFT_NODEJS_PORT,
+	process.env.OPENSHIFT_INTERNAL_PORT);
 
 /* * * * * * * * * * * *
  * Module dependencies *
