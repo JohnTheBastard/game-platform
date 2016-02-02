@@ -36,7 +36,7 @@
   },
 
   "engines": {
-    "node": ">= 4.2.3",
+    "node": ">= 5.5.0",
     "npm": ">= 3.5.3"
   },
   "dependencies": {
@@ -94,8 +94,6 @@
     "gulp-ruby-sass": "^2.0.6",
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
-    "hapi": "^12.1.0",
-    "hbs": "^4.0.0",
     "jshint": "^2.8.0",
     "jshint-stylish": "^2.1.0",
     "lazypipe": "^1.0.1",
