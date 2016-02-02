@@ -1,4 +1,12 @@
 "use strict";
+console.log("Starting index.js ...");
+
+console.log("Environment variables",
+process.env.OPENSHIFT_NODEJS_IP,
+process.env.OPENSHIFT_INTERNAL_IP,
+process.env.OPENSHIFT_NODEJS_PORT,
+process.env.OPENSHIFT_INTERNAL_PORT);
+
 /* * * * * * * * * * * *
  * Module dependencies *
  * * * * * * * * * * * */
@@ -134,7 +142,8 @@ server = http.createServer( app );
  * Listen on provided port, on all network interfaces. *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-server.listen(port, ipaddress, () => console.log( "Listening on " + ipaddress + ", server_port " + port ) );
+//server.listen(port);
+server.listen(port, ipaddress, (error) => console.log( error, "Listening on " + ipaddress + ", server_port " + port ) );
 server.on('error', onError);
 server.on('listening', onListening);
 
