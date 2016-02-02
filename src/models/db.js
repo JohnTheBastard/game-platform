@@ -1,5 +1,5 @@
 const mongoose = require( 'mongoose' );
-const dbURI = process.env.MONGO_URI;
+const dbURI = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.LOCAL_MONGO_URI;
 
 mongoose.Promise = Promise;
 mongoose.connect(dbURI); 
