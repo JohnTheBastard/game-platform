@@ -6,9 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var db = require('./models/db');
-var blob = require('./models/blobs');
+//var blob = require('./models/blobs');
 var routes = require('./routes/index');
-var blobs = require('./routes/blobs');
+//var blobs = require('./routes/blobs');
 
 function createApp() {
 	
@@ -33,7 +33,7 @@ function createApp() {
 	app.use( express.static( publicPath ) );
 		
 	app.use('/', routes);
-	app.use('/blobs', blobs);	
+	//app.use('/blobs', blobs);	
 	
 	/* * * * * * * * * *
 	 * error handlers  *

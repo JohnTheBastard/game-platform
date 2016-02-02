@@ -50,7 +50,6 @@
     "express-restify-mongoose": "^2.4.1",
     "express-session": "^1.13.0",
     "formidable": "^1.0.17",
-    "fs": "0.0.2",
     "install": "^0.4.1",
     "jade": "^1.11.0",
     "kerberos": "0.0.17",
