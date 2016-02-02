@@ -12,7 +12,7 @@
   ],
     "scripts": {
 	  "start": "node src/www",
-	  "dev": "gulp express-start",
+	  "dev": "eval $(cat .env) node src/www",
 	  "test": "gulp test-all"
     },
   "author": {
