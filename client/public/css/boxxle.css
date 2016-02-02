@@ -8,17 +8,16 @@
     overflow: auto;
     padding: 20px 5px 5px 5px;
     border: 10px solid black;
-    margin: 0px auto;
     max-width: 100%;
     max-height: 100%;
     background-color: #ccc;
 }
 
 #counter {
-  float: right;
+
   display: inline-block;
   border: 10px solid black;
-  margin: 0 300px 0 -50px;
+
   max-width: 90%;
   text-align: center;
   width: 150px;
@@ -38,16 +37,22 @@
 }
 
 
-#container {
+.container-class {
   height: auto;
   outline: none;
   margin: 0 auto;
 }
 
 
-#container div, img {
+.container-class div, img {
     background-color: black;
     width: 32px;
     height: 32px;
     float: left;
+}
+
+#otherPlayerStatus {
+  position: absolute;
+  top: 200px;
+  right: 100px;
 }
