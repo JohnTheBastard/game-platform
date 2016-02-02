@@ -5,7 +5,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var db = require('./models/db');
+//var db = require('./models/db');
 //var blob = require('./models/blobs');
 var routes = require('./routes/index');
 //var blobs = require('./routes/blobs');
