@@ -1,0 +1,20 @@
+body {
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+}
+.login {
+    font-family: 'Open Sans', sans-serif;
+    width: 100%;
+    margin: 0 auto;
+}
+.login-select {
+  margin: 0 auto;
+}
+.twitter-login{
+  font-size: 2rem;
+  text-decoration: none;
+}
+.guest-login{
+  font-size: 2rem;
+  text-decoration: none;
+}

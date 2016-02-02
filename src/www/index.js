@@ -9,8 +9,8 @@ var http = require('http');
 var port;
 var server;
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * Normalize a port into a number, string, or false  *  
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Normalize a port into a number, string, or false  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -64,6 +64,7 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('server on: 3000 index.js');
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -86,6 +87,3 @@ var server = http.createServer( app );
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-
-
