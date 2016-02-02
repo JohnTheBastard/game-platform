@@ -5,7 +5,7 @@
     <title> Game Boyz | Final Project </title>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/boxxle.css">
+    <link rel="stylesheet" href="css/multiplayer.css">
   </head>
   <body>
     <header>
@@ -22,20 +22,27 @@
       </nav>
     </header>
 
-    <div id="gameInfo">
-      <div id='status'>
-        <div id="counter"> </div>
-        <div id="game">
-          <div id="gameBoard">
+    <div id="firstPlayerGameInfo">
+      <div id='firstPlayerStatus'>
+        <div id="firstPlayerCounter"> </div>
+        <div id="firstPlayerGame">
+          <div id="firstPlayerGameBoard">
             <!-- JS will put table here. -->
           </div>
         </div>
       </div>
   </div>
 
-    <div id='otherPlayerStatus'>
-
+  <div id="secondPlayerGameInfo">
+    <div id='secondPlayerStatus'>
+      <div id="secondPlayerCounter"> </div>
+      <div id="secondPlayerGame">
+        <div id="secondPlayerGameBoard">
+          <!-- JS will put table here. -->
+        </div>
+      </div>
     </div>
+</div>
 
     <footer>
       <p> &copy; 2015 Team Game Boyz </p>
@@ -44,21 +51,19 @@
 
     <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/levels.js"></script>
-    <script type="text/javascript" src="js/boxer.js"></script>
+    <script type="text/javascript" src="js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
     <script>
+
       var socket = io();
       var otherPlayerStatus = $('#otherPlayerStatus')
       socket.on('broad', function(data){
-        otherPlayerStatus.empty();
-        otherPlayerStatus.append(data);
+        secondPlayerKeyDown(data);
       });
-      function processInput(e) {
-        var status = document.getElementById('gameInfo').innerHTML;
-        e.preventDefault();
-        socket.emit('move', status );
+      function secondPlayerInput(key) {
+        socket.emit('move', key.keyCode );
       }
-      window.addEventListener("keydown", processInput, false);
+      window.addEventListener("keydown", secondPlayerInput, false);
 
     </script>
   </body>
