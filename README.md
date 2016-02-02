@@ -1,79 +1,28 @@
-Running a custom/latest Node[.js] version on Red Hat's OpenShift PaaS
-====================================================================
-This git repository is a sample Node application along with the
-"orchestration" bits to help you run the latest or a custom version
-of Node on Red Hat's OpenShift PaaS.
+# Node Playground
+Code 401: Advanced Software Development in Full-Stack JavaScript  
+Code Fellows, January 2016  
+Author: John Hearn  
 
+I wanted a set up where I can quickly and easily create a new javascript 
+file, execute it from the terminal, and see some console and/or browser output.
+This playground has all of my commonly-used modules installed, though you 
+probably won't need a lot of them most of the time.
 
-Selecting a Node version to install/use
----------------------------------------
+Getting started:
+After you fork or clone the repo to your machine, you probably want to  
+1. install the node modules listed in the package with `npm i`  
 
-To select the version of Node.js that you want to run, just edit or add
-a version to the .openshift/markers/NODEJS_VERSION file.
+2. checkout a new branch with `git checkout -b foo`  
+   you'll edit the code in `www/js/index.js` that allowed you to run your old
+   code, so this way you can always get it back by checking out the correct
+   branch for whatever you were working on before.   
 
-    Example: To install Node.js version 4.2.3, you can run:
-       $ echo 4.2.3 >> .openshift/markers/NODEJS_VERSION
+3. create a new js file to play with, e.g. `touch ./www/js/foo.js`
+   or copy one of the templates, such as `cp ./templates/module_template.js 
+   ./www/js/foo.js`
 
-    Or alternatively, edit the ```.openshift/markers/NODEJS_VERSION``` file
-    in your favorite editor aka vi ;^)
+4. blow away whatever is in `www/js/index.js` include your new js file, and put
+   your code to generate some output here.  
 
-
-The action_hooks in this application will use that NODEJS_VERSION marker
-file to download and extract that Node version if it is available on
-nodejs.org and will automatically set the paths up to use the node/npm
-binaries from that install directory.
-
-     See: .openshift/action_hooks/ for more details.
-
-    Note: The last non-blank line in the .openshift/markers/NODEJS_VERSION
-          file.determines the version it will install.
-
-
-Okay, now onto how can you get a custom Node.js version running
-on OpenShift.
-
-
-Steps to get a custom Node.js version running on OpenShift
-----------------------------------------------------------
-
-Create an account at http://openshift.redhat.com/
-
-Create a namespace, if you haven't already do so
-
-    rhc domain create <yournamespace>
-
-Create a nodejs application (you can name it anything via -a)
-
-    rhc app create -a palinode  -t nodejs-0.10
-
-Add this `github nodejs-custom-version-openshift` repository
-
-    cd palinode
-    git remote add upstream -m master git://github.com/ramr/nodejs-custom-version-openshift.git
-    git pull -s recursive -X theirs upstream master
-
-Optionally, specify the custom version of Node.js you want to run with
-(Default is v4.2.3).
-If you want to more later version of Node (example v4.2.42), you can change
-to that by just writing it to the end of the NODEJS_VERSION file and
-committing that change.
-
-    echo 4.2.42 >> .openshift/markers/NODEJS_VERSION
-    #
-    # Or alternatively, edit the .openshift/markers/NODEJS_VERSION file
-    # in your favorite editor aka vi ;^)
-    #
-    # Note: 4.2.42 doesn't exist (as yet) and is a fictitious version
-    #       mentioned here solely for demonstrative purposes.
-    #
-    git commit . -m 'use Node version 4.2.42'
-
-Then push the repo to OpenShift
-
-    git push
-
-That's it, you can now checkout your application at:
-
-    http://palinode-$yournamespace.rhcloud.com
-    ( See env @ http://palinode-$yournamespace.rhcloud.com/env )
-
+5. run your code with either `npm start`, `npm run webstart` or `npm test` as 
+   appropriate.  
