@@ -56,7 +56,6 @@
     <script>
 
       var socket = io();
-      var otherPlayerStatus = $('#otherPlayerStatus')
       socket.on('broad', function(data){
         secondPlayerKeyDown(data);
       });
