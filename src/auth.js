@@ -10,7 +10,7 @@ var Grant          = require('grant-express'),
     grant          = new Grant(require('../config.json'))
 var app            = express();
 
-//app.use(morgan('dev'))
+app.use(morgan('dev'))
 
 app.use(express.static( path.join(__dirname, '../client/public')));
 
