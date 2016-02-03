@@ -7,6 +7,7 @@ var bodyParser = require('body-parser')
 var methodOverride = require('method-override')
 var mongoose = require('mongoose')
 
+//changed
 mongoose.connect('mongodb://localhost/todos')
 
 var ToDoSchema = new mongoose.Schema({
