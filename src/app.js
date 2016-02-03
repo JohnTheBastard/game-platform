@@ -43,16 +43,13 @@ function createApp() {
 	/* * * * * * * * * *
 	 * authenitcation  *
 	 * * * * * * * * * */
-	app.use(grant);
-	app.use(login);	
-/*
 	app.use(session({
-		store: new MongoStore({db:'boxxle'}),
-		secret: 'very secret',
+		secret: process.env.OPENSHIFT_SECRET_TOKEN || process.env.APP_SECRET,
 		resave: true,
 		saveUninitialized: true
 	}));
-*/
+	app.use(grant);
+	app.use(login);	
 
 	
 	/* * * * * * * * * *
