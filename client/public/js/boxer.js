@@ -142,8 +142,8 @@ function GameBoard() {
     this.canvas = this.$canvasJQ[0];
     this.context = this.canvas.getContext("2d");
 
-
     this.$elementJQ = $('<section></section>').attr( 'id', "container" );
+    this.$elementJQ.addClass('container-class');
     this.element = this.$elementJQ[0];
     this.element.style.position = "absolute";
 

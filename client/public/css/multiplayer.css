@@ -1,4 +1,4 @@
-#game {
+#firstPlayerGame {
     -webkit-transform-origin: center top;
     -moz-transform-origin: center top;
     -ms-transform-origin: center top;
@@ -13,7 +13,7 @@
     background-color: #ccc;
 }
 
-#counter {
+#firstPlayerCounter {
 
   display: inline-block;
   border: 10px solid black;
@@ -51,8 +51,29 @@
     float: left;
 }
 
-#otherPlayerStatus {
-  position: absolute;
-  top: 200px;
-  right: 100px;
+#secondPlayerGame {
+    -webkit-transform-origin: center top;
+    -moz-transform-origin: center top;
+    -ms-transform-origin: center top;
+    -o-transform-origin: center top;
+    transform-origin: center top;
+    position: relative;
+    overflow: auto;
+    padding: 20px 5px 5px 5px;
+    border: 10px solid black;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #ccc;
+}
+
+#secondPlayerCounter {
+
+  display: inline-block;
+  border: 10px solid black;
+  max-width: 90%;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  background-color: #ccc;
+  color: black;
 }
