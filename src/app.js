@@ -1,14 +1,20 @@
 const express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const path = require('path');
+const favicon = require('serve-favicon');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var db = require('./models/db');
-var blob = require('./models/blobs');
-var routes = require('./routes/index');
-var blobs = require('./routes/blobs');
+const session      = require('express-session');
+const MongoStore   = require('connect-mongo')(session);
+const Grant        = require('grant-express'),
+      grant        = new Grant( require('./config/grantConfig') );
+
+const db = require('./models/db');
+const blob = require('./models/blobs');
+const routes = require('./routes/index');
+const blobs = require('./routes/blobs');
+const login = require( './routes/login' );
 
 function createApp() {
 	
@@ -23,7 +29,6 @@ function createApp() {
 	app.use( favicon( path.join( publicPath, 'img/favicon.ico' ) ) );
 	app.use( morgan('dev') );
 
-	
 	// parse application/x-www-form-urlencoded
 	app.use( bodyParser.urlencoded( { extended: false } ) );
 	// parse application/json
@@ -33,7 +38,19 @@ function createApp() {
 	app.use( express.static( publicPath ) );
 		
 	app.use('/', routes);
-	app.use('/blobs', blobs);	
+	app.use('/blobs', blobs);
+
+	/* * * * * * * * * *
+	 * authenitcation  *
+	 * * * * * * * * * */
+	app.use(session({
+		secret: process.env.OPENSHIFT_SECRET_TOKEN || process.env.APP_SECRET,
+		resave: true,
+		saveUninitialized: true
+	}));
+	app.use(grant);
+	app.use(login);	
+
 	
 	/* * * * * * * * * *
 	 * error handlers  *

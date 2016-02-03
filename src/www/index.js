@@ -1,11 +1,13 @@
 "use strict";
 console.log("Starting index.js ...");
-
-console.log("Environment variables",
-	process.env.OPENSHIFT_NODEJS_IP,
-	process.env.OPENSHIFT_INTERNAL_IP,
-	process.env.OPENSHIFT_NODEJS_PORT,
-	process.env.OPENSHIFT_INTERNAL_PORT);
+console.log("Environment variables:",
+	"\n	Port:", process.env.PORT,
+	"\n	Host:", process.env.HOST,
+	"\n	OS DNS", process.env.OPENSHIFT_APP_DNS,
+	"\n	OS Node IP", process.env.OPENSHIFT_NODEJS_IP,
+	"\n	Internal IP:", process.env.OPENSHIFT_INTERNAL_IP,
+	"\n	OS Port:", process.env.OPENSHIFT_NODEJS_PORT,
+	"\n	Internal Port:", process.env.OPENSHIFT_INTERNAL_PORT);
 
 /* * * * * * * * * * * *
  * Module dependencies *
