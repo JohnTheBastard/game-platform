@@ -4,7 +4,7 @@ const hostURI = hostname + ":" + port;
 
 module.exports = {
   "server": {
-    "protocol": "http",
+    "protocol": process.env.NODE_ENV!=="production"?"http":"https",
     "host": hostURI,
     "state": false
   },
