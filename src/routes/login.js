@@ -7,9 +7,6 @@ const router       = new (require( 'express' ).Router )();
 const path         = require('path');
 const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
-const Authenticat  = require('authenticat');
-const authenticat  = new Authenticat(mongoose.connection);
-router.use('/', authenticat.router);
 
 let loginPath = path.join(__dirname, '../views', 'login.html');
 console.log("loginPath:", loginPath);
