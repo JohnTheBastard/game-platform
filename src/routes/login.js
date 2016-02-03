@@ -21,6 +21,7 @@ router.get('/login', (req, res) => {
 mongoose.Promise = Promise;
 
 router.get('/twitter', (req, res, next) => {
+	if(req.query.error) next(req.query.error);
 	State.findOne({
 		twitter: {
 			screen_name: req.query.raw.screen_name,
