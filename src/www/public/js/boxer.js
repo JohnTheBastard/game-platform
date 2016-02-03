@@ -15,12 +15,12 @@ if ( mobile ) {
 
 var listenToKeystrokes = true;
 
-var wallURL = "../img/RedBrick.png";
-var floorURL = "../img/FloorTile.png";
-var crateURL = "../img/WoodenCrate.png";
-var crateOnDotURL = "../img/WoodenCrateOnDot.png"
-var dotsURL  = "../img/DotTile.png";
-var spriteURL = "../img/Sprite.gif";
+var wallURL = "img/RedBrick.png";
+var floorURL = "img/FloorTile.png";
+var crateURL = "img/WoodenCrate.png";
+var crateOnDotURL = "img/WoodenCrateOnDot.png"
+var dotsURL  = "img/DotTile.png";
+var spriteURL = "img/Sprite.gif";
 
 var pad = function (num, size) {
     var s = num+"";
@@ -48,7 +48,6 @@ function User() {
     this.currentLevel = 0;
     this.levelScores = { easy: [ ], hard: [ ] };
     this.difficulty = "easy";
-
     this.saveData = function() {
 	// localStorage.setItem("Name", JSON.stringify( this.name ) );
 	localStorage.setItem("Level", JSON.stringify( this.currentLevel ) );
@@ -363,7 +362,6 @@ function GameBoard() {
     }
 
 }
-
 var BOXER_GAME_MODULE = (function() {
     var my = {};
     my.$anchor = $( "#gameBoard" );
@@ -416,13 +414,13 @@ var BOXER_GAME_MODULE = (function() {
 	my.user.saveData();
     }
 
-    function addCurrentStatus() {
-	$('#counter').empty();
-	var status ='<p class="current"> Difficulty: ' + my.user.difficulty
-	    + '<p> Level: ' + (my.user.currentLevel + 1) + '<p> Steps: '
-	    + my.game.sprite.stepCount + '</p>';
-      $('#counter').append(status);
-    }
+  //   function addCurrentStatus() {
+	// $('#counter').empty();
+	// var status ='<p class="current"> Difficulty: ' + my.user.difficulty
+	//     + '<p> Level: ' + (my.user.currentLevel + 1) + '<p> Steps: '
+	//     + my.game.sprite.stepCount + '</p>';
+  //     $('#counter').append(status);
+  //   }
 
     my.processInput = function(key) {
 	var keyvalue = key.keyCode;
@@ -459,7 +457,7 @@ var BOXER_GAME_MODULE = (function() {
 		$('#gameplay').empty();
 	    }
 
-	    addCurrentStatus();
+	    //addCurrentStatus();
 	}
 
     }
