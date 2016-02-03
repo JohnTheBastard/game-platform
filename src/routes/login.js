@@ -11,7 +11,7 @@ const authenticat  = new Authenticat(mongoose.connection);
 router.use('/', authenticat.router);
 
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../client/public', 'login.html'));
+    res.sendFile(path.join(__dirname, '../views', 'login.html'));
 });
 
 mongoose.Promise = Promise;
@@ -82,10 +82,10 @@ function authenticated (req, res, next) {
   }
 
 router.get('/play', authenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, '../../client/public', 'play.html'));
+    res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
 });
 
 router.get('/guest', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/public', 'play.html'));
+      res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
 })
 module.exports = router;
