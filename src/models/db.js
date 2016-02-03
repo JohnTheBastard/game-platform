@@ -1,8 +1,10 @@
 const mongoose = require( 'mongoose' );
 const dbURI = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.LOCAL_MONGO_URI;
+console.log("dbURI: ", dbURI);
 
 mongoose.Promise = Promise;
 mongoose.connect(dbURI); 
+
 
 // CONNECTION EVENTS
 // When successfully connected
