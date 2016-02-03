@@ -1,5 +1,5 @@
 const jwt = require( 'jsonwebtoken' );
-const sekrit = process.env.APP_SECRET || 'changemenow';
+const sekrit = process.env.APP_SECRET || 'supersecret';
 
 module.exports = {
 	sign ( user ) {
