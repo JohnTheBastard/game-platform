@@ -1,17 +1,17 @@
 const mongoose = require( 'mongoose' );
 const dbURI = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.LOCAL_MONGO_URI;
-console.log("dbURI: ", dbURI);
 
 mongoose.Promise = Promise;
 mongoose.connect(dbURI); 
+
 
 
 // CONNECTION EVENTS
 // When successfully connected
 mongoose.connection.on('connected', function () {  
   console.log('Mongoose default connection open to ' + mongoose.connection.name 
-  				+ ' on host ' + mongoose.connection.host 
-  				+ ' on port ' + mongoose.connection.port);
+				+ ' on host ' + mongoose.connection.host 
+				+ ' on port ' + mongoose.connection.port);
 }); 
 
 // If the connection throws an error
