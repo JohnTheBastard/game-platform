@@ -39,6 +39,7 @@ logs
 config.js
 /data
 /db
+.env
 
 # OS generated files #
 ######################

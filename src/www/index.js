@@ -1,19 +1,28 @@
+"use strict";
+console.log("Starting index.js ...");
+
+console.log("Environment variables",
+	process.env.OPENSHIFT_NODEJS_IP,
+	process.env.OPENSHIFT_INTERNAL_IP,
+	process.env.OPENSHIFT_NODEJS_PORT,
+	process.env.OPENSHIFT_INTERNAL_PORT);
+
 /* * * * * * * * * * * *
  * Module dependencies *
  * * * * * * * * * * * */
-var app = require('../app');
-var debug = require('debug')('node-playground:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('debug')('game-platform:server');
+const http = require('http');
 
 // Defined below; declared here to prevent jshint warnings
-var port;
-var server;
+let port;
+let server;
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Normalize a port into a number, string, or false  *
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * Normalize a port into a number, string, or false  *  
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  let port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -36,7 +45,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -59,31 +68,84 @@ function onError(error) {
  * Event listener for HTTP server "listening" event. *
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  let addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log('server on: 3000 index.js');
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Get server IP address from environment and store. *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+let ipaddress = process.env.OPENSHIFT_NODEJS_IP ||
+                process.env.OPENSHIFT_INTERNAL_IP;
+
+if (typeof ipaddress === "undefined") {
+    //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
+    //  allows us to run/test the app locally.
+    console.warn('No OPENSHIFT_*_IP var, using 127.0.0.1');
+    ipaddress = "127.0.0.1";
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * *
  * Get port from environment and store in Express. *
  * * * * * * * * * * * * * * * * * * * * * * * * * */
-var port = normalizePort( process.env.PORT || '3000' );
+if(ipaddress !==  "127.0.0.1") {
+	port = normalizePort( process.env.OPENSHIFT_NODEJS_PORT   ||
+						  process.env.OPENSHIFT_INTERNAL_PORT || 8080 );
+} else {          
+	port = normalizePort( process.env.PORT || 3000 );
+}
 app.set('port', port);
 
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ *  terminator === the termination handler               *
+ *  Terminate server on receipt of the specified signal. *
+ *  @param {string} sig  Signal to terminate on.         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+let terminator = function(sig){
+    if (typeof sig === "string") {
+       console.log('%s: Received %s - terminating app ...',
+                   Date(Date.now()), sig);
+       process.exit(1);
+    }
+    console.log('%s: Node server stopped.', Date(Date.now()) );
+};
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *  Setup termination handlers (for exit and a list of signals). *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+let setupTerminationHandlers = function(){
+    //  Process on exit and signals.
+    process.on('exit', function() { terminator(); });
+
+    // Removed 'SIGPIPE' from the list - bugz 852598.
+    ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
+     'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
+    ].forEach(function(element, index, array) {
+        process.on(element, function() { terminator(element); });
+    });
+};
+setupTerminationHandlers();
 
 /* * * * * * * * * * * *
  * Create HTTP server. *
  * * * * * * * * * * * */
-var server = http.createServer( app );
+server = http.createServer( app );
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Listen on provided port, on all network interfaces. *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-server.listen(port);
+//server.listen(port);
+server.listen(port, ipaddress, (error) => console.log( error, "Listening on " + ipaddress + ", server_port " + port ) );
 server.on('error', onError);
 server.on('listening', onListening);
+
+
+
