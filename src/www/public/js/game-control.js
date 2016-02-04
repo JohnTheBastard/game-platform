@@ -5,7 +5,7 @@ app.controller('gameCtrl', function($scope, $element) {
     $scope.game = createBoxxer(el);
     console.log($scope.game.game);
 })
-// 
+//
 // app.controller('dataCtrl', function($scope, $resource) {
 //     var data = $resource('/api/v1/data/:id', {
 //         id: '@_id'

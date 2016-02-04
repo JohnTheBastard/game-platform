@@ -21,7 +21,7 @@ elif [ ${args[0]} = "test" ]; then
 			(( num++ ))
 			files=$files' --option '${!num}
 		done
-		
+
 		$( npm run gulp -- $files | tee /dev/tty )
 	fi
 elif [ ${args[0]} = "client" ]; then
