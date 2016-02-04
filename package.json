@@ -50,6 +50,7 @@
     "express-restify-mongoose": "^2.4.1",
     "express-session": "^1.13.0",
     "grant-express": "^3.5.5",
+    "jsonwebtoken": "^5.5.4",
     "kerberos": "0.0.17",
     "method-override": "^2.3.5",
     "mongodb": "^2.1.4",
@@ -59,8 +60,6 @@
     "serve-favicon": "^2.3.0",
     "socket.io": "^1.4.4",
     "twitter": "^1.2.5",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.4.0",
@@ -100,6 +99,8 @@
     "nodemon": "^1.8.1",
     "tiny-lr": "^0.2.1",
     "typescript": "^1.7.5"
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "bundleDependencies": [],
   "main": "src/www"
