@@ -36,40 +36,13 @@ var jsTransform = lazypipe()
 
     
 gulp.task( 'validate', function() {
-    return gulp.src( [ './src/*.js', './client/**/*.js',  '!./**/vendor/**'], {read: true} )
+    return gulp.src( [ './src/*.js',  '!./**/vendor/**'], {read: true} )
 			   .pipe( lint() );
 });
 
 
-gulp.task('serve', function() {
-    browserSync({
-		server: { baseDir: 'client/public' }
-	});
-	gulp.watch(['client/**'], reload);
-});
-
-gulp.task('bundle', ['validate'], function () {
-	// set up the browserify instance on a task basis
-	var b = browserify({
-		entries: './client/my_modules/index.js',
-		extensions: ['.js'],
-		debug: true })
-		.transform(babelify, {presets: ['es2015']});
-	
-	return b.bundle()
-		.pipe(source('bundle.js'))
-		.pipe(buffer())
-		.pipe(sourcemaps.init({loadMaps: true}))
-//		.pipe(uglify())
-		.on('error', gutil.log)
-		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./client/public/js'));
-});
-
-gulp.task( 'start', [ 'bundle', 'watch-js', 'serve' ]);
-
 gulp.task( 'run-tests', function() {
-    return gulp.src( [ './src/test/*Tests.js', './client/test/*Tests.js' ], {read: false} )
+    return gulp.src( [ './src/test/*Tests.js' ], {read: false} )
     .pipe( mocha( { reporter: 'spec',
 					useColors: true,
 					compilers: [ 'js:babel-core/register' ],
@@ -78,19 +51,15 @@ gulp.task( 'run-tests', function() {
 	} ) );
 });
 
-gulp.task('build', () => {
-	return gulp.src('./src/**/*.js')
-			   .pipe( lint() )
-			   .pipe( jsTransform() )
-			   .pipe(gulp.dest('dist'));
-});
-
-gulp.task( 'watch-js', function() {
-	gulp.watch(['./client/my_modules/**'], ['bundle']);
-});
+//gulp.task('build', () => {
+//	return gulp.src('./src/**/*.js')
+//			   .pipe( lint() )
+//			   .pipe( jsTransform() )
+//			   .pipe(gulp.dest('dist'));
+//});
     
 gulp.task( 'watch-test', function(){
-	gulp.watch( [ './client/my_modules/*.js', './src/**' ], [ 'run-tests' ] );
+	gulp.watch( [ './src/**' ], [ 'run-tests' ] );
 });
 
     
@@ -100,9 +69,9 @@ gulp.task( 'test-all', ['run-tests', 'validate', 'watch-test' ] );
 
 gulp.task( 'test-with-args', function() {
 	var testFiles = [];
-	// grab every other arg because we don't want the --option flags before each file
+	// grab every other arg because we don't want the --option flags that's before each file
 	for (var ii = 4; ii < process.argv.length; ii+=2 ) {
-		testFiles.push( './client/test/' + process.argv[ii] + 'Tests.js' );
+		testFiles.push( './src/test/' + process.argv[ii] + 'Tests.js' );
 	}
 	return gulp.src( testFiles, {read: false} )
 		.pipe( lint() )

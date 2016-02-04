@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "start": "node src/www",
-    "dev": "eval $(cat .env) node src/www",
+    "dev": "eval $(cat .env) gulp express-start",
     "test": "gulp test-all"
   },
   "author": {

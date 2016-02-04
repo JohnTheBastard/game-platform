@@ -8,7 +8,7 @@ args=("$@")
 #echo $1 $2 $3 ' -> echo $1 $2 $3'
 
 if [ $# -eq 0 ]; then
- 	$( npm start | tee /dev/tty )
+ 	$( npm run dev | tee /dev/tty )
 elif [ ${args[0]} = "test" ]; then
 	if [ $# -eq 1 ]; then
 		$( npm test | tee /dev/tty )
@@ -24,10 +24,8 @@ elif [ ${args[0]} = "test" ]; then
 		
 		$( npm run gulp -- $files | tee /dev/tty )
 	fi
-elif [ ${args[0]} = "client" ]; then
-	$( npm run client-start )
-elif [ ${args[0]} = "express" ]; then
-	$( npm run express-start | tee /dev/tty )
+elif [ ${args[0]} = "db" ]; then
+	$( mongod --dbpath ./data/db | tee /dev/tty )
 else
 	echo "invalid args"
 fi
