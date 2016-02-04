@@ -66,7 +66,6 @@ router.get('/twitter', (req, res, next) => {
         if (err) handleError(err);
         res.redirect(`/play?token=${token}`)
     }).catch(next);
-
 });
 
 function authenticated (req, res, next) {
@@ -88,4 +87,8 @@ router.get('/play', authenticated, (req, res) => {
 router.get('/guest', (req, res) => {
       res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
 })
+router.post( '/data', (req,res) => {
+    console.log(req.body);
+    res.send('posted to index:' + req.body);
+});
 module.exports = router;

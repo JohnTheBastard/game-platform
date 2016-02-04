@@ -5,7 +5,6 @@
     <title> Game Boyz | Final Project </title>
     <script type="text/javascript" src= "js/vendor/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/vendor/angular.min.js"></script>
-    <script type="text/javascript" src="js/game-control.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
     <link type="text/css" rel="stylesheet" href="css/boxxle.css">
     <link  type="text/css" rel="stylesheet" href="css/main.css">
@@ -43,15 +42,16 @@
     <div ng-controller='mainCtrl' id="status">
 
       <div id="counter">
-        {{ difficulty }}
-        {{ level }}
+          <!-- difficulty: {{ difficulty }}<br>
+          <div id="level">
+          Level: {{ level }}<br>
+        </div>
+          Steps: {{ stepCount }}<br> -->
       </div>
-      <!-- <div ng-controller="stepCount">
-      {{ stepCount }}
-    </div> -->
+
           <div id="game">
-              <div id="gameBoard">
-                  <!-- JS will put table here. -->
+              <div ng-controller='gameCtrl' id="gameBoard">
+                  <!-- Angular will put table here. -->
               </div>
           </div>
 
@@ -68,5 +68,6 @@
       </footer>
       <script type="text/javascript" src= "js/levels.js"></script>
       <script type="text/javascript" src= "js/boxer.js"></script>
+      <script type="text/javascript" src="js/game-control.js"></script>
   </body>
 </html>
