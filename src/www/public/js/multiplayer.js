@@ -52,57 +52,6 @@ function User() {
   };
   this.difficulty = "easy";
 
-  this.saveData = function() {
-    // localStorage.setItem("Name", JSON.stringify( this.name ) );
-    localStorage.setItem("Level", JSON.stringify(this.currentLevel));
-    localStorage.setItem("Scores", JSON.stringify(this.levelScores));
-    localStorage.setItem("Difficulty", JSON.stringify(this.difficulty));
-    localStorage.setItem("Initialized", JSON.stringify('true'));
-  }
-
-  this.loadData = function() {
-    this.name = JSON.parse(localStorage.getItem("Name"));
-    this.currentLevel = JSON.parse(localStorage.getItem("Level"));
-    this.levelScores = JSON.parse(localStorage.getItem("Scores"));
-    this.difficulty = JSON.parse(localStorage.getItem("Difficulty"));
-  }
-
-
-  this.init = function() {
-
-    // My attempt to use Boolean() to cast our localStorage string
-    // was returning true regardless of the value so I wrote my own.
-    function castToBool(stringToCast) {
-      if (stringToCast == "true") {
-        return true;
-      } else if (stringToCast == "false") {
-        return false;
-      } else {
-        console.log("You're attempt to cast " + castToBool + " to a boolean failed.")
-      }
-    }
-
-    this.isInitialized = castToBool(JSON.parse(localStorage.getItem("Initialized")));
-    console.log(localStorage.getItem("Initialized"));
-    console.log(this.isInitialized);
-
-
-    if (!this.isInitialized) {
-      console.log("false = " + this.isInitialized + " I'm not initialized.");
-      for (var ii = 0; ii < levelData.easy.length; ii++) {
-        this.levelScores.easy[ii] = 0;
-      }
-      for (var ii = 0; ii < levelData.hard.length; ii++) {
-        this.levelScores.hard[ii] = 0;
-      }
-      this.saveData();
-    } else {
-      console.log("true = " + this.isInitialized + " I'm already initialized.");
-      removeClass();
-      this.loadData();
-      welcomeBack();
-    }
-  }
 }
 
 function Coord(tileType, tileURL) {
@@ -376,7 +325,6 @@ var BOXER_GAME_MODULE = (function() {
 
   my.initializeGameBoard = function(anchor,user,game, gameID, containerID) {
     anchor.empty();
-    user.init();
     game.init(levelData[user.difficulty][user.currentLevel]);
     anchor.append(game.$elementJQ);
     anchor.append(game.$canvasJQ);
@@ -402,11 +350,7 @@ var BOXER_GAME_MODULE = (function() {
     $('#gameplay').append(winMessage);
 
     console.log("break: advanceTheUser ");
-    if (user.levelScores[user.difficulty][user.currentLevel] > game.sprite.stepCount && 0 < user.levelScores[user.difficulty][user.currentLevel]) {
-      user.levelScores[user.difficulty][user.currentLevel] = game.sprite.stepCount;
-    }
     if (user.currentLevel < (levelData[user.difficulty].length - 1)) {
-      user.levelScores[user.difficulty][user.currentLevel] = game.sprite.stepCount;
       user.currentLevel++;
     } else if (user.difficulty == "easy" && user.currentLevel == levelData[user.difficulty].length - 1) {
       user.difficulty = "hard";
@@ -416,8 +360,6 @@ var BOXER_GAME_MODULE = (function() {
     } else {
       console.log("Error: level index out of bounds");
     }
-
-    user.saveData();
   }
 
   function addCurrentStatus(user,game,counterID) {
@@ -427,7 +369,10 @@ var BOXER_GAME_MODULE = (function() {
   }
 
 
-  my.processInput = function(user,game,counterID) {
+  my.processInput = function(anchor,user,game, gameID, containerID,counterID) {
+    var currentAnchor = anchor;
+    var currentGameID = gameID;
+    var currentContainer = containerID;
     var currentGame = game;
     var currentUser = user;
     var playerCounterId = counterID;
@@ -441,7 +386,7 @@ var BOXER_GAME_MODULE = (function() {
 
       if (currentGame.winCondition) {
         my.advanceTheUser(currentUser,currentGame);
-        my.initializeGameBoard();
+        my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
       } else if (listenToKeystrokes) {
         if (keyvalue == 37) {
           console.log("left");
@@ -471,7 +416,10 @@ var BOXER_GAME_MODULE = (function() {
     }
   }
 
-  my.secondPlayerInput = function(user,game,counterID) {
+  my.secondPlayerInput = function(anchor,user,game, gameID, containerID,counterID) {
+    var currentAnchor = anchor;
+    var currentGameID = gameID;
+    var currentContainer = containerID;
     var currentGame = game;
     var currentUser = user;
     var playerCounterId = counterID;
@@ -480,23 +428,19 @@ var BOXER_GAME_MODULE = (function() {
       var xy = [(currentGame.sprite.x / cellWidth), (currentGame.sprite.y / cellWidth)];
       if (currentGame.winCondition) {
         my.advanceTheUser(currentUser,currentGame);
-        my.initializeGameBoard();
+        my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
       } else if (listenToKeystrokes) {
         if (keyvalue == 37) {
-          console.log("left");
-          deltaXY = [-1, 0];
+          deltaXY = [-1, 0]; // move left
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 38) {
-          console.log("up");
-          deltaXY = [0, -1];
+          deltaXY = [0, -1]; // move up
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 39) {
-          console.log("right");
-          deltaXY = [1, 0];
+          deltaXY = [1, 0]; // move right
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 40) {
-          console.log("down");
-          deltaXY = [0, 1];
+          deltaXY = [0, 1]; // move down
           currentGame.tryToMove(xy, deltaXY);
         }
 
@@ -510,8 +454,8 @@ var BOXER_GAME_MODULE = (function() {
     }
   }
 
-  my.keyDownEvent = my.processInput(my.firstPlayer,my.firstPlayerGame, "#firstPlayerCounter" );
-  secondPlayerKeyDown = my.secondPlayerInput(my.secondPlayer,my.secondPlayerGame, "#secondPlayerCounter");
+  my.keyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
+  secondPlayerKeyDown = my.secondPlayerInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter");
 
   my.scaleGameBoard = function(anchor,game) {
     var buffer = ($('header').height() + $('footer').height()) * 2;

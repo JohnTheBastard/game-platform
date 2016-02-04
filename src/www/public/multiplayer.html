@@ -55,13 +55,15 @@
     <script src='/socket.io/socket.io.js'></script>
     <script>
 
-      var socket = io();
-      socket.on('broad', function(data){
+      var clientSocket = io('/multiplayer');
+      clientSocket.on('broad', function(data){
         secondPlayerKeyDown(data);
       });
+
       function secondPlayerInput(key) {
-        socket.emit('move', key.keyCode );
+        clientSocket.emit('move', key.keyCode );
       }
+      
       window.addEventListener("keydown", secondPlayerInput, false);
 
     </script>

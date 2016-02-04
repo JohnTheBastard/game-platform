@@ -43,10 +43,10 @@
       <br>
       <br>
       <input id='submit' type='button' ng-click='createRoom()' value='Create Room'>
-
-      <h4> Rooms Available: </h4> <br>
+      <h6> {{error}} </h6>
+      <h4> Rooms Available: </h4>
       <div ng-repeat='room in rooms'>
-        <a href='multiplayer.html'> {{room.name}} </a>
+        <div ng-click='joinRoom(room)'> {{room.name}} </div>
       </div>
 
     <footer>
