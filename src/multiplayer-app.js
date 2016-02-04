@@ -10,7 +10,6 @@ var io = require('socket.io')(server);
 var portNumber = 8080;
 var peopleID = {};
 var rooms = [];
-var roomNumber = 0;
 var roomName = {};
 
 
@@ -57,12 +56,14 @@ roomIO.on('connection', function(serverSocket) {
   })
 
   serverSocket.on('userJoined', function(data){
-    console.log(data);
     roomName[data.name].users++;
     if(roomName[data.name].users === 2) {
-      rooms.splice(data.$index,1);
+      rooms = rooms.filter(function(object){
+        if(object.name !== data.name) {
+          return object;
+        }
+      });
       roomName[data.name] = null;
-      roomNumber--;
       serverSocket.emit('rooms',rooms);
       serverSocket.broadcast.emit('rooms',rooms);
     }
