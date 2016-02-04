@@ -8,9 +8,11 @@ var path = require('path');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var portNumber = 8080;
-var people = [];
-var rooms = {};
-var clients = {};
+var peopleID = {};
+var rooms = [];
+var roomNumber = 0;
+var roomName = {};
+
 
 var publicPath = path.join( __dirname, '../client/public/' );
 app.use( express.static(publicPath) );
@@ -25,20 +27,49 @@ server.listen(app.get('port'), function(){
   console.log('server is conncected')
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
+var multiplayerIO = io.of('/multiplayer');
+var roomIO = io.of('/rooms');
 
-  socket.on('move', function(data){
-    socket.broadcast.emit('broad',data);
+multiplayerIO.on('connection', function(serverSocket) {
+  console.log('someone connected on multiplayer');
+  serverSocket.on('move', function(data){
+    serverSocket.broadcast.emit('broad',data);
   })
 
-  socket.on('hello', function(data){
-    people.push(data);
-    socket.emit('there', people);
+  serverSocket.on('disconnect', function(){
+    console.log('user disconnected from multiplayer');
+  });
+})
+
+roomIO.on('connection', function(serverSocket) {
+  console.log('user connected to rooms namespace');
+  serverSocket.emit('rooms', rooms);
+
+  serverSocket.on('newRoom', function(data) {
+    if(!roomName[data.name]) {
+      roomName[data.name] = data;
+      rooms.push(data);
+      serverSocket.emit('rooms', rooms);
+      serverSocket.broadcast.emit('rooms',rooms);
+    } else {
+      serverSocket.emit('existingRoom');
+    }
   })
 
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
+  serverSocket.on('userJoined', function(data){
+    console.log(data);
+    roomName[data.name].users++;
+    if(roomName[data.name].users === 2) {
+      rooms.splice(data.$index,1);
+      roomName[data.name] = null;
+      roomNumber--;
+      serverSocket.emit('rooms',rooms);
+      serverSocket.broadcast.emit('rooms',rooms);
+    }
+  });
+
+  serverSocket.on('disconnect', function(){
+    console.log('user disconnected from rooms');
   });
 
 });
