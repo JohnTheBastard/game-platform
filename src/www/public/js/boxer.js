@@ -95,6 +95,7 @@ function User() {
             for (var ii = 0; ii < levelData.hard.length; ii++) {
                 this.levelScores.hard[ii] = 0;
             }
+
             this.saveData();
         } else {
             console.log("true = " + this.isInitialized + " I'm already initialized.");
@@ -364,11 +365,10 @@ function GameBoard() {
     }
 
 }
-
+var dataArr = []
 function createBoxxer(anchor) {
     var my = {};
     my.$anchor = anchor;
-    //my.$anchor = $( "#gameBoard" );
     my.user = new User();
     my.game = new GameBoard();
 
@@ -432,6 +432,7 @@ function createBoxxer(anchor) {
         if (my.game.winCondition) {
             my.advanceTheUser();
             my.initializeGameBoard();
+            dataArr.push(my);
         } else if (listenToKeystrokes) {
             if (keyvalue == 37) {
                 console.log("left");
@@ -477,12 +478,10 @@ function createBoxxer(anchor) {
     }
 
     my.scaleGameBoard();
-
     my.eventListeners = function() {
         window.addEventListener("keydown", my.processInput, false);
         window.addEventListener("resize", my.scaleGameBoard, false);
     }
     my.eventListeners();
-
     return my;
 }

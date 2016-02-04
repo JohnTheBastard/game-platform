@@ -1,4 +1,5 @@
-const db           = require('../models/db')
+'use strict';
+const db           = require('../models/db');
 const User         = require('../models/user');
 const State        = require('../models/state');
 const token        = require( '../models/token' );
@@ -6,17 +7,18 @@ const router       = new (require( 'express' ).Router )();
 const path         = require('path');
 const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
-const Authenticat  = require('authenticat');
-const authenticat  = new Authenticat(mongoose.connection);
-router.use('/', authenticat.router);
+
+let loginPath = path.join(__dirname, '../views', 'login.html');
+console.log("loginPath:", loginPath);
 
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views', 'login.html'));
+    res.sendFile(loginPath);
 });
 
 mongoose.Promise = Promise;
 
 router.get('/twitter', (req, res, next) => {
+<<<<<<< HEAD
   State.findOne({
       twitter: {
           screen_name: req.query.raw.screen_name,
@@ -66,29 +68,85 @@ router.get('/twitter', (req, res, next) => {
         if (err) handleError(err);
         res.redirect(`/play?token=${token}`)
     }).catch(next);
+=======
+	if(req.query.error) next(req.query.error);
+	State.findOne({
+		twitter: {
+			screen_name: req.query.raw.screen_name,
+			user_id: req.query.raw.user_id,
+		}
+	})
+	.then(state => {
+		if (state) return state;
+		return new State ({
+			twitter: {
+				screen_name: req.query.raw.screen_name,
+				user_id: req.query.raw.user_id,
+			},
+			username: req.query.raw.screen_name,
+			boxxle: {
+				difficulty: 'easy',
+				stepsAt: '10',
+				position: ['test position']
+			},
+		}).save();
+	})
+	.then((user, err) => {
+		if(err) handleError(err);
+	}).catch((err) => {
+		console.log(err);
+	});
+
+	User.findOne({
+		twitter: {
+			screen_name: req.query.raw.screen_name,
+			user_id: req.query.raw.user_id,
+		}
+	})
+	.then((user) => {
+		if (user) return user;
+		return new User({
+			twitter: {
+				screen_name: req.query.raw.screen_name,
+				user_id: req.query.raw.user_id,
+			}
+		}).save();
+	})
+	.then((user) => {
+		return token.sign(user);
+	})
+	.then((token, err) => {
+		if (err) handleError(err);
+		res.redirect(`/play?token=${token}`)
+	}).catch(next);
+>>>>>>> 5628aa4bce8508247e97d70920c168ee20fc6415
 });
 
 function authenticated (req, res, next) {
-    var accessToken = req.headers.token || req.query.token;
-    if (accessToken) {
-      token.verify(accessToken).then(verified => {
-          req.userId = verified.userId;
-          next();
-        }).catch(next);
-    } else {
-      res.redirect('/login');
-    }
-  }
+	let accessToken = req.headers.token || req.query.token;
+	if (accessToken) {
+		token.verify(accessToken).then(verified => {
+		req.userId = verified.userId;
+		next();
+		}).catch(next);
+	} else {
+		res.redirect('/login');
+	}
+}
 
 router.get('/play', authenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
+	res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
 });
 
 router.get('/guest', (req, res) => {
+<<<<<<< HEAD
       res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
 })
 router.post( '/data', (req,res) => {
     console.log(req.body);
     res.send('posted to index:' + req.body);
+=======
+	res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
+>>>>>>> 5628aa4bce8508247e97d70920c168ee20fc6415
 });
 module.exports = router;
