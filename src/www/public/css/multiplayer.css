@@ -1,3 +1,16 @@
+
+#firstPlayerGameInfo {
+  position: absolute;
+  top: 200px;
+  left: 5px;
+}
+
+#secondPlayerGameInfo {
+  position: absolute;
+  top: 200px;
+  right: 5px;
+}
+
 #firstPlayerGame {
     -webkit-transform-origin: center top;
     -moz-transform-origin: center top;
@@ -14,10 +27,8 @@
 }
 
 #firstPlayerCounter {
-
   display: inline-block;
   border: 10px solid black;
-
   max-width: 90%;
   text-align: center;
   width: 150px;
@@ -67,7 +78,6 @@
 }
 
 #secondPlayerCounter {
-
   display: inline-block;
   border: 10px solid black;
   max-width: 90%;
@@ -76,4 +86,11 @@
   height: 150px;
   background-color: #ccc;
   color: black;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  right: 0;
+  left: 0;
 }
