@@ -39,18 +39,16 @@
       <p class='playParagraphs'> Press Space Bar to clear these paragraphs. Enjoy the Game! </p>
     </div>
 
-    <div ng-controller='mainCtrl' id="status">
+    <div ng-controller='gameCtrl' id="status">
 
       <div id="counter">
-          <!-- difficulty: {{ difficulty }}<br>
-          <div id="level">
-          Level: {{ level }}<br>
-        </div>
-          Steps: {{ stepCount }}<br> -->
+        <p>{{level}}</p>
+        <p>{{difficulty}}</p>
+        <p>{{steps}}</p>
       </div>
 
           <div id="game">
-              <div ng-controller='gameCtrl' id="gameBoard">
+              <div id="gameBoard">
                   <!-- Angular will put table here. -->
               </div>
           </div>

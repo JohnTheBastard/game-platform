@@ -2,19 +2,18 @@
     var difficulty = JSON.parse(localStorage.getItem("Difficulty"));
     var scores = JSON.parse(localStorage.getItem("Scores"));
 
-    var app = angular.module('boxxleApp', [])
+    var app = angular.module('boxxleApp', []);
+
 
     app.controller('gameCtrl', function($scope, $element) {
-      $scope.game = createBoxxer($element);
-      console.log($scope.game.user.currentLevel);
-      console.log($scope.game.user);
-    //  $scope.stepCount = 0 || $scope.game.game.sprite ;
-    });
-
-    app.controller('mainCtrl', function($scope) {
-        $scope.difficulty = difficulty;
-        $scope.level = JSON.parse(localStorage.getItem("Level"));
-        $scope.$watch('level', function() {
-          $scope.level = JSON.parse(localStorage.getItem("Level"))
-        });
+      var el = angular.element(document.querySelector('#gameBoard'));
+      $scope.game = createBoxxer(el);
+      $scope.level = $scope.game.user.currentLevel;
+      $scope.difficulty = $scope.game.user.difficulty;
+      $scope.steps = $scope.game.user.difficulty;
+      // $scope.$watch('level', function(newValue, oldValue) {
+      //   console.log('something changed!');
+      //   console.log(newValue);
+      //   $scope.level = $scope.game.user.currentLevel;
+      // });
     });

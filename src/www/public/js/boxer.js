@@ -370,7 +370,6 @@ function createBoxxer(anchor) {
     my.$anchor = anchor; //$('#gameBoard')
     my.user = new User();
     my.game = new GameBoard();
-
     my.initializeGameBoard = function() {
         my.$anchor.empty();
         my.user.init();
@@ -389,9 +388,8 @@ function createBoxxer(anchor) {
     window.onload = function() {
         my.initializeGameBoard();
         my.game.draw();
+        //addCurrentStatus();
     }
-
-
     my.advanceTheUser = function() {
         var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1) +
             ' in ' + my.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
@@ -415,15 +413,16 @@ function createBoxxer(anchor) {
         }
         my.user.saveData();
     }
+    //var app = angular.module('boxxleApp')
+
 
       function addCurrentStatus() {
     $('#counter').empty();
-    var status ='<p class="current"> Difficulty: ' + my.user.difficulty
-        + '<p> Level: ' + (my.user.currentLevel + 1) + '<p> Steps: '
+    var status ='<p class="current"> Difficulty: ' + my.user.difficulty +'</p>'
+        + '<p id="level"> Level: ' + (my.user.currentLevel) + '</p><p> Steps: '
         + my.game.sprite.stepCount + '</p>';
         $('#counter').append(status);
       }
-
     my.processInput = function(key) {
         var keyvalue = key.keyCode;
         var xy = [(my.game.sprite.x / cellWidth), (my.game.sprite.y / cellWidth)];
@@ -437,19 +436,19 @@ function createBoxxer(anchor) {
             my.initializeGameBoard();
         } else if (listenToKeystrokes) {
             if (keyvalue == 37) {
-                console.log("left");
+                //console.log("left");
                 deltaXY = [-1, 0];
                 my.game.tryToMove(xy, deltaXY);
             } else if (keyvalue == 38) {
-                console.log("up");
+                //console.log("up");
                 deltaXY = [0, -1];
                 my.game.tryToMove(xy, deltaXY);
             } else if (keyvalue == 39) {
-                console.log("right");
+                //console.log("right");
                 deltaXY = [1, 0];
                 my.game.tryToMove(xy, deltaXY);
             } else if (keyvalue == 40) {
-                console.log("down");
+                //console.log("down");
                 deltaXY = [0, 1];
                 my.game.tryToMove(xy, deltaXY);
             }
@@ -458,7 +457,6 @@ function createBoxxer(anchor) {
             } else if (keyvalue == 32) {
                 $('#gameplay').empty();
             };
-            addCurrentStatus();
         }
     }
 
