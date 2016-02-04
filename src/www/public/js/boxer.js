@@ -364,8 +364,7 @@ function GameBoard() {
     }
 
 }
-var dataArr = []
-function createBoxxer(anchor) {
+function createBoxer(anchor) {
     var my = {};
     my.$anchor = anchor;
     my.user = new User();
