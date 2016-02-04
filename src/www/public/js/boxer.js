@@ -53,6 +53,7 @@ function User() {
     this.difficulty = "easy";
 
     this.saveData = function() {
+
         // localStorage.setItem("Name", JSON.stringify( this.name ) );
         localStorage.setItem("Level", JSON.stringify(this.currentLevel));
         localStorage.setItem("Scores", JSON.stringify(this.levelScores));
@@ -368,6 +369,13 @@ function GameBoard() {
 var dataArr = []
 function createBoxxer(anchor) {
     var my = {};
+    my.saveData = function(user) {
+      angular.module('boxxleApp').controller('dataCtrl', function($scope) {
+        $scope.level = user.currentLevel;
+        $scope.levelScores = user.levelScores;
+        $scope.difficulty = user.difficulty;
+      });
+    }
     my.$anchor = anchor;
     my.user = new User();
     my.game = new GameBoard();
@@ -390,6 +398,8 @@ function createBoxxer(anchor) {
     window.onload = function() {
         my.initializeGameBoard();
         addCurrentStatus()
+        var output = '<div ng-controller="dataCtrl">{{level}}{{levelScores}}{{difficulty}}</div>'
+        $('#target').append(output);
     }
     my.advanceTheUser = function() {
         var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1) +
@@ -458,6 +468,7 @@ function createBoxxer(anchor) {
                 $('#gameplay').empty();
             }
             addCurrentStatus();
+            my.saveData(my.user);
         }
 
     }
