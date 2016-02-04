@@ -15,12 +15,12 @@ if (mobile) {
 
 var listenToKeystrokes = true;
 
-var wallURL = "img/RedBrick.png";
-var floorURL = "img/FloorTile.png";
-var crateURL = "img/WoodenCrate.png";
-var crateOnDotURL = "img/WoodenCrateOnDot.png"
-var dotsURL = "img/DotTile.png";
-var spriteURL = "img/Sprite.gif";
+var wallURL = "../img/RedBrick.png";
+var floorURL = "../img/FloorTile.png";
+var crateURL = "../img/WoodenCrate.png";
+var crateOnDotURL = "../img/WoodenCrateOnDot.png"
+var dotsURL = "../img/DotTile.png";
+var spriteURL = "../img/Sprite.gif";
 
 var pad = function(num, size) {
     var s = num + "";
@@ -44,7 +44,6 @@ var welcomeBack = function() {
 
 }
 
-
 function User() {
     this.currentLevel = 0;
     this.levelScores = {
@@ -52,6 +51,7 @@ function User() {
         hard: []
     };
     this.difficulty = "easy";
+
     this.saveData = function() {
         // localStorage.setItem("Name", JSON.stringify( this.name ) );
         localStorage.setItem("Level", JSON.stringify(this.currentLevel));
@@ -145,8 +145,8 @@ function GameBoard() {
     this.canvas = this.$canvasJQ[0];
     this.context = this.canvas.getContext("2d");
 
+
     this.$elementJQ = $('<section></section>').attr('id', "container");
-    this.$elementJQ.addClass('container-class');
     this.element = this.$elementJQ[0];
     this.element.style.position = "absolute";
 
@@ -367,9 +367,11 @@ function GameBoard() {
 
 function createBoxxer(anchor) {
     var my = {};
-    my.$anchor = anchor; //$('#gameBoard')
+    my.$anchor = anchor;
+    //my.$anchor = $( "#gameBoard" );
     my.user = new User();
     my.game = new GameBoard();
+
     my.initializeGameBoard = function() {
         my.$anchor.empty();
         my.user.init();
@@ -387,8 +389,7 @@ function createBoxxer(anchor) {
     // so I'm probably doing this wrong.
     window.onload = function() {
         my.initializeGameBoard();
-        my.game.draw();
-        //addCurrentStatus();
+        addCurrentStatus()
     }
     my.advanceTheUser = function() {
         var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1) +
@@ -411,18 +412,16 @@ function createBoxxer(anchor) {
         } else {
             console.log("Error: level index out of bounds");
         }
+
         my.user.saveData();
     }
-    //var app = angular.module('boxxleApp')
 
-
-      function addCurrentStatus() {
-    $('#counter').empty();
-    var status ='<p class="current"> Difficulty: ' + my.user.difficulty +'</p>'
-        + '<p id="level"> Level: ' + (my.user.currentLevel) + '</p><p> Steps: '
-        + my.game.sprite.stepCount + '</p>';
+    function addCurrentStatus() {
+        $('#counter').empty();
+        var status = '<p id="difficulty"> Difficulty: ' + my.user.difficulty + '<p id="level"> Level: ' + (my.user.currentLevel + 1) + '<p id="steps"> Steps: ' + my.game.sprite.stepCount + '</p>';
         $('#counter').append(status);
-      }
+    }
+
     my.processInput = function(key) {
         var keyvalue = key.keyCode;
         var xy = [(my.game.sprite.x / cellWidth), (my.game.sprite.y / cellWidth)];
@@ -431,33 +430,35 @@ function createBoxxer(anchor) {
         key.preventDefault();
 
         if (my.game.winCondition) {
-          console.log('win condition: ' + my.game.winCondition);
             my.advanceTheUser();
             my.initializeGameBoard();
         } else if (listenToKeystrokes) {
             if (keyvalue == 37) {
-                //console.log("left");
+                console.log("left");
                 deltaXY = [-1, 0];
                 my.game.tryToMove(xy, deltaXY);
             } else if (keyvalue == 38) {
-                //console.log("up");
+                console.log("up");
                 deltaXY = [0, -1];
                 my.game.tryToMove(xy, deltaXY);
             } else if (keyvalue == 39) {
-                //console.log("right");
+                console.log("right");
                 deltaXY = [1, 0];
                 my.game.tryToMove(xy, deltaXY);
             } else if (keyvalue == 40) {
-                //console.log("down");
+                console.log("down");
                 deltaXY = [0, 1];
                 my.game.tryToMove(xy, deltaXY);
             }
+
             if (keyvalue == 13) {
                 my.game.draw();
             } else if (keyvalue == 32) {
                 $('#gameplay').empty();
-            };
+            }
+            addCurrentStatus();
         }
+
     }
 
     my.scaleGameBoard = function() {
@@ -482,5 +483,6 @@ function createBoxxer(anchor) {
         window.addEventListener("resize", my.scaleGameBoard, false);
     }
     my.eventListeners();
+
     return my;
-};
+}

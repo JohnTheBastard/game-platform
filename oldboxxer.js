@@ -364,9 +364,10 @@ function GameBoard() {
 
 }
 
-var BOXER_GAME_MODULE = (function() {
+function createBoxxer(anchor) {
     var my = {};
-    my.$anchor = $( "#gameBoard" );
+    my.$anchor = anchor;
+    //my.$anchor = $( "#gameBoard" );
     my.user = new User();
     my.game = new GameBoard( );
 
@@ -387,7 +388,10 @@ var BOXER_GAME_MODULE = (function() {
 	my.initializeGameBoard();
     }
 
-
+    // var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1) +
+    //     ' in ' + my.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
+    // $('#gameplay').empty();
+    // $('#gameplay').append(winMessage);
     my.advanceTheUser = function () {
 	var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1)  +
 	    ' in ' + my.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
