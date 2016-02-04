@@ -9,6 +9,7 @@ const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
 
 let loginPath = path.join(__dirname, '../views', 'login.html');
+
 console.log("loginPath:", loginPath);
 
 router.get('/login', (req, res) => {
