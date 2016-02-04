@@ -9,6 +9,9 @@ const session      = require('express-session');
 const MongoStore   = require('connect-mongo')(session);
 const Grant        = require('grant-express'),
       grant        = new Grant( require('./config/grantConfig') );
+      
+const multiplayer = require('./routes/multiplayer');
+const rooms = require('./routes/rooms');
 
 const db = require('./models/db');
 const blob = require('./models/blobs');
@@ -38,7 +41,7 @@ function createApp() {
 	app.use( express.static( publicPath ) );
 		
 	app.use('/', routes);
-	app.use('/blobs', blobs);
+//	app.use('/blobs', blobs);
 
 	/* * * * * * * * * *
 	 * authenitcation  *
@@ -51,6 +54,11 @@ function createApp() {
 	app.use(grant);
 	app.use(login);	
 
+	/* * * * * * * * * *
+	 * multiplayer     *
+	 * * * * * * * * * */
+	app.use('/multiplayer', multiplayer());
+	app.use('/rooms', rooms());
 	
 	/* * * * * * * * * *
 	 * error handlers  *

@@ -8,6 +8,8 @@ console.log("Environment variables:",
 	"\n	Internal IP:", process.env.OPENSHIFT_INTERNAL_IP,
 	"\n	OS Port:", process.env.OPENSHIFT_NODEJS_PORT,
 	"\n	Internal Port:", process.env.OPENSHIFT_INTERNAL_PORT);
+	
+const startIO = require('../server-socketio');
 
 /* * * * * * * * * * * *
  * Module dependencies *
@@ -138,6 +140,10 @@ setupTerminationHandlers();
  * Create HTTP server. *
  * * * * * * * * * * * */
 server = http.createServer( app );
+
+/* start websockets */
+startIO(server);
+
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
