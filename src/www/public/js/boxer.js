@@ -364,9 +364,9 @@ function GameBoard() {
 
 }
 
-var BOXER_GAME_MODULE = (function() {
+function createBoxer(anchor) {
     var my = {};
-    my.$anchor = $( "#gameBoard" );
+    my.$anchor = anchor //$( "#gameBoard" );
     my.user = new User();
     my.game = new GameBoard( );
 
@@ -488,4 +488,4 @@ var BOXER_GAME_MODULE = (function() {
     my.eventListeners();
 
     return my;
-})();
+};
