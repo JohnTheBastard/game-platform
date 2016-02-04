@@ -8,13 +8,6 @@ var methodOverride = require('method-override')
 var mongoose = require('mongoose')
 
 //changed
-mongoose.connect('mongodb://localhost/todos')
-
-var ToDoSchema = new mongoose.Schema({
-  text: { type: String, required: true },
-  done: { type: Boolean, default: false }
-})
-var ToDoModel = mongoose.model('ToDo', ToDoSchema)
 
 var app = express()
 app.set('port', process.env.PORT || 3000);
@@ -22,12 +15,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(methodOverride('X-HTTP-Method-Override'))
-restify.serve(app, ToDoModel, {
-  // exclude: 'text,done'
-})
+// restify.serve(app, ToDoModel, {
+//   // exclude: 'text,done'
+// })
+app.use(express.static( path.join(__dirname + '/www/public')));
 
-app.use(function (req, res) {
-  res.sendFile(path.join(__dirname, '../src/views/play', 'play.html'));
+app.use('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'www/public/', 'play.html'));
+  console.log(__dirname);
 })
 
 http.createServer(app).listen(app.get('port'), function () {
