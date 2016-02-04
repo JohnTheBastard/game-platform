@@ -431,20 +431,16 @@ var BOXER_GAME_MODULE = (function() {
         my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
       } else if (listenToKeystrokes) {
         if (keyvalue == 37) {
-          console.log("left");
-          deltaXY = [-1, 0];
+          deltaXY = [-1, 0]; // move left
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 38) {
-          console.log("up");
-          deltaXY = [0, -1];
+          deltaXY = [0, -1]; // move up
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 39) {
-          console.log("right");
-          deltaXY = [1, 0];
+          deltaXY = [1, 0]; // move right
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 40) {
-          console.log("down");
-          deltaXY = [0, 1];
+          deltaXY = [0, 1]; // move down
           currentGame.tryToMove(xy, deltaXY);
         }
 
