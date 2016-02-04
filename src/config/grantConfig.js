@@ -1,6 +1,5 @@
 const port = process.env.OPENSHIFT_NODEJS_PORT || process.env.OPENSHIFT_INTERNAL_PORT || process.env.PORT;
-const hostname = process.env.OPENSHIFT_NODEJS_IP || process.env.OPENSHIFT_INTERNAL_IP || process.env.HOST;
-const hostURI = hostname + ":" + port;
+const hostURI = process.env.OPENSHIFT_APP_DNS || (process.env.HOST + ":" + port);
 
 module.exports = {
   "server": {
