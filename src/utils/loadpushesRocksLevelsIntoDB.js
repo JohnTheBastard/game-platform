@@ -1,7 +1,7 @@
 "use strict";
-const db       = require('./db');
 const mongoose = require('mongoose');
-const LevelModel = require('./pushesRocksLevelSchema');
+const db       = require('../models/db');
+const LevelModel = require('../models/pushesRocksLevelSchema');
 const levelData = require('../games/pushesRocks/pushesRocksLevels.json');
 
 
