@@ -15,6 +15,7 @@ if ( mobile ) {
 
 var listenToKeystrokes = true;
 
+
 var wallURL = "../img/RedBrick.png";
 var floorURL = "../img/FloorTile.png";
 var crateURL = "../img/WoodenCrate.png";
@@ -68,9 +69,9 @@ function User() {
 		// My attempt to use Boolean() to cast our localStorage string
 		// was returning true regardless of the value so I wrote my own.
 		function castToBool(stringToCast) {
-		    if( stringToCast == "true" ) {
+		    if( stringToCast === "true" ) {
 				return true;
-		    } else if( stringToCast == "false" ) {
+		    } else if( stringToCast === "false" ) {
 				return false;
 		    } else {
 				console.log("You're attempt to cast " + castToBool + " to a boolean failed." );
@@ -84,10 +85,10 @@ function User() {
 	
 		if ( !this.isInitialized ) {
 		    console.log("false = " + this.isInitialized + " I'm not initialized.");
-		    for( var ii=0; ii < oldLevelData.easy.length; ii++ ) {
+		    for( ii=0; ii < oldLevelData.easy.length; ii++ ) {
 				this.levelScores.easy[ii] = 0;
 		    }
-		    for( var ii=0; ii < oldLevelData.hard.length; ii++ ) {
+		    for( ii=0; ii < oldLevelData.hard.length; ii++ ) {
 				this.levelScores.hard[ii] = 0;
 		    }
 		    this.saveData();
@@ -109,7 +110,7 @@ function Coord(tileType, tileURL) {
     this.hasCrate = false;
 
     this.isADot = function() {
-		if ( this.tile == "dot" ) {
+		if ( this.tile === "dot" ) {
 		    return true;
 		} else {
 		    return false;
@@ -149,12 +150,12 @@ function GameBoard() {
      * * * * Member Methods  * * * *
      * * * * * * * * * * * * * * * */
     this.clearTheBoard = function() {
-		for ( var ii = 0; ii < this.coordinates.length; ii++ ) {
+		for ( ii = 0; ii < this.coordinates.length; ii++ ) {
 		    console.log("clearing board");
 		    delete this.coordinates[ii];
 		}
 		this.coordinates = [];
-		for ( var ii = 0; ii < this.crates.length; ii++ ) {
+		for ( ii = 0; ii < this.crates.length; ii++ ) {
 		    delete this.crates[ii];
 		}
 		this.crates = [];
@@ -190,7 +191,7 @@ function GameBoard() {
 		// Clear any existing data
 		this.clearTheBoard();
 	
-		for ( var ii = 0; ii < this.boardData.dimension; ii++ ) {
+		for ( ii = 0; ii < this.boardData.dimension; ii++ ) {
 		    for ( var jj = 0; jj < this.boardData.dimension; jj++ ) {
 			this.coordinates.push( [ ] );
 			this.coordinates[jj].push( new Coord( "wall", wallURL ) );
@@ -199,16 +200,16 @@ function GameBoard() {
 		}
 	
 		// update floor tiles
-		for ( var ii = 0; ii < this.boardData.floor.length; ii++ ) {
+		for ( ii = 0; ii < this.boardData.floor.length; ii++ ) {
 		    this.updateCell(this.boardData.floor[ii], "floor", floorURL, false );
 		}
 		// update dot tiles
-		for ( var ii = 0; ii < this.boardData.dots.length; ii++ ) {
+		for ( ii = 0; ii < this.boardData.dots.length; ii++ ) {
 		    this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false );
 		}
 	
 		// make our crates
-		for ( var ii = 0; ii < this.boardData.crate.length; ii++ ) {
+		for ( ii = 0; ii < this.boardData.crate.length; ii++ ) {
 		    this.crates.push( new Crate( this.boardData.crate[ii] ) );
 		    this.crates[ii].onDot =
 			this.coordinates[ this.boardData.crate[ii][0] ][ this.boardData.crate[ii][1] ].isADot();
@@ -226,8 +227,8 @@ function GameBoard() {
     };
 
     this.findCrate = function( xy ) {
-		for (var ii = 0; ii < this.crates.length; ii++ ) {
-		    if ( xy[0] == this.crates[ii].x && xy[1] == this.crates[ii].y ) {
+		for (ii = 0; ii < this.crates.length; ii++ ) {
+		    if ( xy[0] === this.crates[ii].x && xy[1] === this.crates[ii].y ) {
 			return ii;
 		    }
 		}
@@ -236,12 +237,12 @@ function GameBoard() {
 
     this.checkWinCondition = function() {
 		var onDotCounter = 0;
-		for (var ii = 0; ii < this.crates.length; ii++ ) {
+		for (ii = 0; ii < this.crates.length; ii++ ) {
 		    if ( this.crates[ii].onDot ) {
 				onDotCounter++;
 		    }
 		}
-		if ( onDotCounter == this.crates.length ) {
+		if ( onDotCounter === this.crates.length ) {
 		    return true;
 		} else {
 		    return false;
@@ -266,7 +267,7 @@ function GameBoard() {
     // draw our sprite and crates to the canvas
     this.draw = function() {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height );
-		for ( var ii = 0; ii < this.crates.length; ii++ ) {
+		for (ii = 0; ii < this.crates.length; ii++ ) {
 			this.context.drawImage( this.crates[ii].$crateImg[0], this.crates[ii].x, this.crates[ii].y );
 		}
 		this.context.drawImage(this.sprite.$img[0], this.sprite.x, this.sprite.y );
@@ -324,28 +325,29 @@ function GameBoard() {
 		var dy = deltaXY[1];
 	
 		var nextLocation = this.coordinates[ x + dx ][ y + dy ];
-	
+		var twoAway;
+		
 		// Make sure two spaces away is on the board
 		if ( ( 0 <= x + 2*dx && x + 2*dx < this.boardData.dimension ) &&
 			 ( 0 <= y + 2*dy && y + 2*dy < this.boardData.dimension ) ) {
-			var twoAway = this.coordinates[ x + 2*dx ][ y + 2*dy ];
+			twoAway = this.coordinates[ x + 2*dx ][ y + 2*dy ];
 			twoAway.exists = true;
 		} else {
 			// Two spaces away would be off the board
-			var twoAway = {};
+			twoAway = {};
 			twoAway.exists = false;
 		}
 	
-		if ( nextLocation.tile == "wall" ) {
+		if ( nextLocation.tile === "wall" ) {
 			return;
 		} else if ( nextLocation.hasCrate ) {
-			if ( twoAway.exists && !twoAway.hasCrate && twoAway.tile != "wall" ) {
+			if ( twoAway.exists && !twoAway.hasCrate && twoAway.tile !== "wall" ) {
 				// move with crate
 				this.move(deltaXY, true);
 		    }
 		    return;
-		} else if ( ( nextLocation.tile == "floor" ) ||
-					( nextLocation.tile == "dot") ) {
+		} else if ( ( nextLocation.tile === "floor" ) ||
+					( nextLocation.tile === "dot") ) {
 			this.move(deltaXY, false);
 			return;
 		} else {
@@ -392,12 +394,12 @@ var BOXER_GAME_MODULE = (function() {
 		if( my.user.currentLevel < ( levelData[my.user.difficulty].length - 1 ) ) {
 			my.user.levelScores[my.user.difficulty][my.user.currentLevel ] = my.game.sprite.stepCount;
 			my.user.currentLevel++;
-		} else if( my.user.difficulty == "easy"
-				&& my.user.currentLevel == levelData[my.user.difficulty].length -1) {
+		} else if( my.user.difficulty === "easy"
+				&& my.user.currentLevel === levelData[my.user.difficulty].length -1) {
 			my.user.difficulty = "hard";
 			my.user.currentLevel = 0;
-		} else if( my.user.difficulty == "hard"
-				&& my.user.currentLevel == levelData[my.user.difficulty].length - 1 ) {
+		} else if( my.user.difficulty === "hard"
+				&& my.user.currentLevel === levelData[my.user.difficulty].length - 1 ) {
 			console.log("CONGRATULATIONS: You beat all the levels!" );
 		} else {
 			console.log("Error: level index out of bounds");
@@ -425,27 +427,27 @@ var BOXER_GAME_MODULE = (function() {
 			my.advanceTheUser();
 			my.initializeGameBoard();
 		} else if ( listenToKeystrokes ) {
-			if (keyvalue == 37) {
+			if (keyvalue === 37) {
 				console.log("left");
 				deltaXY = [ -1, 0 ];
 				my.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue == 38) {
+		    } else if (keyvalue === 38) {
 				console.log("up");
 				deltaXY = [ 0, -1 ];
 				my.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue == 39) {
+		    } else if (keyvalue === 39) {
 				console.log("right");
 				deltaXY = [ 1, 0 ];
 				my.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue == 40) {
+		    } else if (keyvalue === 40) {
 				console.log("down");
 				deltaXY = [ 0, 1 ];
 				my.game.tryToMove( xy, deltaXY );
 		    }
 		
-		    if (keyvalue == 13) {
+		    if (keyvalue === 13) {
 				my.game.draw();
-		    } else if (keyvalue == 32) {
+		    } else if (keyvalue === 32) {
 				$('#gameplay').empty();
 		    }
 		    addCurrentStatus();
