@@ -1,20 +1,26 @@
-/* global angular */
 var app = angular.module('boxxleApp', []);
-app.controller('gameCtrl', function($scope, $element) {
+app.controller('gameCtrl', function($scope, $element, $http) {
     var el = angular.element(document.querySelector('#gameBoard'));
-    $scope.game = createBoxxer(el);
+	var game = createBoxxer(el);
+    $scope.game = game;
     console.log($scope.game.game);
-})
-//
-// app.controller('dataCtrl', function($scope, $resource) {
-//     var data = $resource('/api/v1/data/:id', {
-//         id: '@_id'
-//     })
-//     $scope.state = Todo.query()
-//     $scope.addData = function() {
-//         var state = new State();
-//         todo.$save(function() {
-//             $scope.state.push(state)
-//         })
-//     }
-// })
+    
+/*
+	game.onDone = function(endData) {
+		$scope.saving = true;
+		$http.post('/data', endData).then(res => {
+			var newLevel = res.data;
+			$scope.saving = false;
+			game = createBoxxer($element, getLevel(newLevel) );
+		})
+	}
+*/
+    
+/*
+    setTimeout(function(){ 
+		console.log($scope.game.user);
+		console.log($scope.game.user.currentLevel);
+	}, 30000);
+*/
+    
+});
