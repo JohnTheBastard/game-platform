@@ -6,6 +6,10 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 
 
 
+	getLevel = function(levelID) {
+		return levelID;
+	};
+
 
 	game.onDone = function(endData) {		
 		$scope.saving = true;
@@ -18,16 +22,5 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 
 	};
 
-	
-	//game.onDone( {"foo": "bar" } );
-
-
-    
-/*
-    setTimeout(function(){ 
-		console.log($scope.game.user);
-		console.log($scope.game.user.currentLevel);
-	}, 30000);
-*/
     
 });
