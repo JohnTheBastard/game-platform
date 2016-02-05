@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/multiplayer.css">
-    <script type="text/javascript" src="js/vendor/angular.min.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/multiplayer.css">
+    <script type="text/javascript" src="../js/vendor/angular.min.js"></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script src='js/vendor/socket.js'></script>
-    <script type="text/javascript" src="js/rooms.js"></script>
+    <script src='../js/vendor/socket.js'></script>
+    <script type="text/javascript" src="../js/rooms.js"></script>
   </head>
   <body ng-app="listRoomsApp">
     <header>
@@ -44,15 +44,22 @@
       <br>
       <input id='submit' type='button' ng-click='createRoom()' value='Create Room'>
       <h6> {{error}} </h6>
-      <h4> Rooms Available: </h4>
-      <div ng-repeat='room in rooms'>
-        <a ng-click='joinRoom(room)' href='/multiplayer/{{room.name}}'> {{room.name}} </a>
-      </div>
+      <h3>Rooms Available: </h3>
+      <ul ng-repeat='room in rooms'>
+        <li>
+          <a ng-click='joinRoom(room)' href='/multiplayer/{{room.name}}'>Room Name: {{room.name}} </a>
+          <ul>
+            <li> Difficulty: {{room.diff}} </li>
+            <li> Number of Levels to Win: {{room.levels}} </li>
+            <li> Number of Users in Room: {{room.users}} </li>
+          </ul>
+        </li>
+      </ul>
 
     <footer>
       <p> &copy; 2015 Team Game Boyz </p>
     </footer>
 
-    <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/vendor/jquery-2.1.4.min.js"></script>
   </body>
 </html>

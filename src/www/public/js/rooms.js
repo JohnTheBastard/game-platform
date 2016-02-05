@@ -10,7 +10,6 @@ angular.module('listRoomsApp', ['btford.socket-io'])
   .controller('mainCtrl',['$scope','socket',function($scope,clientSocket) {
     $scope.rooms = [];
     $scope.error = '';
-    $scope.$watch('rooms');
     $scope.createRoom = function(){
       $scope.error = '';
       var roomData = {};

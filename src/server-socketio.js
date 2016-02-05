@@ -4,7 +4,7 @@ module.exports = function startIO(server) {
 	const io = require('socket.io')(server);
 
 	let peopleID = {};
-	let rooms = [];
+	let createdRooms = [];
 	let roomName = {};
 	let multiplayerIO = io.of('/multiplayer');
 	let roomIO = io.of('/rooms');
@@ -25,40 +25,37 @@ module.exports = function startIO(server) {
 		serverSocket.on('move', function(data){
 			serverSocket.broadcast.to(multiplayerRooms[data.roomName].name).emit('broad',data.keyCode);
 		});
-		serverSocket.on('disconnect', function(){
-			console.log(serverSocket.adapter.rooms);
-			//roomName[data.name] = null;
+		serverSocket.on('disconnect', function() {
 			console.log('user disconnected from multiplayer');
 		});
 	});
 
 	roomIO.on('connection', function(serverSocket) {
 		console.log('user connected to rooms namespace');
-		serverSocket.emit('rooms', rooms);
+		serverSocket.emit('rooms', createdRooms);
 
 		serverSocket.on('newRoom', function(data) {
 			if(!roomName[data.name]) {
 				roomName[data.name] = data;
-				rooms.push(data);
-				serverSocket.emit('rooms', rooms);
-				serverSocket.broadcast.emit('rooms',rooms);
+				createdRooms.push(data);
+				serverSocket.emit('rooms', createdRooms);
+				serverSocket.broadcast.emit('rooms',createdRooms);
 			} else {
 				serverSocket.emit('existingRoom');
 			}
 		});
 
-		serverSocket.on('userJoined', function(data){
+		serverSocket.on('userJoined', function(data) {
 			roomName[data.name].users++;
 			if(roomName[data.name].users === 2) {
-				rooms = rooms.filter(function(object){
-				if(object.name !== data.name) {
-					return object;
-				}
-			});
-
-			serverSocket.emit('rooms',rooms);
-			serverSocket.broadcast.emit('rooms',rooms);
+				createdRooms = createdRooms.filter(function(object){
+					if(object.name !== data.name) {
+						return object;
+					}
+				});
 			}
+			serverSocket.emit('rooms',createdRooms);
+			serverSocket.broadcast.emit('rooms',createdRooms);
 		});
 
 		serverSocket.on('disconnect', function(){
