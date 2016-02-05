@@ -1,17 +1,57 @@
 <html>
+
 <head>
-<link rel="stylesheet" type="text/css" href="css/login.css">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
-  <body>
-  <main class='login'>
-  <section class='logo'>
-    <img id='gameBoy' src='img/gameboyLogin.png'></img>
-  </section>
-    <section class='login-select'>
-    <a class='twitter-login' href="/connect/twitter"><img src='img/twit.svg'></img>Twitter login</a><br>
-    <a class='guest-login' href="/guest"><img src='img/prsn.svg'></img>Guest</a>
-    </section>
-  </main>
-  </body>
+<header>
+    <nav id="navBar">
+        <h1>Boxxle</h1>
+        <ul>
+            <li class="sub" id="homeNav"><a href="index.html"><i class="fa fa-home fa-lg"></i> Home</a>
+                <aside></aside>
+                <ul>
+                    <li><a href="#">about</a></li>
+                    <li><a href="#">contact</a></li>
+                </ul>
+            </li>
+            <li class="sub" id="blogNav"><a href="#"><i class="fa fa-edit fa-lg"></i> Game</a>
+                <aside></aside>
+                <ul>
+                    <li id="resetToAllArticles">
+                        <span>all</span>
+                    </li>
+                    <li class="sub" id="authors">
+                        <span>author</span>
+                        <ul>
+                        </ul>
+                    </li>
+                    <li class="sub" id="categories">
+                        <span>category</span>
+                        <ul>
+                        </ul>
+                    </li>
+                    <li class="sub" id="dates">
+                        <span>year</span>
+                        <ul>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </nav>
+</header>
+<body>
+        <section class='logo'>
+            <img id='gameBoy' src='img/boxxlelogo.svg'></img>
+        </section>
+        <section class='login-select'>
+            <a class='twitter-login' href="/connect/twitter">
+                <img src='img/twit.svg'></img>Twitter login</a>
+            <a class='guest-login' href="/guest">
+                <img src='img/prsn.svg'></img>Guest</a>
+        </section>
+</body>
+
 </html>
