@@ -4,12 +4,9 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 	var game = createBoxxer(el);
     $scope.game = game;
 
-
-
 	getLevel = function(levelID) {
 		return levelID;
 	};
-
 
 	game.onDone = function(endData) {		
 		$scope.saving = true;

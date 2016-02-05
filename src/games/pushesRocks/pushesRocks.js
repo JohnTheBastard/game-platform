@@ -85,10 +85,10 @@ function User() {
 	
 		if ( !this.isInitialized ) {
 		    console.log("false = " + this.isInitialized + " I'm not initialized.");
-		    for( ii=0; ii < levelData.easy.length; ii++ ) {
+		    for( ii=0; ii < oldLevelData.easy.length; ii++ ) {
 				this.levelScores.easy[ii] = 0;
 		    }
-		    for( ii=0; ii < levelData.hard.length; ii++ ) {
+		    for( ii=0; ii < oldLevelData.hard.length; ii++ ) {
 				this.levelScores.hard[ii] = 0;
 		    }
 		    this.saveData();
