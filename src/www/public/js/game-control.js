@@ -8,7 +8,7 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 		return levelID;
 	};
 
-	game.onDone = function(endData) {		
+	game.onDone = function(endData) {
 		$scope.saving = true;
 		$http.post('/data', endData).then(function(res){
 			//console.log(res.data);
@@ -19,5 +19,5 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 
 	};
 
-    
+
 });

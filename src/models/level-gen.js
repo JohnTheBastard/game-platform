@@ -1,25 +1,28 @@
-var db       = require('./db');
-var mongoose = require('mongoose');
-var levelData = require('../games/pushesRocks/pushesRocksLevels.json');
+'use strict';
+const db       = require('./db');
+const mongoose = require('mongoose');
+const levelData = require('../games/pushesRocks/pushesRocksLevels.json');
 
 function createLevels() {
     var Schema = mongoose.Schema;
 
     var Level = new Schema({
-		identifier: String,
-		difficulty: String,
-		data: Object,
+      identifier: String,
+      difficulty: String,
+      data: Object,
     });
 
     var level = mongoose.model('level', Level);
-
     //drop collection to prevent duplicates before gen
-    var rm = level.find().remove({});
+    let rm = level.find().remove({});
     rm.exec();
-	
-    for (var ii = 0; ii < levelData.length; ii++) {
-	    console.log(levelData[ii]);
-        var easyLevel = new level(levelData[ii]);
+
+    for (let ii = 0; ii < levelData.length; ii++) {
+        var easyLevel = new level({
+            identifier: levelData[ii].identifier,
+            difficulty: levelData[ii].difficulty,
+            data: levelData[ii].data
+        });
         easyLevel.save();
     }
 }
