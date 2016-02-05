@@ -13,22 +13,22 @@ function createLevels() {
     level = mongoose.model('level', Level);
 
     //drop collection to prevent duplicates before gen
-    var rm = level.find().remove({});
+    let rm = level.find().remove({});
     rm.exec();
 
-    for (var ii = 0; ii < levelData.easy.length; ii++) {
+    for (let ii = 0; ii < levelData.easy.length; ii++) {
         var easyLevel = new level({
             difficulty: 'easy',
             level: levelData.easy[ii]
         });
         easyLevel.save();
     }
-    for (var ii = 0; ii < levelData.hard.length; ii++) {
-        var hardLevel = new level({
+    for (let ii = 0; ii < levelData.hard.length; ii++) {
+        let hardLevel = new level({
             difficulty: 'hard',
             level: levelData.hard[ii]
         });
         hardLevel.save();
-    };
-};
+    }
+}
 createLevels();
