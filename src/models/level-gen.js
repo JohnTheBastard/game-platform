@@ -2,7 +2,8 @@
 const db       = require('./db');
 const mongoose = require('mongoose');
 const levelData = require('./level-data');
-
+const pushesRocksLevels = require('./pushesRocksLevels.json');
+console.log(pushesRocksLevels);
 function createLevels() {
     var Schema = mongoose.Schema;
 
