@@ -13,6 +13,8 @@ const Grant        = require('grant-express'),
 const multiplayer = require('./routes/multiplayer');
 const rooms = require('./routes/rooms');
 
+const data = require('./routes/data');
+
 
 const db = require('./models/db');
 const blob = require('./models/blobs');
@@ -54,6 +56,8 @@ function createApp() {
 	}));
 	app.use(grant);
 	app.use(login);	
+	
+	app.use("/data", data);
 
 	/* * * * * * * * * *
 	 * multiplayer     *

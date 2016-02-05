@@ -424,6 +424,7 @@ function createBoxxer(anchor) {
 		key.preventDefault();
 		
 		if ( my.game.winCondition ) {
+			my.onDone({"goo":"gob"});
 			my.advanceTheUser();
 			my.initializeGameBoard();
 		} else if ( listenToKeystrokes ) {

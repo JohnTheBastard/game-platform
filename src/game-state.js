@@ -6,6 +6,8 @@ var restify = require('express-restify-mongoose');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
+const data = require('./routes/data');
+
 
 var app = express();
 app.set('port', process.env.PORT || 3000);
@@ -18,6 +20,9 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // })
 app.use(express.static( path.join(__dirname + '/www/public')));
 
+
+
+app.use("/data", data);
 app.use('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'www/public/', 'play.html'));
 });
