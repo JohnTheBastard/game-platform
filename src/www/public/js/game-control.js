@@ -4,10 +4,7 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 	var game = createBoxxer(el);
     $scope.game = game;
 
-
-
-
-	game.onDone = function(endData) {		
+	game.onDone = function(endData) {
 		$scope.saving = true;
 		$http.post('/data', endData).then(function(res){
 			//console.log(res.data);
@@ -17,17 +14,4 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 		}, function(err){ console.log(err); } );
 
 	};
-
-	
-	//game.onDone( {"foo": "bar" } );
-
-
-    
-/*
-    setTimeout(function(){ 
-		console.log($scope.game.user);
-		console.log($scope.game.user.currentLevel);
-	}, 30000);
-*/
-    
 });
