@@ -1,55 +1,53 @@
 'use strict';
-const db           = require('../models/db');
-const User         = require('../models/user');
-const State        = require('../models/state');
-const token        = require( '../models/token' );
-const router       = new (require( 'express' ).Router )();
-const path         = require('path');
-const bodyParser   = require('body-parser');
-const mongoose     = require('mongoose');
+const db            = require('../models/db');
+const User          = require('../models/user');
+const State         = require('../models/state');
+const token         = require('../models/token');
+const authenticated = require('./authroute');
+const router        = new (require( 'express' ).Router )();
+const path          = require('path');
+const bodyParser    = require('body-parser');
+const mongoose      = require('mongoose');
 
 let loginPath = path.join(__dirname, '../views', 'login.html');
-console.log("loginPath:", loginPath);
 
 router.get('/login', (req, res) => {
     res.sendFile(loginPath);
 });
-
 mongoose.Promise = Promise;
-
 router.get('/twitter', (req, res, next) => {
-	if(req.query.error) next(req.query.error);
-	State.findOne({
-		twitter: {
-			screen_name: req.query.raw.screen_name,
-			user_id: req.query.raw.user_id,
-		}
-	})
-	.then(state => {
-		if (state) return state;
-		return new State ({
-			twitter: {
-				screen_name: req.query.raw.screen_name,
-				user_id: req.query.raw.user_id,
-			},
-			username: req.query.raw.screen_name,
-			boxxle: {
-				difficulty: 'easy',
-				stepsAt: '10',
-				position: ['test position']
-			},
-		}).save();
-	})
-	.then((user, err) => {
-		if(err) handleError(err);
-	}).catch((err) => {
-		console.log(err);
-	});
-	
+	// if(req.query.error) next(req.query.error);
+	// State.findOne({
+	// 	twitter: {
+	// 		screen_name: req.query.raw.screen_name,
+	// 		user_id: req.query.raw.user_id,
+	// 	}
+	// })
+	// .then(state => {
+	// 	if (state) return state;
+	// 	return new State ({
+	// 		twitter: {
+	// 			screen_name: req.query.raw.screen_name,
+	// 			user_id: req.query.raw.user_id,
+	// 		},
+	// 		username: req.query.raw.screen_name,
+	// 		boxxle: {
+	// 			difficulty: 'easy',
+	// 			stepsAt: '10',
+	// 			position: ['test position']
+	// 		},
+	// 	}).save();
+	// })
+	// .then((user, err) => {
+	// 	if(err) handleError(err);
+	// }).catch((err) => {
+	// 	console.log(err);
+	// });
+
 	User.findOne({
 		twitter: {
 			screen_name: req.query.raw.screen_name,
-			user_id: req.query.raw.user_id,
+			user_id: req.query.raw.user_id
 		}
 	})
 	.then((user) => {
@@ -57,7 +55,7 @@ router.get('/twitter', (req, res, next) => {
 		return new User({
 			twitter: {
 				screen_name: req.query.raw.screen_name,
-				user_id: req.query.raw.user_id,
+				user_id: req.query.raw.user_id
 			}
 		}).save();
 	})
@@ -70,23 +68,5 @@ router.get('/twitter', (req, res, next) => {
 	}).catch(next);
 });
 
-function authenticated (req, res, next) {
-	let accessToken = req.headers.token || req.query.token;
-	if (accessToken) {
-		token.verify(accessToken).then(verified => {
-		req.userId = verified.userId;
-		next();
-		}).catch(next);
-	} else {
-		res.redirect('/login');
-	}
-}
 
-router.get('/play', authenticated, (req, res) => {
-	res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
-});
-
-router.get('/guest', (req, res) => {
-	res.sendFile(path.join(__dirname, '../views/play', 'play.html'));
-});
 module.exports = router;

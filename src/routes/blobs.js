@@ -24,10 +24,10 @@ router.route('/')
 			} else {
 				//respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
 				res.format({
-					//HTML response will render the index.jade file in the views/blobs folder. We are also setting "blobs" to be an accessible variable in our jade view
+					//HTML response w ill render the index.jade file in the views/blobs folder. We are also setting "blobs" to be an accessible variable in our jade view
 					html: function(){
 						res.render('blobs/index', {
-							title: 'All my Blobs',
+							title: 'All my Blobs and blobs',
 							"blobs" : blobs
 						});
 					},
@@ -36,7 +36,7 @@ router.route('/')
 						res.json(infophotos);
 					}
 				});
-			} 
+			}
 	    });
 	})
 	//POST a new blob
@@ -107,8 +107,8 @@ router.param('id', function(req, res, next, id) {
             // once validation is done save the new item in the req
             req.id = id;
             // go to the next thing
-            next(); 
-        } 
+            next();
+        }
     });
 });
 
@@ -185,7 +185,7 @@ router.route('/:id/edit')
 	        }, function (err, blobID) {
 	          if (err) {
 	              res.send("There was a problem updating the information to the database: " + err);
-	          } 
+	          }
 	          else {
 	                  //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
 	                  res.format({

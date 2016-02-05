@@ -1,20 +1,140 @@
 body {
     font-size: 1em;
     font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
 }
-.login {
-    font-family: 'Open Sans', sans-serif;
-    width: 100%;
-    margin: 0 auto;
+.logo{
+  width: 50%;
 }
 .login-select {
-  margin: 0 auto;
+  margin: 30% auto;
+  width: 30%;
 }
 .twitter-login{
+  display: block;
+  width: 50%;
+  color: rgba(255, 255, 255, 1);
   font-size: 2rem;
+  padding: 1rem;
+  margin: 0 auto;
   text-decoration: none;
+  text-align: center;
+  letter-spacing: .5rem;
+  background: rgba(51, 51, 51, 1);
+}
+.twitter-login:hover {
+  background: rgba(81, 81, 81, 1);
 }
 .guest-login{
+  display: block;
+  width: 50%;
+  color: rgba(255, 255, 255, 1);
+  padding: 1rem;
+  margin: 0 auto;
   font-size: 2rem;
+  text-align: center;
   text-decoration: none;
+  letter-spacing: .5rem;
+  background: rgba(51, 51, 51, 1);
+}
+.guest-login:hover {
+  background: rgba(81, 81, 81, 1);
+}
+/*Nav-bar*/
+nav {
+    background-color: rgba(51, 51, 51, 1);
+    border: 1px solid rgb(51, 51, 51, 1);
+    color: rgba(255, 255, 255, 1);
+    display: block;
+    margin: 0;
+    z-index: 1000;
+    font-family: 'Oswald', 'Futura', sans-serif;
+}
+nav > h1 {
+    height: 1em;
+    line-height: 1em;
+    margin: 0em;
+    padding: .5em;
+    color: #FFF;
+    background-color: rgba(51, 51, 51, 1);
+    z-index: 1000;
+}
+
+nav ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    z-index: 1000;
+}
+
+
+nav ul li {
+    margin: 0;
+    display: inline-block;
+    list-style-type: none;
+    transition: all 0.2s;
+    z-index: 1000;
+}
+nav > ul > li > span,
+nav > ul > li > a {
+    color: rgba(170, 170, 170, 0.9);
+    display: block;
+    line-height: 2em;
+    padding: 0.5em 2em;
+    text-decoration: none;
+    z-index: 1000;
+}
+
+nav li > ul{
+    display : none;
+    margin-top:1px;
+    background-color: rgba(187, 187, 187, 0.9);
+    z-index: 1000;
+
+}
+nav li > ul li{
+    display: block;
+    z-index: 1000;
+}
+nav  li > ul li span,
+nav  li > ul li a {
+    color: rgba(17, 17, 17, 0.9);
+    display: block;
+    line-height: 2em;
+    padding: .5em 2em;
+    text-decoration: none;
+    z-index: 1000;
+}
+nav li:hover {
+    background-color: rgba(102, 102, 102, 0.9);
+    z-index: 1000;
+
+}
+nav li:hover > ul{
+    position:absolute;
+    display : block;
+    z-index: 1000;
+}
+nav li > ul > li ul  {
+    display: none;
+    background-color: rgba(136, 136, 136, 0.9);
+    z-index: 1000;
+}
+nav li > ul > li:hover > ul  {
+    position:absolute;
+    display : block;
+    margin-left:100%;
+    margin-top:-3em;
+    z-index: 1000;
+}
+
+nav ul > li.sub{
+    background: url(../img/arrow_down.png) right center no-repeat;
+    z-index: 1000;
+}
+
+nav ul > li.sub li.sub{
+    background: url(../img/arrow_right.png) right center no-repeat;
+    z-index: 1000;
 }
