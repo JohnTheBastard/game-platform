@@ -48,7 +48,7 @@ function User() {
 	this.currentLevel = 0;
 	this.levelScores = { easy: [ ], hard: [ ] };
 	this.difficulty = "easy";
-	
+
 	this.saveData = function() {
 		// localStorage.setItem("Name", JSON.stringify( this.name ) );
 		localStorage.setItem("Level", JSON.stringify( this.currentLevel ) );
@@ -56,7 +56,7 @@ function User() {
 		localStorage.setItem("Difficulty", JSON.stringify(this.difficulty ) );
 		localStorage.setItem("Initialized", JSON.stringify( 'true' ) );
 	};
-	
+
 	this.loadData = function() {
 		this.name = JSON.parse( localStorage.getItem( "Name" ) );
 		this.currentLevel = JSON.parse( localStorage.getItem( "Level" ) );
@@ -77,12 +77,12 @@ function User() {
 				console.log("You're attempt to cast " + castToBool + " to a boolean failed." );
 		    }
 		}
-	
+
 		this.isInitialized = castToBool( JSON.parse(localStorage.getItem("Initialized") ) );
 		console.log(localStorage.getItem("Initialized"));
 		console.log(this.isInitialized);
-	
-	
+
+
 		if ( !this.isInitialized ) {
 		    console.log("false = " + this.isInitialized + " I'm not initialized.");
 		    for( ii=0; ii < oldLevelData.easy.length; ii++ ) {
@@ -181,16 +181,16 @@ function GameBoard() {
 		this.canvas.style.left = 0;
 		this.canvas.style.top = 0;
 		this.canvas.style.zIndex = "10";
-	
+
 		this.element.style.left = 0;
 		this.element.style.top = 0;
 		this.element.style.zIndex = "0";
-	
+
 		// This is where we will change CSS element width and height
-	
+
 		// Clear any existing data
 		this.clearTheBoard();
-	
+
 		for ( ii = 0; ii < this.boardData.dimension; ii++ ) {
 		    for ( var jj = 0; jj < this.boardData.dimension; jj++ ) {
 			this.coordinates.push( [ ] );
@@ -198,7 +198,7 @@ function GameBoard() {
 			this.$elementJQ.append( this.coordinates[jj][ii].$div );
 		    }
 		}
-	
+
 		// update floor tiles
 		for ( ii = 0; ii < this.boardData.floor.length; ii++ ) {
 		    this.updateCell(this.boardData.floor[ii], "floor", floorURL, false );
@@ -207,7 +207,7 @@ function GameBoard() {
 		for ( ii = 0; ii < this.boardData.dots.length; ii++ ) {
 		    this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false );
 		}
-	
+
 		// make our crates
 		for ( ii = 0; ii < this.boardData.crate.length; ii++ ) {
 		    this.crates.push( new Crate( this.boardData.crate[ii] ) );
@@ -217,12 +217,12 @@ function GameBoard() {
 		    if ( this.crates[ii].onDot) {
 				this.crates[ii].$crateImg.attr('src', crateOnDotURL );
 		    }
-	
+
 		}
-	
+
 		// make a sprite
 		this.sprite = new Sprite( this.boardData.start );
-	
+
 		this.draw();
     };
 
@@ -252,7 +252,7 @@ function GameBoard() {
     this.updateCrateStatus = function(crateIndex, oldPosition, newPosition) {
 		this.coordinates[ oldPosition[0] ][ oldPosition[1] ].hasCrate = false;
 		this.coordinates[ newPosition[0] ][ newPosition[1] ].hasCrate = true;
-	
+
 		if ( this.coordinates[ newPosition[0] ][ newPosition[1] ].isADot() ){
 			this.crates[crateIndex].onDot = true;
 			this.crates[crateIndex].$crateImg.attr('src', crateOnDotURL );
@@ -260,7 +260,7 @@ function GameBoard() {
 			this.crates[crateIndex].onDot = false;
 			this.crates[crateIndex].$crateImg.attr('src', crateURL );
 		}
-	
+
 		this.winCondition = this.checkWinCondition();
     };
 
@@ -281,14 +281,14 @@ function GameBoard() {
 		var draw = this.draw.bind(this);
 		var counter = 0;
 		var frames = cellWidth;
-	
+
 		if ( withCrate ) {
-	
+
 		    var crateIndex = self.findCrate([ x + deltaXY[0]*cellWidth ,  y + deltaXY[1]*cellWidth ]);
 		    var xCrate = self.crates[crateIndex].x;
 		    var yCrate = self.crates[crateIndex].y;
 		}
-	
+
 		function drawFrame(fraction) {
 		    // This looks weird, but we'll be sure that the sprite ends in
 		    // a valid location when setTimeout calls drawFrame(1)
@@ -300,17 +300,17 @@ function GameBoard() {
 		    }
 		    requestAnimationFrame(draw);
 		}
-	
+
 		var interval = setInterval(function(){
 			counter++;
 			drawFrame(counter/frames);
 		}, 256 / cellWidth );
-	
+
 		setTimeout(function(){
 			clearInterval(interval);
 			drawFrame(1);
 		    if ( withCrate ) {
-				self.updateCrateStatus(crateIndex, [xCrate/cellWidth, yCrate/cellWidth ], 
+				self.updateCrateStatus(crateIndex, [xCrate/cellWidth, yCrate/cellWidth ],
 					[ xCrate/cellWidth + deltaXY[0],  yCrate/cellWidth + deltaXY[1] ] );
 			}
 			self.sprite.stepCount++;
@@ -323,10 +323,10 @@ function GameBoard() {
 		var y = xy[1];
 		var dx = deltaXY[0];
 		var dy = deltaXY[1];
-	
+
 		var nextLocation = this.coordinates[ x + dx ][ y + dy ];
 		var twoAway;
-		
+
 		// Make sure two spaces away is on the board
 		if ( ( 0 <= x + 2*dx && x + 2*dx < this.boardData.dimension ) &&
 			 ( 0 <= y + 2*dy && y + 2*dy < this.boardData.dimension ) ) {
@@ -337,7 +337,7 @@ function GameBoard() {
 			twoAway = {};
 			twoAway.exists = false;
 		}
-	
+
 		if ( nextLocation.tile === "wall" ) {
 			return;
 		} else if ( nextLocation.hasCrate ) {
@@ -361,7 +361,7 @@ function createBoxxer(anchor) {
 	my.$anchor = anchor;
 	my.user = new User();
 	my.game = new GameBoard( );
-	
+
 	my.initializeGameBoard = function() {
 		my.$anchor.empty();
 		my.user.init();
@@ -372,20 +372,20 @@ function createBoxxer(anchor) {
 				  'height': my.game.boardDimensionInPixels - 25 } );
 		$('#container').css( 'width', my.game.boardDimensionInPixels );
 	};
-	
+
 	// I don't really understand window.onload behavior
 	// so I'm probably doing this wrong.
 	window.onload = function () {
 		my.initializeGameBoard();
 	};
-	
-	
+
+
 	my.advanceTheUser = function () {
 		var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1)  +
 		    ' in ' + my.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
 		$('#gameplay').empty();
 		$('#gameplay').append(winMessage);
-		
+
 		console.log( "break: advanceTheUser " );
 		if ( my.user.levelScores[my.user.difficulty][my.user.currentLevel] > my.game.sprite.stepCount
 		     && 0 < my.user.levelScores[my.user.difficulty][my.user.currentLevel] ) {
@@ -404,10 +404,10 @@ function createBoxxer(anchor) {
 		} else {
 			console.log("Error: level index out of bounds");
 		}
-		
+
 		my.user.saveData();
 	};
-	
+
 	function addCurrentStatus() {
 	$('#counter').empty();
 	var status ='<p class="current"> Difficulty: ' + my.user.difficulty
@@ -415,14 +415,14 @@ function createBoxxer(anchor) {
 	    + my.game.sprite.stepCount + '</p>';
 	  $('#counter').append(status);
 	}
-	
+
 	my.processInput = function(key) {
 		var keyvalue = key.keyCode;
 		var xy = [ (my.game.sprite.x / cellWidth), (my.game.sprite.y / cellWidth) ];
-		
+
 		// Keep key input from scrolling
 		key.preventDefault();
-		
+
 		if ( my.game.winCondition ) {
 			my.onDone({"goo":"gob"});
 			my.advanceTheUser();
@@ -445,7 +445,7 @@ function createBoxxer(anchor) {
 				deltaXY = [ 0, 1 ];
 				my.game.tryToMove( xy, deltaXY );
 		    }
-		
+
 		    if (keyvalue === 13) {
 				my.game.draw();
 		    } else if (keyvalue === 32) {
@@ -453,16 +453,16 @@ function createBoxxer(anchor) {
 		    }
 		    addCurrentStatus();
 		}
-	
+
 	};
-	
+
 	my.scaleGameBoard = function() {
 		var buffer = ( $('header').height() + $('footer').height() ) * 2;
 		var frameHeight = $(window).height() - buffer;
 		var frameWidth = $(window).width();
 		var frameSize = Math.min( frameHeight, frameWidth );
 		var scale;
-		
+
 		if ( my.game.boardDimensionInPixels < frameSize ) {
 			scale =  1;
 		} else {
@@ -470,14 +470,14 @@ function createBoxxer(anchor) {
 			my.$anchor.parent().css( 'transform', 'scale( ' + scale + ', ' + scale + ')');
 		}
 	};
-	
+
 	my.scaleGameBoard();
-	
+
 	my.eventListeners= function() {
 		window.addEventListener("keydown", my.processInput, false);
 		window.addEventListener("resize",  my.scaleGameBoard, false );
 	};
 	my.eventListeners();
-	
+
 	return my;
 }

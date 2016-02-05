@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
+    <script type="text/javascript" src="js/vendor/angular.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
   </head>
@@ -46,14 +47,20 @@
              value="Save" onclick="COOKIE_MODULE.getInput()">
           </fieldset>
         </div>
-        <a href="play.html"><img class="hide" id="gameboyIMG" src="img/gameboy.png" alt=""></a>
+        <div ng-controller="loginCtrl"></div>
+        <div ng-app="myApp" ng-controller="loginCtrl">
+
+<button ng-click="count">Click me!</button>
+</div>
+          <!-- <img class="hide" id="gameboyIMG" src="img/gameboy.png" alt=""> -->
       </section>
       <footer>
-        <p> &copy; 2015 Team Game Boyz </p>
+        <p> &copy; 2015 Team Game Boyz</p>
       </footer>
     </div>
-
-    <script type="text/javascript" src="js/vendorjquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/game-control.js"></script>
+    <script type="text/javascript" src="js/login-control.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/setCookie.js"></script>
   </body>
 </html>

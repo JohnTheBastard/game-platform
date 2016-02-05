@@ -1,3 +1,4 @@
+'use strict';
 const db       = require('./db');
 const mongoose = require('mongoose');
 const levelData = require('./level-data');
@@ -10,7 +11,7 @@ function createLevels() {
         level: Object
     });
 
-    level = mongoose.model('level', Level);
+    var level = mongoose.model('level', Level);
 
     //drop collection to prevent duplicates before gen
     let rm = level.find().remove({});
@@ -24,7 +25,7 @@ function createLevels() {
         easyLevel.save();
     }
     for (let ii = 0; ii < levelData.hard.length; ii++) {
-        let hardLevel = new level({
+        var hardLevel = new level({
             difficulty: 'hard',
             level: levelData.hard[ii]
         });

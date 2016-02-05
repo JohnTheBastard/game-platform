@@ -15,11 +15,11 @@
         <h1> Game <span id="B">B</span><span id="O">O</span><span id="Y">Y</span><span id="Z">Z</span></h1>
         <h2> Boxxle </h2>
       </div>
-      <nav>
+      <nav ng-controller="loginCtrl">
         <ul>
           <li><a href="index.html" >Home</a></li>
           <li><a href="description.html" >Description</a></li>
-          <li><a href="play.html" class="selected">Play</a></li>
+          <li><a href="" ng-click="checkToken()" class="selected">Play</a></li>
         </ul>
       </nav>
     </header>
@@ -61,6 +61,8 @@
         <p> &copy; 2015 Team Game Boyz </p>
       </footer>
       <script type="text/javascript" src="js/game-control.js"></script>
+      <script type="text/javascript" src="js/login-control.js"></script>
+      <script type="text/javascript" src= "js/setCookie.js"></script>
       <script type="text/javascript" src= "js/levels.js"></script>
       <script type="text/javascript" src= "js/boxer.js"></script>
 </body>
