@@ -15,12 +15,12 @@ if (mobile) {
 
 var listenToKeystrokes = true;
 
-var wallURL = "img/RedBrick.png";
-var floorURL = "img/FloorTile.png";
-var crateURL = "img/WoodenCrate.png";
-var crateOnDotURL = "img/WoodenCrateOnDot.png"
-var dotsURL = "img/DotTile.png";
-var spriteURL = "img/Sprite.gif";
+var wallURL = "../img/RedBrick.png";
+var floorURL = "../img/FloorTile.png";
+var crateURL = "../img/WoodenCrate.png";
+var crateOnDotURL = "../img/WoodenCrateOnDot.png"
+var dotsURL = "../img/DotTile.png";
+var spriteURL = "../img/Sprite.gif";
 
 var pad = function(num, size) {
   var s = num + "";
