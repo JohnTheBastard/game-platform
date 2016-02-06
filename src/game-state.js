@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.set('view engine', 'ejs');
+app.set( 'views', path.join( __dirname, 'views' ) );
 
 // restify.serve(app, ToDoModel, {
 //   // exclude: 'text,done'
@@ -29,7 +30,7 @@ app.use( express.static( publicPath ) );
 
 app.use("/data", data);
 app.use('/', function (req, res) {
-	res.sendFile( path.join( __dirname, 'views/play/play.ejs' ) );
+	res.render( 'play/play' );
 });
 
 http.createServer(app).listen(app.get('port'), function () {
