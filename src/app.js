@@ -12,7 +12,6 @@ const Grant        = require('grant-express'),
 
 const multiplayer = require('./routes/multiplayer');
 const rooms = require('./routes/rooms');
-
 const data = require('./routes/data');
 
 const db = require('./models/db');
