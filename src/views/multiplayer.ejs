@@ -62,7 +62,11 @@
       clientSocket.emit('joinedRoom', currentRoom);
 
       clientSocket.on('broad', function(data){
-        secondPlayerKeyDownEvent(data);
+        console.log(data);
+        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
+          secondPlayerKeyDownEvent(data.moves[ii]);
+        }
+        clientSocket.emit('movesCompleted', data.currentMove);
       });
 
       function secondPlayerInput(key) {
@@ -72,18 +76,7 @@
         clientSocket.emit('move', input );
       }
 
-
-      clientSocket.on('startGame', function(data) {
-        console.log(data)
-        BOXER_GAME_MODULE.eventListeners();
-        window.addEventListener("keydown", secondPlayerInput, false);
-      })
-
-
-
-
-
-
+      window.addEventListener("keydown", secondPlayerInput, false);
 
     </script>
   </body>

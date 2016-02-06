@@ -479,8 +479,8 @@ var BOXER_GAME_MODULE = (function() {
     window.addEventListener("keydown", my.firstPlayerKeyDownEvent, false);
     window.addEventListener("resize", my.scaleGameBoard(my.$firstPlayerAnchor,my.firstPlayerGame), false);
   }
-  // function start() {
-  //   my.eventListeners();
+
+    my.eventListeners();
 
 
 

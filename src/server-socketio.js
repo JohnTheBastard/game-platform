@@ -3,10 +3,11 @@
 module.exports = function startIO(server) {
 	const mongoose = require('mongoose');
 	const Room = require('./models/multiPlayerRooms');
+	const Game = require('./models/multiPlayerGame');
 	const io = require('socket.io')(server);
 	let multiplayerIO = io.of('/multiplayer');
 	let roomIO = io.of('/rooms');
-	let multiplayerRooms = {};
+
 	mongoose.Promise = Promise;
 
 	function showAllRooms(model,socket) {
@@ -20,10 +21,7 @@ module.exports = function startIO(server) {
 	};
 
 	roomIO.on('connection', function(serverSocket) {
-
-		console.log('user connected to rooms namespace');
 		showAllRooms(Room, serverSocket);
-
 		serverSocket.on('newRoom', function(data) {
 			var newRoom = new Room(data);
 			newRoom.save()
@@ -59,25 +57,38 @@ module.exports = function startIO(server) {
 	});
 
 	multiplayerIO.on('connection', function(serverSocket) {
-
+		let moves = [];
+		let currentMove = 0;
 		serverSocket.on('joinedRoom', function(data) {
 			serverSocket.join(data);
 			Room.findOne({name: data})
 				.then(function(room) {
-					console.log(room);
-					if(room.usersInRoom === 2) {
-						serverSocket.to(room.name).emit('startGame','Two users have joined you may start playing');
-						serverSocket.broadcast.to(room.name).emit('startGame','Two users have joined you may start playing');
-					}
 					if(room.firstPlayer === 'player') {
 						room.firstPlayer = serverSocket.id;
+						var game = new Game();
+						game.roomName = room.name;
+						game.startingLevel = 0;
+						game.moves = [13];
+						game.movesCompleted = 0;
+						game.currentMove = 1;
+						game.playerName = serverSocket.id;
+						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
+						game.save().then(function(game){ console.log('first',game)});
 					} else if(room.secondPlayer === 'player') {
 						room.secondPlayer = serverSocket.id;
+						var game = new Game();
+						game.roomName = room.name;
+						game.startingLevel = 0;
+						game.moves = [13];
+						game.movesCompleted = 0;
+						game.currentMove = 1;
+						game.playerName = serverSocket.id;
+						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
+						game.save().then(function(game){ console.log('second',game)});
 					}
 					return room;
 				})
 				.then(function(room) {
-					console.log(room);
 						room.save();
 				})
 				.catch(function(error) {
@@ -85,12 +96,53 @@ module.exports = function startIO(server) {
 				})
 		});
 
-		serverSocket.on('move', function(data){
-			serverSocket.broadcast.to(data.roomName).emit('broad',data.keyCode);
+		serverSocket.on('move', function(data) {
+			var moveData = data;
+			console.log('initial find',serverSocket.id);
+			Game.findOne({playerName: serverSocket.id})
+				.then(function(game){
+					console.log(game);
+					game.moves.push(moveData.keyCode);
+					game.currentMove = game.moves.length;
+					game.save()
+						.then(function(game){
+							var gameData = {};
+							gameData.movesCompleted = game.movesCompleted;
+							gameData.moves = game.moves;
+							gameData.currentMove = game.currentMove;
+							serverSocket.broadcast.to(moveData.roomName).emit('broad',gameData);
+						});
+				})
+				.catch(function(error){
+					console.log(error);
+				})
 		});
 
+		serverSocket.on('movesCompleted', function(data){
+			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
+				.then(function(room){
+					if(room.firstPlayer === serverSocket.id) {
+						Game.findOne({'playerName': room.secondPlayer })
+							.then(function(game) {
+								console.log(game)
+								game.movesCompleted = data;
+								game.save();
+							})
+					} else if (room.secondPlayer === serverSocket.id) {
+						Game.findOne({'playerName': room.firstPlayer })
+							.then(function(game) {
+								console.log(game)
+								game.movesCompleted = data;
+								game.save();
+							})
+					}
+				})
+				.catch(function(error){
+					console.log(error);
+				});
+		})
+
 		serverSocket.on('disconnect', function() {
-			console.log(serverSocket.id);
 			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
 				.then(function(room) {
 					if(room.usersInRoom === 2) {
