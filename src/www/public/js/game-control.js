@@ -16,10 +16,10 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 			$http.post('/data', endData).then(function(res){
 				console.log("HTTP POST JUST HAPPENED");
 				var newLevel = res.data;
-				console.log("CONSOLE LOGGING FROM GAME-CONTROL:", newLevel);
+				console.log("CONSOLE LOGGING FROM GAME-CONTROL:", newLevel.data);
 				$scope.saving = false;
 				el.innerHTML="";
-				game = createBoxxer($element, newLevel );
+				game = createBoxxer($element, newLevel.data );
 				game.onDone = onDone;
 			}, function(err){ console.log(err); } );
 
