@@ -10,20 +10,15 @@ let firstLevelID = "easy01-level03";
 let secondLevelID = "easy01-level04";
 
 
-const nextID = function(levelID, res, next) {
-	Level.find().lean().select("identifier").exec(function (err, identifiers) {
-		if(err) return next(err);
-		console.log("list of identifiers:\n", res.json(identifiers) );
-
+const nextID = function(levelID, cb) {
+    Level.find().lean().select("identifier").exec(function (err, identifiers) {
+		if(err) return cb(err);
 		let idArr = identifiers.map( obj => obj.identifier );
 		let idIndex = 1 + idArr.indexOf(levelID);
-		console.log("OMG DID IT WORK?", idArr[idIndex]);
-
-		res.json(idArr[idIndex]);
-	});	
+		console.log("In nextID:", idArr[idIndex] );
+		callback( null, idArr[idIndex] );
+	});  	
 };
-
-
 
 const getLevel = function(levelID, res, next){
 	Level.findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
@@ -32,32 +27,38 @@ const getLevel = function(levelID, res, next){
 	});	
 };
 
-const saveUserData = function(newUserData, res, next){
+const saveUserData = function(newUserData, cb){
 	//code to save user data goes here
 	// BTW: you're gonna need to pass in the levelID so you know where you're saving
-	console.log("EXPRESS CONSOLE:", secondLevelID);
-	res.send(secondLevelID);
+    //let achievement = new USERMODEL( newUserData );
+    //achievment.save( cb );
+    console.log("In saveUserData:", newUserData.levelID);
+    
+    let fakeData = { levelID: secondLevelID };
+    process.nextTick( function(someData, cb) { 
+	    nextID( fakeData.levelID, cb );
+	 });
 };
+
+router.post('/', function(req, res, next) {
+	//console.log(req.body);
+    // set the levelID from body
+    let levelID = req.body.levelID;
+    console.log("In POST:        ", levelID);
+    saveUserData(req.body, function(err){
+        if(err) return next(err);
+        
+        nextID(levelID, function(err, nextLevelID) {
+            if(err) return next(err);
+            res.json({ nextLevelID: nextLevelID });   //formerly// getLevel( nextLevelID, res, next);
+        });
+        
+    });
+});	//res.end();
 
 router.get('/', function(req, res, next) {
 	getLevel( firstLevelID, res, next );
 });
 
-router.post('/', function(req, res, next) {
-	//console.log(req.body);
-	saveUserData(req.body, res, function(err, levelID){
-		console.log("POST CALLBACK EXECUTING...");
-		if(err) return next(err);
-		console.log("...WITH NO ERRORS (YET).");
-		
-		
-		nextID(levelID, res, function(err, nextLevelID, next) {
-			console.log("2ND CB NOW...");
-			if(err) return next(err);
-			getLevel(nextLevelID, res, next);
-		});
-	});
-	//res.end();
-});
 
 module.exports = router;
