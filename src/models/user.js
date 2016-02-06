@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var User = new Schema({
-    twitter : {
-      screen_name: String,
-      user_id: String,
-    },
+const Schema = mongoose.Schema;
+const User = new Schema({
+	twitter: {
+		screen_name: String,
+		user_id: String,
+	},
+	game_data: [GameSaveData],
+	
 }, {
-    collection: 'user'
+	collection: 'user'
 });
 
 user = mongoose.model('user', User);
