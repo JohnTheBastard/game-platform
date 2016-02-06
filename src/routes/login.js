@@ -3,7 +3,6 @@ const db            = require('../models/db');
 const User          = require('../models/user');
 const State         = require('../models/state');
 const token         = require('../models/token');
-const authenticated = require('./authroute');
 const router        = new (require( 'express' ).Router )();
 const path          = require('path');
 const bodyParser    = require('body-parser');

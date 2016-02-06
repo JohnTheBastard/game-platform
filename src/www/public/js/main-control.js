@@ -1,19 +1,15 @@
-var app = angular.module( 'myApp', ['ngRoute','controllers']);
-var controllers = angular.module( 'controllers', [] );
-
+var app = angular.module( 'myApp', ['ngRoute']);
 app.config( [ '$routeProvider', function( $routeProvider ) {
 	$routeProvider
 		.when('/', {
 			templateUrl: 'boxxle/main.html',
-			//controller:
+			ontroller: 'loginCtrl'
 		})
 		.when('/login', {
 			templateUrl: 'boxxle/login.html',
-			//controller:
 		})
 		.when('/about', {
-			templateUrl: 'boxxle/about.html',
-			//controller:
+			templateUrl: 'boxxle/about.html'
 		})
 		.when('/play', {
 			templateUrl: 'boxxle/play.html',
@@ -21,10 +17,10 @@ app.config( [ '$routeProvider', function( $routeProvider ) {
 		})
 		.when('/guest', {
 			templateUrl: 'boxxle/guestplay.html',
-			//controller:
+			controller: 'gameCtrl'
 		})
 		.when('/rooms', {
-			templateUrl: 'boxxle/rooms.html',
+			templateUrl: 'boxxle/rooms.html'
 			//controller:
 		})
 		.otherwise({
