@@ -1,30 +1,35 @@
-var http = require('http');
-var express = require('express');
-var path = require('path');
-var morgan = require('morgan');
-var restify = require('express-restify-mongoose');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var mongoose = require('mongoose');
+'use strict';
+const http = require('http');
+const express = require('express');
+const path = require('path');
+const morgan = require('morgan');
+const restify = require('express-restify-mongoose');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const db = require('./models/db');
 const data = require('./routes/data');
 
 
-var app = express();
+const app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('X-HTTP-Method-Override'));
+app.set('view engine', 'ejs');
+
 // restify.serve(app, ToDoModel, {
 //   // exclude: 'text,done'
 // })
-app.use(express.static( path.join(__dirname + '/www/public')));
+
+let publicPath = path.join(__dirname, 'www/public');
+app.use( express.static( publicPath ) );
 
 
 
 app.use("/data", data);
 app.use('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'www/public/', 'play.html'));
+	res.sendFile( path.join( __dirname, 'views/play/play.ejs' ) );
 });
 
 http.createServer(app).listen(app.get('port'), function () {
