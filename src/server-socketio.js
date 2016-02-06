@@ -98,10 +98,8 @@ module.exports = function startIO(server) {
 
 		serverSocket.on('move', function(data) {
 			var moveData = data;
-			console.log('initial find',serverSocket.id);
 			Game.findOne({playerName: serverSocket.id})
 				.then(function(game){
-					console.log(game);
 					game.moves.push(moveData.keyCode);
 					game.currentMove = game.moves.length;
 					game.save()
@@ -124,14 +122,12 @@ module.exports = function startIO(server) {
 					if(room.firstPlayer === serverSocket.id) {
 						Game.findOne({'playerName': room.secondPlayer })
 							.then(function(game) {
-								console.log(game)
 								game.movesCompleted = data;
 								game.save();
 							})
 					} else if (room.secondPlayer === serverSocket.id) {
 						Game.findOne({'playerName': room.firstPlayer })
 							.then(function(game) {
-								console.log(game)
 								game.movesCompleted = data;
 								game.save();
 							})
