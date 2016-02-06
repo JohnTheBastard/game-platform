@@ -64,6 +64,11 @@ module.exports = function startIO(server) {
 			serverSocket.join(data);
 			Room.findOne({name: data})
 				.then(function(room) {
+					console.log(room);
+					if(room.usersInRoom === 2) {
+						serverSocket.to(room.name).emit('startGame','Two users have joined you may start playing');
+						serverSocket.broadcast.to(room.name).emit('startGame','Two users have joined you may start playing');
+					}
 					if(room.firstPlayer === 'player') {
 						room.firstPlayer = serverSocket.id;
 					} else if(room.secondPlayer === 'player') {
@@ -95,6 +100,7 @@ module.exports = function startIO(server) {
 						} else if (room.secondPlayer === serverSocket.id) {
 							room.secondPlayer = 'player';
 						}
+						serverSocket.broadcast.to(room.name).emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
 						room.save();
 					} else if (room.usersInRoom < 2) {
 						Room.findOneAndRemove({name: room.name})
@@ -109,7 +115,7 @@ module.exports = function startIO(server) {
 				.catch(function(error){
 					console.log(error);
 				});
-			//serverSocket.broadcast.emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
+
 		});
 
 	});

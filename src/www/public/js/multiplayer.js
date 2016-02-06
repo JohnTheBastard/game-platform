@@ -454,8 +454,8 @@ var BOXER_GAME_MODULE = (function() {
     }
   }
 
-  my.keyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
-  secondPlayerKeyDown = my.secondPlayerInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter");
+  my.firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
+  secondPlayerKeyDownEvent = my.secondPlayerInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter");
 
   my.scaleGameBoard = function(anchor,game) {
     var buffer = ($('header').height() + $('footer').height()) * 2;
@@ -476,10 +476,13 @@ var BOXER_GAME_MODULE = (function() {
   my.scaleGameBoard(my.$secondPlayerAnchor,my.secondPlayerGame);
 
   my.eventListeners = function() {
-    window.addEventListener("keydown", my.keyDownEvent, false);
+    window.addEventListener("keydown", my.firstPlayerKeyDownEvent, false);
     window.addEventListener("resize", my.scaleGameBoard(my.$firstPlayerAnchor,my.firstPlayerGame), false);
   }
-  my.eventListeners();
+  // function start() {
+  //   my.eventListeners();
+
+
 
   return my;
 })();
