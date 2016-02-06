@@ -57,14 +57,13 @@ function createApp() {
 		saveUninitialized: true
 	}));
 	app.use(grant);
-<<<<<<< HEAD
+
   app.use(login);
 	app.use('/play', authenticated, play);
   app.use('/guestplay', guestplay);
 	app.use("/data", data);
-=======
-	app.use(login);
->>>>>>> rooms
+
+
 
 	/* * * * * * * * * *
 	 * multiplayer     *
