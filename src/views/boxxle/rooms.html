@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/main.css">
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
     <link rel="stylesheet" href="css/multiplayer.css">
     <script type="text/javascript" src="js/vendor/angular.min.js"></script>
     <script src='/socket.io/socket.io.js'></script>
@@ -12,20 +12,6 @@
     <script type="text/javascript" src="js/rooms.js"></script>
   </head>
   <body ng-app="listRoomsApp">
-    <header>
-      <div id="logo">
-        <h1> Game <span id="B">B</span><span id="O">O</span><span id="Y">Y</span><span id="Z">Z</span></h1>
-        <h2> Boxxle </h2>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html" >Home</a></li>
-          <li><a href="description.html" >Description</a></li>
-          <li><a href="play.html" class="selected">Play</a></li>
-        </ul>
-      </nav>
-    </header>
-
     <div ng-controller='mainCtrl'>
       <div> Room Name  :
         <input ng-model='roomName' type="text"/><br>
@@ -53,6 +39,6 @@
       <p> &copy; 2015 Team Game Boyz </p>
     </footer>
 
-    <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
+    <!-- <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script> -->
   </body>
 </html>

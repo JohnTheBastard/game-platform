@@ -49,8 +49,7 @@
     </footer>
 
 
-    <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="js/levels.js"></script>
+    <!-- <script type="text/javascript" src="js/levels.js"></script> -->
     <script type="text/javascript" src="js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
     <script>
@@ -63,7 +62,7 @@
       function secondPlayerInput(key) {
         clientSocket.emit('move', key.keyCode );
       }
-      
+
       window.addEventListener("keydown", secondPlayerInput, false);
 
     </script>

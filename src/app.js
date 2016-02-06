@@ -26,7 +26,9 @@ const authenticated = require('./routes/authroute');
 function createApp() {
 
 	var app = express();
+
 	var publicPath = path.join( __dirname, 'www/public/' );
+  var viewPath = path.join( __dirname, 'views' );
 
 	// view engine setup
 	app.set( 'views', path.join( __dirname, 'views' ) );
@@ -43,8 +45,7 @@ function createApp() {
 	app.use( cookieParser() );
 
 	app.use( express.static( publicPath ) );
-
-	app.use('/', routes);
+	app.use( express.static( viewPath ) );
 //	app.use('/blobs', blobs);
 
 	/* * * * * * * * * *
@@ -55,6 +56,8 @@ function createApp() {
 		resave: true,
 		saveUninitialized: true
 	}));
+  
+  app.use('/', routes);
 	app.use(grant);
   app.use(login);
 	app.use('/play', authenticated, play);

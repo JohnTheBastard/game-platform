@@ -1,5 +1,5 @@
-var app = angular.module('boxxleApp', []);
-app.controller('gameCtrl', function($scope, $element, $http) {
+var boxxleApp = angular.module('boxxleApp', []);
+boxxleApp.controller('gameCtrl', function($scope, $element, $http) {
     var el = angular.element(document.querySelector('#gameBoard'));
 	var game = createBoxxer(el);
     $scope.game = game;

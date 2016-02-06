@@ -8,7 +8,7 @@ console.log("Environment variables:",
 	"\n	Internal IP:", process.env.OPENSHIFT_INTERNAL_IP,
 	"\n	OS Port:", process.env.OPENSHIFT_NODEJS_PORT,
 	"\n	Internal Port:", process.env.OPENSHIFT_INTERNAL_PORT);
-	
+
 const startIO = require('../server-socketio');
 
 /* * * * * * * * * * * *
@@ -22,8 +22,8 @@ const http = require('http');
 let port;
 let server;
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * Normalize a port into a number, string, or false  *  
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Normalize a port into a number, string, or false  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function normalizePort(val) {
   let port = parseInt(val, 10);
@@ -99,13 +99,13 @@ if (typeof ipaddress === "undefined") {
 if(ipaddress !==  "127.0.0.1") {
 	port = normalizePort( process.env.OPENSHIFT_NODEJS_PORT   ||
 						  process.env.OPENSHIFT_INTERNAL_PORT || 8080 );
-} else {          
+} else {
 	port = normalizePort( process.env.PORT || 3000 );
 }
 app.set('port', port);
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  terminator === the termination handler               *
  *  Terminate server on receipt of the specified signal. *
  *  @param {string} sig  Signal to terminate on.         *
@@ -154,6 +154,3 @@ startIO(server);
 server.listen(port, ipaddress, (error) => console.log( error, "Listening on " + ipaddress + ", server_port " + port ) );
 server.on('error', onError);
 server.on('listening', onListening);
-
-
-
