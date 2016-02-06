@@ -8,6 +8,7 @@ module.exports = function startIO(server) {
 	let roomIO = io.of('/rooms');
 	let multiplayerRooms = {};
 	mongoose.Promise = Promise;
+
 	function showAllRooms(model,socket) {
 		model.find({}).then(function(rooms) {
 			socket.emit('rooms', rooms);
@@ -19,6 +20,7 @@ module.exports = function startIO(server) {
 	};
 
 	roomIO.on('connection', function(serverSocket) {
+
 		console.log('user connected to rooms namespace');
 		showAllRooms(Room, serverSocket);
 
@@ -35,20 +37,15 @@ module.exports = function startIO(server) {
 
 		serverSocket.on('userJoined', function(data) {
 			Room.findOne({name: data.name})
-				.then(function(room,error) {
-					room.usersInRoom++;
+				.then(function(room) {
+					if(room.usersInRoom !== 2) {
+						room.usersInRoom++;
+					}
 					return room;
 				})
 				.then(function(room) {
-					if(room.usersInRoom === 2) {
-						Room.remove({name: room.name}, function(error) {
-							console.log(error);
-							showAllRooms(Room, serverSocket);
-						});
-					} else {
 						room.save();
 						showAllRooms(Room, serverSocket);
-					}
 				})
 				.catch(function(error) {
 					socket.emit('roomError', 'Sorry the database is down');
@@ -58,18 +55,62 @@ module.exports = function startIO(server) {
 		serverSocket.on('disconnect', function(){
 			console.log('user disconnected from rooms');
 		});
+
 	});
 
 	multiplayerIO.on('connection', function(serverSocket) {
+
 		serverSocket.on('joinedRoom', function(data) {
-			console.log('someone joined room', data.name);
-			serverSocket.join(data.name);
+			serverSocket.join(data);
+			Room.findOne({name: data})
+				.then(function(room) {
+					if(room.firstPlayer === 'player') {
+						room.firstPlayer = serverSocket.id;
+					} else if(room.secondPlayer === 'player') {
+						room.secondPlayer = serverSocket.id;
+					}
+					return room;
+				})
+				.then(function(room) {
+					console.log(room);
+						room.save();
+				})
+				.catch(function(error) {
+					console.log(error);
+				})
 		});
+
 		serverSocket.on('move', function(data){
-			serverSocket.broadcast.to(multiplayerRooms[data.roomName].name).emit('broad',data.keyCode);
+			serverSocket.broadcast.to(data.roomName).emit('broad',data.keyCode);
 		});
+
 		serverSocket.on('disconnect', function() {
-			console.log('user disconnected from multiplayer');
+			console.log(serverSocket.id);
+			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
+				.then(function(room) {
+					if(room.usersInRoom === 2) {
+						room.usersInRoom--;
+						if(room.firstPlayer === serverSocket.id) {
+							room.firstPlayer = 'player';
+						} else if (room.secondPlayer === serverSocket.id) {
+							room.secondPlayer = 'player';
+						}
+						room.save();
+					} else if (room.usersInRoom < 2) {
+						Room.findOneAndRemove({name: room.name})
+							.then(function(room){
+								console.log('everyone left');
+							})
+							.catch(function(error){
+								console.log(error);
+							})
+					}
+				})
+				.catch(function(error){
+					console.log(error);
+				});
+			//serverSocket.broadcast.emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
 		});
+
 	});
 };

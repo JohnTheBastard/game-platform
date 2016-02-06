@@ -46,11 +46,11 @@
       <h3>Rooms Available: </h3>
       <ul ng-repeat='room in rooms'>
         <li>
-          <a ng-click='joinRoom(room)' href='/multiplayer/{{room.name}}'>Room Name: {{room.name}} </a>
+          <div ng-click='joinRoom(room)'>Room Name: {{room.name}} </div>
           <ul>
             <li> Creator: {{room.creator}} </li>
             <li> Number of Levels to Win: {{room.numberOfLevelsToWin}} </li>
-            <li> Number of Users in Room: {{room.usersInRoom}} </li>
+            <li> Number of Users in Room: {{room.usersInRoom}} <span> {{room.roomIsFull}} </span> </li>
           </ul>
         </li>
       </ul>

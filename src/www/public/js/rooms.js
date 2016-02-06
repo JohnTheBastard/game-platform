@@ -14,14 +14,20 @@ angular.module('listRoomsApp', ['btford.socket-io'])
       var newRoom = {};
       newRoom.name = $scope.roomName;
       newRoom.usersInRoom = 0;
+      newRoom.firstPlayer = 'player';
+      newRoom.secondPlayer = 'player';
       newRoom.creator = $scope.creator;
-      newRoom.firstPlayer = $scope.creator;
       newRoom.numberOfLevelsToWin = $scope.levels;
       clientSocket.emit('newRoom', newRoom);
     }
 
     $scope.joinRoom = function(room) {
-      clientSocket.emit('userJoined', room);
+      if(room.usersInRoom < 2) {
+        window.location.href = '/multiplayer/'+room.name
+        clientSocket.emit('userJoined', room);
+      } else {
+        room.roomIsFull = 'Sorry that room is full';
+      }
     }
 
     clientSocket.on('rooms', function(data) {
