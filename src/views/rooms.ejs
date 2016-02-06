@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/multiplayer.css">
-    <script type="text/javascript" src="js/vendor/angular.min.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/multiplayer.css">
+    <script type="text/javascript" src="../js/vendor/angular.min.js"></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script src='js/vendor/socket.js'></script>
-    <script type="text/javascript" src="js/rooms.js"></script>
+    <script src='../js/vendor/socket.js'></script>
+    <script type="text/javascript" src="../js/rooms.js"></script>
   </head>
   <body ng-app="listRoomsApp">
     <header>
@@ -28,31 +28,37 @@
 
     <div ng-controller='mainCtrl'>
       <div> Room Name  :
-        <input ng-model='roomName' type="text"/><br>
+        <input ng-model='roomName' type="text"/>
       </div>
-      <div> Level Difficulty  : <br>
-        <input type='radio' ng-model='diff' value='easy'> Easy</input> <br>
-        <input type='radio' ng-model='diff' value='hard'> Hard</input> <br>
-        <br>
-        <br>
+      <br>
+      <div> Creator of Room:
+        <input ng-model='creator' type="text"/>
       </div>
+      <br>
       Number of Levels to Win  : <br>
       <input type='radio' ng-model='levels' value='1'> 1 </input><br>
       <input type='radio' ng-model='levels' value='3'> 3 </input><br>
       <input type='radio' ng-model='levels' value='5'> 5 </input><br>
       <br>
       <br>
-      <input id='submit' type='button' ng-click='createRoom()' value='Create Room'>
-      <h6> {{error}} </h6>
-      <h4> Rooms Available: </h4>
-      <div ng-repeat='room in rooms'>
-        <div ng-click='joinRoom(room)'> {{room.name}} </div>
-      </div>
+      <input id='submit' ng-click='createRoom()' type='button'  value='Create Room'>
+      <h5> {{error}} </h5>
+      <h3>Rooms Available: </h3>
+      <ul ng-repeat='room in rooms'>
+        <li>
+          <div ng-click='joinRoom(room)'>Room Name: {{room.name}} </div>
+          <ul>
+            <li> Creator: {{room.creator}} </li>
+            <li> Number of Levels to Win: {{room.numberOfLevelsToWin}} </li>
+            <li> Number of Users in Room: {{room.usersInRoom}} <span> {{room.roomIsFull}} </span> </li>
+          </ul>
+        </li>
+      </ul>
 
     <footer>
       <p> &copy; 2015 Team Game Boyz </p>
     </footer>
 
-    <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/vendor/jquery-2.1.4.min.js"></script>
   </body>
 </html>

@@ -11,6 +11,11 @@
   right: 5px;
 }
 
+#currentRoom {
+  text-align: center;
+  margin: 0 auto;
+}
+
 #firstPlayerGame {
     -webkit-transform-origin: center top;
     -moz-transform-origin: center top;

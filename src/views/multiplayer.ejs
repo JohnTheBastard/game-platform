@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/multiplayer.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/multiplayer.css">
   </head>
   <body>
     <header>
@@ -31,39 +31,51 @@
           </div>
         </div>
       </div>
-  </div>
-
-  <div id="secondPlayerGameInfo">
-    <div id='secondPlayerStatus'>
-      <div id="secondPlayerCounter"> </div>
-      <div id="secondPlayerGame">
-        <div id="secondPlayerGameBoard">
-          <!-- JS will put table here. -->
-        </div>
-      </div>
     </div>
-</div>
+
+    <div id='currentRoom'> Welcome, you are currently in room <span id='roomName'><%=room%></span>
+      <span id='numberOfUsers'> </span>
+    </div>
+
+    <div id="secondPlayerGameInfo">
+      <div id='secondPlayerStatus'>
+        <div id="secondPlayerCounter"> </div>
+          <div id="secondPlayerGame">
+            <div id="secondPlayerGameBoard">
+              <!-- JS will put table here. -->
+            </div>
+          </div>
+        </div>
+    </div>
 
     <footer>
       <p> &copy; 2015 Team Game Boyz </p>
     </footer>
 
-
-    <script type="text/javascript" src="js/vendor/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="js/levels.js"></script>
-    <script type="text/javascript" src="js/multiplayer.js"></script>
+    <script type="text/javascript" src="../js/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/levels.js"></script>
+    <script type="text/javascript" src="../js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
     <script>
-
+      var currentRoom = $.trim($('#roomName').text());
       var clientSocket = io('/multiplayer');
+      clientSocket.emit('joinedRoom', currentRoom);
+
       clientSocket.on('broad', function(data){
-        secondPlayerKeyDown(data);
+        console.log(data);
+        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
+          secondPlayerKeyDownEvent(data.moves[ii]);
+        }
+        clientSocket.emit('movesCompleted', data.currentMove);
       });
 
       function secondPlayerInput(key) {
-        clientSocket.emit('move', key.keyCode );
+        var input = {}
+        input.keyCode = key.keyCode;
+        input.roomName = currentRoom;
+        clientSocket.emit('move', input );
       }
-      
+
       window.addEventListener("keydown", secondPlayerInput, false);
 
     </script>

@@ -30,7 +30,9 @@ function createApp() {
 	// view engine setup
 	app.set( 'views', path.join( __dirname, 'views' ) );
 	//app.set( 'view engine', 'hbs' );
-	app.set( 'view engine', 'jade' );
+
+//	app.set( 'view engine', 'jade' );
+  app.set('view engine', 'ejs');
 
 	app.use( favicon( path.join( publicPath, 'img/favicon.ico' ) ) );
 	app.use( morgan('dev') );
@@ -55,10 +57,13 @@ function createApp() {
 		saveUninitialized: true
 	}));
 	app.use(grant);
+
   app.use(login);
 	app.use('/play', authenticated, play);
   app.use('/guestplay', guestplay);
 	app.use("/data", data);
+
+
 
 	/* * * * * * * * * *
 	 * multiplayer     *
