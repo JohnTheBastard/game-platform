@@ -8,11 +8,6 @@ const path          = require('path');
 const bodyParser    = require('body-parser');
 const mongoose      = require('mongoose');
 
-let loginPath = path.join(__dirname, '../views', 'login.html');
-
-router.get('/login', (req, res) => {
-    res.sendFile(loginPath);
-});
 mongoose.Promise = Promise;
 router.get('/twitter', (req, res, next) => {
 	User.findOne({

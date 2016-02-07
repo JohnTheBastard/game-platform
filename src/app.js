@@ -20,7 +20,6 @@ const routes = require('./routes/index');
 const blobs = require('./routes/blobs');
 const login = require( './routes/login' );
 const play = require( './routes/play' );
-const guestplay = require( './routes/guestplay' );
 const authenticated = require('./routes/authroute');
 function createApp() {
 
@@ -62,7 +61,6 @@ function createApp() {
 
   app.use(login);
 	app.use('/play', authenticated, play);
-  app.use('/guestplay', guestplay);
 	app.use("/data", data);
 
 
