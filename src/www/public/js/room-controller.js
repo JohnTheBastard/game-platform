@@ -32,7 +32,5 @@ angular.module('myApp')
       $scope.error = data;
     });
 
-
-
   }]
 );
