@@ -29,5 +29,4 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 app.controller('guestCtrl', function($scope, $element, $http) {
     var el = angular.element(document.querySelector('#gameBoard'));
 	createBoxxer(el);
-	});
 });
