@@ -2,7 +2,7 @@ var app = angular.module('boxxleApp', []);
 app.controller('gameCtrl', function($scope, $element, $http) {
     var el = angular.element(document.querySelector('#gameBoard'));
 	var game;
-	
+
 	$http.get('/data').then( function(res) {
 		console.log(res.data.data);
 		game = createBoxxer(el, res.data.data);
