@@ -16,6 +16,11 @@
   margin: 0 auto;
 }
 
+#waitingForUser {
+  text-align: center;
+  color: red;
+}
+
 #firstPlayerGame {
     -webkit-transform-origin: center top;
     -moz-transform-origin: center top;

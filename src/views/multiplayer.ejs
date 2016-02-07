@@ -38,6 +38,9 @@
       <p>Number Of Levels To Win  : <span id='roomLevelsToWin'><%=levelsToWin%></span> </p>
     </div>
 
+    <h2 id='waitingForUser'> Welcome, waiting for User to Join......</h2>
+
+
     <div id="secondPlayerGameInfo">
       <div id='secondPlayerStatus'>
         <div id="secondPlayerCounter"> </div>
@@ -60,6 +63,7 @@
     <script>
       var currentRoom = $.trim($('#roomName').text());
       var difficulty = $.trim($('#roomDiff').text());
+      var waiting= $('#waitingForUser');
       var levelsToWin = Number($.trim($('#roomLevelsToWin').text()));
       var startingLevel = 0;
       startGame(startingLevel,difficulty,levelsToWin);
@@ -87,6 +91,9 @@
 
       clientSocket.on('startGame', function(data){
         window.addEventListener("keyup", secondPlayerInput, false);
+        waiting.text('GO GO GO GO!!!!!');
+        firstPlayerKeyDownEvent(13);
+        secondPlayerKeyDownEvent(13);
         clientSocket.emit('otherUserCanStart', data);
       });
 
