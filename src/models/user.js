@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const User = new Schema({
+const User = new mongoose.Schema({
 	twitter: {
 		screen_name: String,
 		user_id: String,
@@ -11,6 +10,4 @@ const User = new Schema({
 	collection: 'user'
 });
 
-user = mongoose.model('user', User);
-
-module.exports = user;
+module.exports = mongoose.model('user', User);
