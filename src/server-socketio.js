@@ -104,6 +104,10 @@ module.exports = function startIO(server) {
 			serverSocket.broadcast.to(data).emit('startGame', 'you may now start');
 		});
 
+		serverSocket.on('firstPlayerCanMove', function(data){
+			serverSocket.broadcast.to(data.roomName).emit('firstBroad', data.keyCode);
+		});
+
 		serverSocket.on('move', function(data) {
 			var moveData = data;
 			Game.findOne({playerName: serverSocket.id})
@@ -113,16 +117,20 @@ module.exports = function startIO(server) {
 					game.save()
 						.then(function(game){
 							var gameData = {};
+							gameData.roomName = moveData.roomName;
 							gameData.movesCompleted = game.movesCompleted;
 							gameData.moves = game.moves;
 							gameData.currentMove = game.currentMove;
 							serverSocket.broadcast.to(moveData.roomName).emit('broad',gameData);
-							serverSocket.broadcast.to(serverSocket.id).emit('local',moveData.keyCode);
 						});
 				})
 				.catch(function(error){
 					console.log(error);
 				})
+		});
+
+		serverSocket.on('firstPlayerCanMove', function(data){
+			serverSocket.broadcast.to(data.roomName).emit('firstPlayerMove',data);
 		});
 
 		serverSocket.on('movesCompleted', function(data){

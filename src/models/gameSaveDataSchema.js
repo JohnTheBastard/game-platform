@@ -6,17 +6,20 @@ const PushesRocksBestScore = new mongoose.Schema({
 	level: String,
 	score: Number
 });
+const pushesRocksBestScore = mongoose.model('pushesRocksBestScore', PushesRocksBestScore);
+
 
 const PushesRocksUserData = new mongoose.Schema({
-	current_level: PushesRocksLevel,
-	best_scores: [PushesRocksBestScore]
-}, {
-    collection: 'user'
+	current_level: {type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksLevel'},
+	scores: [PushesRocksBestScore]
 });
+const pushesRocksUserData = mongoose.model('pushesRocksUserData', PushesRocksUserData);
 
 
 const GameSaveData = new mongoose.Schema({
-	pushes_rocks: PushesRocksUserData
+	pushes_rocks: {type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksUserData'}
 });
 
-module.exports = mongoose.model('gameSaveData', GameSaveData);
+const gameSaveData = mongoose.model('gameSaveData', GameSaveData);
+module.exports = gameSaveData;
+
