@@ -9,9 +9,9 @@ var Room = new Schema({
     numberOfLevelsToWin: { type: Number, required: true },
     diff: { type: String, required: true }
 }, {
-    collection: 'multiPlayerRooms'
+    collection: 'Rooms'
 });
 
-room = mongoose.model('multiPlayerRooms', Room);
+room = mongoose.model('Rooms', Room);
 
 module.exports = room;

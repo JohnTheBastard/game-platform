@@ -1,4 +1,11 @@
-var app = angular.module( 'myApp', ['ngRoute']);
+var app = angular.module( 'myApp', ['ngRoute','btford.socket-io']);
+app.factory('socket', function(socketFactory) {
+	var myRoomSocket = io('/rooms');
+	mySocket = socketFactory({
+		ioSocket: myRoomSocket
+	});
+	return mySocket;
+});
 app.config( [ '$routeProvider', function( $routeProvider ) {
 	$routeProvider
 		.when('/', {
@@ -20,8 +27,8 @@ app.config( [ '$routeProvider', function( $routeProvider ) {
 			controller: 'gameCtrl'
 		})
 		.when('/rooms', {
-			templateUrl: 'boxxle/rooms.html'
-			//controller:
+			templateUrl: 'boxxle/rooms.html',
+			controller: 'roomCtrl'
 		})
 		.otherwise({
 			redirectTo: '/'

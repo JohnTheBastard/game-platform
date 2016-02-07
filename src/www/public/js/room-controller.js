@@ -1,12 +1,5 @@
-angular.module('listRoomsApp', ['btford.socket-io'])
-  .factory('socket', function(socketFactory) {
-    var myRoomSocket = io('/rooms');
-    mySocket = socketFactory({
-      ioSocket: myRoomSocket
-    });
-    return mySocket;
-  })
-  .controller('mainCtrl',['$scope','$http','socket',function($scope,$http,clientSocket) {
+angular.module('myApp')
+  .controller('roomCtrl',['$scope','$http','socket',function($scope,$http,clientSocket) {
     $scope.rooms = [];
     $scope.error = '';
     $scope.createRoom = function(){

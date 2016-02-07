@@ -11,7 +11,7 @@ const Grant        = require('grant-express'),
       grant        = new Grant( require('./config/grantConfig') );
 
 const multiplayer = require('./routes/multiplayer');
-const rooms = require('./routes/rooms');
+
 const data = require('./routes/data');
 
 const db = require('./models/db');
@@ -71,7 +71,6 @@ function createApp() {
 	 * multiplayer     *
 	 * * * * * * * * * */
 	app.use('/multiplayer', multiplayer());
-	app.use('/rooms', rooms());
 
 	/* * * * * * * * * *
 	 * error handlers  *

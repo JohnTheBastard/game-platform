@@ -29,6 +29,7 @@ module.exports = function startIO(server) {
 					showAllRooms(Room, serverSocket);
 				})
 				.catch(function(error) {
+					console.log(error);
 					serverSocket.emit('roomError', 'Sorry that room has already been taken.');
 				});
 		});
