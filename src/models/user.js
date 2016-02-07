@@ -4,8 +4,8 @@ const User = new mongoose.Schema({
 		screen_name: String,
 		user_id: String,
 	},
-	game_data: [GameSaveData],
-	
+	//game_data: [GameSaveData],
+
 }, {
 	collection: 'user'
 });
