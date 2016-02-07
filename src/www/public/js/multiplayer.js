@@ -314,7 +314,7 @@ function GameBoard(containerID) {
 
 }
 
-var BOXER_GAME_MODULE = (function() {
+function startGame() {
   var my = {};
   my.$firstPlayerAnchor = $("#firstPlayerGameBoard");
   my.firstPlayer = new User();
@@ -335,12 +335,10 @@ var BOXER_GAME_MODULE = (function() {
     $(containerID).css('width', game.boardDimensionInPixels);
   }
 
-  // I don't really understand window.onload behavior
-  // so I'm probably doing this wrong.
-  window.onload = function() {
-    my.initializeGameBoard(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container');
-    my.initializeGameBoard(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2');
-  }
+
+  my.initializeGameBoard(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container');
+  my.initializeGameBoard(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2');
+
 
 
   my.advanceTheUser = function(user,game) {
@@ -485,4 +483,4 @@ var BOXER_GAME_MODULE = (function() {
 
 
   return my;
-})();
+};

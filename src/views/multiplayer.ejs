@@ -57,6 +57,7 @@
     <script type="text/javascript" src="../js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
     <script>
+      startGame();
       var currentRoom = $.trim($('#roomName').text());
       var clientSocket = io('/multiplayer');
       clientSocket.emit('joinedRoom', currentRoom);

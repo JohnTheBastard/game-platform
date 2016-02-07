@@ -73,7 +73,7 @@ module.exports = function startIO(server) {
 						game.currentMove = 1;
 						game.playerName = serverSocket.id;
 						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
-						game.save().then(function(game){ console.log('first',game)});
+						game.save();
 					} else if(room.secondPlayer === 'player') {
 						room.secondPlayer = serverSocket.id;
 						var game = new Game();
@@ -84,7 +84,7 @@ module.exports = function startIO(server) {
 						game.currentMove = 1;
 						game.playerName = serverSocket.id;
 						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
-						game.save().then(function(game){ console.log('second',game)});
+						game.save();
 					}
 					return room;
 				})
