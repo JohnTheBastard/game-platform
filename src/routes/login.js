@@ -11,10 +11,35 @@ const mongoose      = require('mongoose');
 
 let loginPath = path.join(__dirname, '../views/boxxle', 'login.html');
 
+
+/*
+const FOOFOO = new mongoose.Schema({  
+	identifier: String,
+	difficulty: String,
+	data: Object,
+});
+let foofoo = mongoose.model('fooFoo', FOOFOO);
+*/
+
+let firstLevel;
+const getFirstLevel = function() {
+	PushesRocksLevel.getLevel('easy01-level00', function(level) {
+//		firstLevel = new mongoose.model('fooFoo', FOOFOO)({	identifier: level.identifier, 
+		firstLevel = new PushesRocksLevel({	identifier: level.identifier, 
+											difficulty: level.difficulty, 
+											data: level.data });
+		console.log(' l:', level instanceof mongoose.model('pushesRocksLevel') );
+		console.log('fl:', firstLevel instanceof mongoose.model('pushesRocksLevel') );
+	}); 	
+};
+
+getFirstLevel();
+
 router.get('/login', (req, res) => {
     res.sendFile(loginPath);
 });
-mongoose.Promise = Promise;
+mongoose.Promise = Promise; 
+
 router.get('/twitter', (req, res, next) => {
 	User.findOne({
 		twitter: {
@@ -23,12 +48,16 @@ router.get('/twitter', (req, res, next) => {
 		}
 	})
 	.then((user) => {
-		if (user) return user;
+		if (user) return user;	
 		return new User({
 			twitter: {
 				screen_name: req.query.raw.screen_name,
-				user_id: req.query.raw.user_id,
-				game_data: { pushes_rocks: { current_level: PushesRocksLevel.getLevel('easy01-level00') } }
+				user_id: req.query.raw.user_id
+			},
+			game_data: { 
+				pushes_rocks: { 
+					current_level: firstLevel
+				} 
 			}
 		}).save();
 	})
