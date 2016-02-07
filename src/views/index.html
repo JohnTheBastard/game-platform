@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='myApp'>
+<head>
+	<title>$templateCache</title>
+	<meta charset="UTF-8">
+	<link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+	<!-- <script type="text/javascript" src= "js/vendor/jquery-2.1.4.min.js"></script> -->
+	<script src='js/vendor/angular.min.js'></script>
+	<script src='js/vendor/angular-route.min.js'></script>
+
+	<script type="text/javascript" src="js/main-control.js"></script>
+	<!-- <script type="text/javascript" src="js/login-control.js"></script> -->
+	<script type="text/javascript" src="js/main-control.js"></script>
+
+	<script type="text/javascript" src= "js/levels.js"></script>
+	<script type="text/javascript" src= "js/boxer.js"></script>
+	<script src='js/main-control.js'></script>
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+
+	<script src='/socket.io/socket.io.js'></script>
+	<script src='js/vendor/socket.js'></script>
+	<script type="text/javascript" src="js/room-controller.js"></script>
+</head>
+<body>
+	<header>
+		<nav id="navBar">
+			<!-- <div id="logo">
+					<h1>Game</h1>
+						<span id="B">B</span>
+						<span id="O">O</span>
+						<span id="Y">Y</span>
+						<span id="Z">Z</span>
+					<h2> Boxxle </h2>
+				</div> -->
+			<ul>
+				<li class="sub" id="homeNav"><a href="#/"><i class="fa fa-home fa-lg"></i> Home</a>
+					<aside></aside>
+					<ul>
+						<li><a href="#/login">login</a></li>
+						<li><a href="#/about">about</a></li>
+					</ul>
+				</li>
+				<li class="sub" id="blogNav"><a href="#/login"><i class="fa fa-edit fa-lg"></i>Play</a>
+					<aside></aside>
+					<ul>
+						<li><a href="#/guest">guest</a></li>
+						<li><a href="#/rooms">Multiplayer</a></li>
+						</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+		</nav>
+	</header>
+	<main>
+		<div ng-view></div>
+	</main>
+</body>
+
+</html>

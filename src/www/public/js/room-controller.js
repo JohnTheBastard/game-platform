@@ -1,12 +1,5 @@
-angular.module('listRoomsApp', ['btford.socket-io'])
-  .factory('socket', function(socketFactory) {
-    var myRoomSocket = io('/rooms');
-    mySocket = socketFactory({
-      ioSocket: myRoomSocket
-    });
-    return mySocket;
-  })
-  .controller('mainCtrl',['$scope','$http','socket',function($scope,$http,clientSocket) {
+angular.module('myApp')
+  .controller('roomCtrl',['$scope','$http','socket',function($scope,$http,clientSocket) {
     $scope.rooms = [];
     $scope.error = '';
     $scope.createRoom = function(){
@@ -16,14 +9,15 @@ angular.module('listRoomsApp', ['btford.socket-io'])
       newRoom.usersInRoom = 0;
       newRoom.firstPlayer = 'player';
       newRoom.secondPlayer = 'player';
-      newRoom.creator = $scope.creator;
+      newRoom.diff = $scope.diff;
       newRoom.numberOfLevelsToWin = $scope.levels;
       clientSocket.emit('newRoom', newRoom);
     }
 
     $scope.joinRoom = function(room) {
       if(room.usersInRoom < 2) {
-        window.location.href = '/multiplayer/'+room.name
+        var url = '/multiplayer/'+room.name+'/'+room.diff+'/'+room.numberOfLevelsToWin;
+        window.location.href = url;
         clientSocket.emit('userJoined', room);
       } else {
         room.roomIsFull = 'Sorry that room is full';

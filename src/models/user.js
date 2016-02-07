@@ -6,7 +6,6 @@ const User = new mongoose.Schema({
 		user_id: String,
 	},
 	game_data: { type: mongoose.Schema.Types.ObjectId, ref: 'gameSaveData'}
-	
 }, {
 	collection: 'user'
 });

@@ -15,12 +15,12 @@ if (mobile) {
 
 var listenToKeystrokes = true;
 
-var wallURL = "../img/RedBrick.png";
-var floorURL = "../img/FloorTile.png";
-var crateURL = "../img/WoodenCrate.png";
-var crateOnDotURL = "../img/WoodenCrateOnDot.png"
-var dotsURL = "../img/DotTile.png";
-var spriteURL = "../img/Sprite.gif";
+var wallURL = "../../../img/RedBrick.png";
+var floorURL = "../../../img/FloorTile.png";
+var crateURL = "../../../img/WoodenCrate.png";
+var crateOnDotURL = "../../../img/WoodenCrateOnDot.png"
+var dotsURL = "../../../img/DotTile.png";
+var spriteURL = "../../../img/Sprite.gif";
 
 var pad = function(num, size) {
   var s = num + "";
@@ -44,14 +44,10 @@ var welcomeBack = function() {
 
 }
 
-function User() {
-  this.currentLevel = 0;
-  this.levelScores = {
-    easy: [],
-    hard: []
-  };
-  this.difficulty = "easy";
-
+function User(startingLevel, diff, amountOfLevelsToWin) {
+  this.currentLevel = startingLevel;
+  this.difficulty = diff;
+  this.numberOfLevelsToWin = amountOfLevelsToWin;
 }
 
 function Coord(tileType, tileURL) {
@@ -314,13 +310,13 @@ function GameBoard(containerID) {
 
 }
 
-var BOXER_GAME_MODULE = (function() {
+function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
   var my = {};
   my.$firstPlayerAnchor = $("#firstPlayerGameBoard");
-  my.firstPlayer = new User();
+  my.firstPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
   my.firstPlayerGame = new GameBoard('container');
   my.$secondPlayerAnchor = $("#secondPlayerGameBoard");
-  my.secondPlayer = new User();
+  my.secondPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
   my.secondPlayerGame = new GameBoard('container2');
 
   my.initializeGameBoard = function(anchor,user,game, gameID, containerID) {
@@ -335,12 +331,10 @@ var BOXER_GAME_MODULE = (function() {
     $(containerID).css('width', game.boardDimensionInPixels);
   }
 
-  // I don't really understand window.onload behavior
-  // so I'm probably doing this wrong.
-  window.onload = function() {
-    my.initializeGameBoard(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container');
-    my.initializeGameBoard(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2');
-  }
+
+  my.initializeGameBoard(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container');
+  my.initializeGameBoard(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2');
+
 
 
   my.advanceTheUser = function(user,game) {
@@ -350,12 +344,9 @@ var BOXER_GAME_MODULE = (function() {
     $('#gameplay').append(winMessage);
 
     console.log("break: advanceTheUser ");
-    if (user.currentLevel < (levelData[user.difficulty].length - 1)) {
+    if (user.currentLevel < user.numberOfLevelsToWin) {
       user.currentLevel++;
-    } else if (user.difficulty == "easy" && user.currentLevel == levelData[user.difficulty].length - 1) {
-      user.difficulty = "hard";
-      user.currentLevel = 0;
-    } else if (user.difficulty == "hard" && user.currentLevel == levelData[user.difficulty].length - 1) {
+    } else if (user.currentLevel === user.numberOfLevelsToWin) {
       console.log("CONGRATULATIONS: You beat all the levels!");
     } else {
       console.log("Error: level index out of bounds");
@@ -377,12 +368,11 @@ var BOXER_GAME_MODULE = (function() {
     var currentUser = user;
     var playerCounterId = counterID;
 
-    return function(key) {
-      var keyvalue = key.keyCode;
+    return function(keyvalue) {
       var xy = [(currentGame.sprite.x / cellWidth), (currentGame.sprite.y / cellWidth)];
 
       // Keep key input from scrolling
-      key.preventDefault();
+
 
       if (currentGame.winCondition) {
         my.advanceTheUser(currentUser,currentGame);
@@ -454,7 +444,7 @@ var BOXER_GAME_MODULE = (function() {
     }
   }
 
-  my.firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
+  firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
   secondPlayerKeyDownEvent = my.secondPlayerInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter");
 
   my.scaleGameBoard = function(anchor,game) {
@@ -476,7 +466,7 @@ var BOXER_GAME_MODULE = (function() {
   my.scaleGameBoard(my.$secondPlayerAnchor,my.secondPlayerGame);
 
   my.eventListeners = function() {
-    window.addEventListener("keydown", my.firstPlayerKeyDownEvent, false);
+  //  window.addEventListener("keydown", my.firstPlayerKeyDownEvent, false);
     window.addEventListener("resize", my.scaleGameBoard(my.$firstPlayerAnchor,my.firstPlayerGame), false);
   }
 
@@ -485,4 +475,4 @@ var BOXER_GAME_MODULE = (function() {
 
 
   return my;
-})();
+};

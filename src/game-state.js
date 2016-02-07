@@ -30,7 +30,7 @@ app.use( express.static( publicPath ) );
 
 app.use("/data", data);
 app.use('/', function (req, res) {
-	res.render( 'play/play' );
+	res.render( 'boxxle/play' );
 });
 
 http.createServer(app).listen(app.get('port'), function () {

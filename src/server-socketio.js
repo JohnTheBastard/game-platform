@@ -29,6 +29,7 @@ module.exports = function startIO(server) {
 					showAllRooms(Room, serverSocket);
 				})
 				.catch(function(error) {
+					console.log(error);
 					serverSocket.emit('roomError', 'Sorry that room has already been taken.');
 				});
 		});
@@ -73,7 +74,7 @@ module.exports = function startIO(server) {
 						game.currentMove = 1;
 						game.playerName = serverSocket.id;
 						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
-						game.save().then(function(game){ console.log('first',game)});
+						game.save();
 					} else if(room.secondPlayer === 'player') {
 						room.secondPlayer = serverSocket.id;
 						var game = new Game();
@@ -84,16 +85,27 @@ module.exports = function startIO(server) {
 						game.currentMove = 1;
 						game.playerName = serverSocket.id;
 						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
-						game.save().then(function(game){ console.log('second',game)});
+						game.save();
 					}
 					return room;
 				})
 				.then(function(room) {
+					if(room.usersInRoom === 2) {
+						serverSocket.to(room.name).emit('startGame', room.name);
+					}
 						room.save();
 				})
 				.catch(function(error) {
 					console.log(error);
 				})
+		});
+
+		serverSocket.on('otherUserCanStart', function(data){
+			serverSocket.broadcast.to(data).emit('startGame', 'you may now start');
+		});
+
+		serverSocket.on('firstPlayerCanMove', function(data){
+			serverSocket.broadcast.to(data.roomName).emit('firstBroad', data.keyCode);
 		});
 
 		serverSocket.on('move', function(data) {
@@ -105,6 +117,7 @@ module.exports = function startIO(server) {
 					game.save()
 						.then(function(game){
 							var gameData = {};
+							gameData.roomName = moveData.roomName;
 							gameData.movesCompleted = game.movesCompleted;
 							gameData.moves = game.moves;
 							gameData.currentMove = game.currentMove;
@@ -114,6 +127,10 @@ module.exports = function startIO(server) {
 				.catch(function(error){
 					console.log(error);
 				})
+		});
+
+		serverSocket.on('firstPlayerCanMove', function(data){
+			serverSocket.broadcast.to(data.roomName).emit('firstPlayerMove',data);
 		});
 
 		serverSocket.on('movesCompleted', function(data){

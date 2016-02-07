@@ -1,15 +1,15 @@
 var app = angular.module('boxxleApp', []);
-
 app.controller('gameCtrl', function($scope, $element, $http) {
-    var el = angular.element(document.querySelector('#gameBoard')); 
+    var el = angular.element(document.querySelector('#gameBoard'));
 	var game;
 	$http.get('/data').then( function(res) {
 		console.log(res.data.data);
 		game = createBoxxer(el, res.data.data);
 		game.onDone = onDone;
 	});
-	
-	function onDone(endData) {		
+
+
+	function onDone(endData) {
 			$scope.saving = true;
 			$http.post('/data', endData).then(function(res){
 				var newLevel = res.data;
@@ -21,5 +21,5 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 
 			$scope.game = game;
 		}
-    
+
 });
