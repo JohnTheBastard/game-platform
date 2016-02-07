@@ -2,10 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const PushesRocksLevel = require('../models/pushesRocksLevelSchema');
-//const mongoose = require('mongoose');
 const User = require('../models/user.js');
-
-//const nextLevel = require('../utils/nextLevel').nextLevel;
 
 let firstLevelID = "easy01-level03";
 let secondLevelID = "easy01-level04";

@@ -10,7 +10,7 @@ PushesRocksLevel.statics.getLevel = function(levelID, cb){
 	console.log(typeof cb);
 	mongoose.model('pushesRocksLevel').findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
 		if(err) return cb(err);
-		cb( level.data );
+		cb( level );
 	});	
 };
 

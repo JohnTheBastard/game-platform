@@ -27,7 +27,8 @@ router.get('/twitter', (req, res, next) => {
 		return new User({
 			twitter: {
 				screen_name: req.query.raw.screen_name,
-				user_id: req.query.raw.user_id
+				user_id: req.query.raw.user_id,
+				game_data: { pushes_rocks: { current_level: PushesRocksLevel.getLevel('easy01-level00') } }
 			}
 		}).save();
 	})

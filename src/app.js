@@ -22,19 +22,20 @@ const login = require( './routes/login' );
 const play = require( './routes/play' );
 const guestplay = require( './routes/guestplay' );
 const authenticated = require('./routes/authroute');
+
 function createApp() {
 
-	var app = express();
+	const app = express();
 
-	var publicPath = path.join( __dirname, 'www/public' );
-  var viewPath = path.join( __dirname, 'views' );
+	const publicPath = path.join( __dirname, 'www/public' );
+	const viewPath = path.join( __dirname, 'views' );
 
 	// view engine setup
 	app.set( 'views', path.join( __dirname, 'views' ) );
 	//app.set( 'view engine', 'hbs' );
 
-//	app.set( 'view engine', 'jade' );
-  app.set('view engine', 'ejs');
+	//	app.set( 'view engine', 'jade' );
+	app.set('view engine', 'ejs');
 
 	app.use( favicon( path.join( publicPath, 'img/favicon.ico' ) ) );
 	app.use( morgan('dev') );
@@ -46,7 +47,6 @@ function createApp() {
 	app.use( cookieParser() );
 	app.use( express.static( publicPath, { redirect : false } ) );
 	app.use( express.static( viewPath, { redirect : false } ) );
-//	app.use('/blobs', blobs);
 
 	/* * * * * * * * * *
 	 * authenitcation  *
@@ -57,12 +57,12 @@ function createApp() {
 		saveUninitialized: true
 	}));
 
-  app.use('/', routes);
+	app.use('/', routes);
 	app.use(grant);
 
-  app.use(login);
+	app.use(login);
 	app.use('/play', authenticated, play);
-  app.use('/guestplay', guestplay);
+	app.use('/guestplay', guestplay);
 	app.use("/data", data);
 
 
