@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> Game Boyz | Final Project </title>
+    <script type="text/javascript" src= "js/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/vendor/angular.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="css/boxxle.css">
+    <link  type="text/css" rel="stylesheet" href="css/main.css">
+  </head>
+  <body ng-app="boxxleApp">
+      <!-- <div ng-controller="loginCtrl"> -->
+        <!-- <li><a href="" ng-click="checkToken()" class="selected">Play</a></li> -->
+          <!-- <li><a href="" ng-click="checkToken()" class="selected">Play</a></li> -->
+    <div id="gameplay">
+      <p class='playParagraphs'> Hey, welcome to the Boxxle Game Page. By now you should have
+         already entered a username and should be ready to play. If you
+         are still a little hazy on how the game works here is a basic
+         summary. The goal is to get the character (blue guy) to move around and push all the
+         crates over the dots. Once the box is over a crate, it should turn blue. If all the crates
+         are over the dots then you will be able to advance to the next level
+         by pressing enter. </p>
+
+      <p class='playParagraphs'> If you do not see a character or crates,
+         simply press enter to generate them. If you find yourself stuck on
+         the level and have no where to go. Simply refresh the page to start the level over. </p>
+
+      <p class='playParagraphs'> Press Space Bar to clear these paragraphs. Enjoy the Game! </p>
+    </div>
+
+    <div ng-controller='gameCtrl' id="status">
+
+      <div id="counter">
+      </div>
+          <div id="game">
+              <div id="gameBoard">
+                  <!-- Angular will put table here. -->
+              </div>
+          </div>
+
+      </div>
+      <div class="container">
+        <div class="row">
+          <h2>ToDo</h2>
+        </div>
+        <div class="row">
+      </div>
+
+      <footer>
+        <p> &copy; 2015 Team Game Boyz </p>
+      </footer>
+      <script type="text/javascript" src="js/game-control.js"></script>
+      <script type="text/javascript" src="js/login-control.js"></script>
+      <script type="text/javascript" src= "js/setCookie.js"></script>
+      <script type="text/javascript" src= "js/levels.js"></script>
+      <script type="text/javascript" src= "js/boxer.js"></script>
+</body>
+</html>

@@ -21,11 +21,13 @@ const blobs = require('./routes/blobs');
 const login = require( './routes/login' );
 const play = require( './routes/play' );
 const guestplay = require( './routes/guestplay' );
-const authenticated = require('./routes/authroute');
+// const authenticated = require('./routes/authroute');
 function createApp() {
 
 	var app = express();
-	var publicPath = path.join( __dirname, 'www/public/' );
+
+	var publicPath = path.join( __dirname, 'www/public' );
+  var viewPath = path.join( __dirname, 'views' );
 
 	// view engine setup
 	app.set( 'views', path.join( __dirname, 'views' ) );
@@ -43,9 +45,8 @@ function createApp() {
 	app.use( bodyParser.json() );
 	app.use( cookieParser() );
 
-	app.use( express.static( publicPath ) );
-
-	app.use('/', routes);
+	app.use( express.static( publicPath, { redirect : false } ) );
+	app.use( express.static( viewPath, { redirect : false } ) );
 //	app.use('/blobs', blobs);
 
 	/* * * * * * * * * *
@@ -56,10 +57,12 @@ function createApp() {
 		resave: true,
 		saveUninitialized: true
 	}));
+
+  app.use('/', routes);
 	app.use(grant);
 
   app.use(login);
-	app.use('/play', authenticated, play);
+	app.use('/play', play);  //authenticated,
   app.use('/guestplay', guestplay);
 	app.use("/data", data);
 

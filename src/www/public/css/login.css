@@ -4,11 +4,27 @@ body {
     margin: 0;
     padding: 0;
 }
-.logo{
-  width: 50%;
+#logo {
+  text-align: center;
+  margin: 0;
+}
+#B {
+  color: red;
+}
+
+#O {
+  color: blue;
+}
+
+#Y {
+  color: lightgreen;
+}
+
+#Z {
+  color: yellow;
 }
 .login-select {
-  margin: 30% auto;
+  margin: 10rem auto;
   width: 30%;
 }
 .twitter-login{
