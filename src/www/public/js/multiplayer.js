@@ -44,14 +44,10 @@ var welcomeBack = function() {
 
 }
 
-function User() {
-  this.currentLevel = 0;
-  this.levelScores = {
-    easy: [],
-    hard: []
-  };
-  this.difficulty = "easy";
-
+function User(startingLevel, diff, amountOfLevelsToWin) {
+  this.currentLevel = startingLevel;
+  this.difficulty = diff;
+  this.numberOfLevelsToWin = amountOfLevelsToWin;
 }
 
 function Coord(tileType, tileURL) {
@@ -314,13 +310,13 @@ function GameBoard(containerID) {
 
 }
 
-function startGame() {
+function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
   var my = {};
   my.$firstPlayerAnchor = $("#firstPlayerGameBoard");
-  my.firstPlayer = new User();
+  my.firstPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
   my.firstPlayerGame = new GameBoard('container');
   my.$secondPlayerAnchor = $("#secondPlayerGameBoard");
-  my.secondPlayer = new User();
+  my.secondPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
   my.secondPlayerGame = new GameBoard('container2');
 
   my.initializeGameBoard = function(anchor,user,game, gameID, containerID) {
@@ -348,12 +344,9 @@ function startGame() {
     $('#gameplay').append(winMessage);
 
     console.log("break: advanceTheUser ");
-    if (user.currentLevel < (levelData[user.difficulty].length - 1)) {
+    if (user.currentLevel < user.numberOfLevelsToWin) {
       user.currentLevel++;
-    } else if (user.difficulty == "easy" && user.currentLevel == levelData[user.difficulty].length - 1) {
-      user.difficulty = "hard";
-      user.currentLevel = 0;
-    } else if (user.difficulty == "hard" && user.currentLevel == levelData[user.difficulty].length - 1) {
+    } else if (user.currentLevel === user.numberOfLevelsToWin) {
       console.log("CONGRATULATIONS: You beat all the levels!");
     } else {
       console.log("Error: level index out of bounds");
