@@ -1,4 +1,5 @@
 var app = angular.module('myApp', ['ngRoute', 'btford.socket-io']);
+
 app.factory('socket', function(socketFactory) {
     var myRoomSocket = io('/rooms');
     mySocket = socketFactory({
@@ -6,6 +7,9 @@ app.factory('socket', function(socketFactory) {
     });
     return mySocket;
 });
+
+
+//Setup '.when' routes attached to browser window obj
 window.routes = {
     '/': {
         templateUrl: 'boxxle/main.html',
@@ -34,9 +38,8 @@ window.routes = {
         authRequired: true
     }
 };
-/*
- * Checks paths that could be manually navigated to for a jwt token
- */
+
+//Checks paths that could be manually navigated to for a jwt token
 app.config(['$routeProvider', function($routeProvider) {
     for (var path in window.routes) {
         $routeProvider.when(path, window.routes[path]);
@@ -45,13 +48,20 @@ app.config(['$routeProvider', function($routeProvider) {
         redirectTo: '/'
     });
 }]).run(function($rootScope) {
+
+    //listen for nav changes in $rootScope
     $rootScope.$on("$locationChangeStart", function(event, next) {
+
+
+      // next - the route getting navigated to
+      // event - the $locationChangeStart object
         var jwt = localStorage.getItem('token');
-        for (var i in window.routes) {
-            if (next.indexOf(i) != -1) {
-                if (window.routes[i].authRequired && !jwt) {
-                    console.log('no token');
-                    event.preventDefault();
+        for (var ii in window.routes) {
+
+        // check the authRequired true/false values with indexOf
+            if (next.indexOf(ii) != -1) {
+                if (window.routes[ii].authRequired && !jwt) {
+                    event.defaultPrevented = true;
                 }
             }
         }
