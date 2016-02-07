@@ -2,6 +2,8 @@
 const db            = require('../models/db');
 const User          = require('../models/user');
 const PushesRocksLevel = require('../models/pushesRocksLevelSchema');
+const PushesRocksUserData = require('../models/gameSaveDataSchema').PushesRocksUserData;
+const GameSaveData = require('../models/gameSaveDataSchema').GameSaveData;
 const State         = require('../models/state');
 const token         = require('../models/token');
 const router        = new (require( 'express' ).Router )();
@@ -9,30 +11,19 @@ const path          = require('path');
 const bodyParser    = require('body-parser');
 const mongoose      = require('mongoose');
 
+
 let loginPath = path.join(__dirname, '../views/boxxle', 'login.html');
 
-
-
-const FOOFOO = new mongoose.Schema({  
-	identifier: String,
-	difficulty: String,
-	data: Object,
-});
-let foofoo = mongoose.model('fooFoo', FOOFOO);
-
-
-let firstLevel;
+let newGameSave;
 const getFirstLevel = function() {
-	PushesRocksLevel.getLevel('easy01-level00', function(level) {
-		firstLevel = new foofoo({	identifier: level.identifier, 
-//		firstLevel = new PushesRocksLevel({	identifier: level.identifier, 
-											difficulty: level.difficulty, 
-											data: level.data });
-		console.log(' l:', level instanceof mongoose.model('pushesRocksLevel') );
-		console.log('fl:', firstLevel instanceof mongoose.model('foofoo') );
+	PushesRocksLevel.findOne('easy01-level00').lean().select('_id').exec(function (err, level) {
+//	PushesRocksLevel.getLevel('easy01-level00', function(level) {
+	console.log("lid", level);
+		let prUserData = new PushesRocksUserData({ current_level: level._id })
+		newGameSave = new GameSaveData({ pushes_rocks: prUserData});
+		console.log( JSON.stringify(newGameSave, null, 3) );
 	}); 	
 };
-
 getFirstLevel();
 
 router.get('/login', (req, res) => {
@@ -54,11 +45,7 @@ router.get('/twitter', (req, res, next) => {
 				screen_name: req.query.raw.screen_name,
 				user_id: req.query.raw.user_id
 			},
-			game_data: { 
-				pushes_rocks: { 
-					current_level: firstLevel
-				} 
-			}
+			game_data: newGameSave
 		}).save();
 	})
 	.then((user) => {

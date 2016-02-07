@@ -10,6 +10,7 @@ const pushesRocksBestScore = mongoose.model('pushesRocksBestScore', PushesRocksB
 
 
 const PushesRocksUserData = new mongoose.Schema({
+	current_level: {type: Number, ref: 'pushesRocksLevel'},
 	current_level: {type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksLevel'},
 	scores: [PushesRocksBestScore]
 });
@@ -21,5 +22,8 @@ const GameSaveData = new mongoose.Schema({
 });
 
 const gameSaveData = mongoose.model('gameSaveData', GameSaveData);
-module.exports = gameSaveData;
+
+module.exports = {	PushesRocksBestScore: pushesRocksBestScore,
+					PushesRocksUserData: pushesRocksUserData,
+					GameSaveData: gameSaveData };
 
