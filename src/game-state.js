@@ -3,10 +3,8 @@ const http = require('http');
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
-const restify = require('express-restify-mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const db = require('./models/db');
 const data = require('./routes/data');
 
 

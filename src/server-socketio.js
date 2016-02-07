@@ -18,7 +18,7 @@ module.exports = function startIO(server) {
 		.catch(function (error) {
 			socket.emit('roomError', 'Sorry the database is down');
 		});
-	};
+	}
 
 	roomIO.on('connection', function(serverSocket) {
 		showAllRooms(Room, serverSocket);
@@ -48,7 +48,7 @@ module.exports = function startIO(server) {
 				})
 				.catch(function(error) {
 					socket.emit('roomError', 'Sorry the database is down');
-				})
+				});
 		});
 
 		serverSocket.on('disconnect', function(){
@@ -97,7 +97,7 @@ module.exports = function startIO(server) {
 				})
 				.catch(function(error) {
 					console.log(error);
-				})
+				});
 		});
 
 		serverSocket.on('otherUserCanStart', function(data){
@@ -126,7 +126,7 @@ module.exports = function startIO(server) {
 				})
 				.catch(function(error){
 					console.log(error);
-				})
+				});
 		});
 
 		serverSocket.on('firstPlayerCanMove', function(data){
@@ -141,19 +141,19 @@ module.exports = function startIO(server) {
 							.then(function(game) {
 								game.movesCompleted = data;
 								game.save();
-							})
+							});
 					} else if (room.secondPlayer === serverSocket.id) {
 						Game.findOne({'playerName': room.firstPlayer })
 							.then(function(game) {
 								game.movesCompleted = data;
 								game.save();
-							})
+							});
 					}
 				})
 				.catch(function(error){
 					console.log(error);
 				});
-		})
+		});
 
 		serverSocket.on('disconnect', function() {
 			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
@@ -174,7 +174,7 @@ module.exports = function startIO(server) {
 							})
 							.catch(function(error){
 								console.log(error);
-							})
+							});
 					}
 				})
 				.catch(function(error){

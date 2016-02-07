@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const session      = require('express-session');
-const MongoStore   = require('connect-mongo')(session);
 const Grant        = require('grant-express'),
       grant        = new Grant( require('./config/grantConfig') );
 
@@ -14,10 +13,7 @@ const multiplayer = require('./routes/multiplayer');
 
 const data = require('./routes/data');
 
-const db = require('./models/db');
-const blob = require('./models/blobs');
 const routes = require('./routes/index');
-const blobs = require('./routes/blobs');
 const login = require( './routes/login' );
 const play = require( './routes/play' );
 const authenticated = require('./routes/authroute');
@@ -62,7 +58,6 @@ function createApp() {
 
 	app.use(login);
 	app.use('/play', authenticated, play);
-	app.use('/guestplay', guestplay);
 	app.use("/data", data);
 
 	/* * * * * * * * * *
@@ -84,7 +79,7 @@ function createApp() {
 	// development error handler
 	// will print stacktrace
 	if ( app.get('env') === 'development' ) {
-		app.use(function(err, req, res, next) {
+		app.use(function(err, req, res) {
 			res.status(err.status || 500);
 			res.render('error', {
 				message: err.message,
@@ -95,7 +90,7 @@ function createApp() {
 
 	// production error handler
 	// no stacktraces leaked to user
-	app.use( (err, req, res, next) => {
+	app.use( (err, req, res) => {
 	  res.status(err.status || 500);
 	  res.render('error', {
 	    message: err.message,
