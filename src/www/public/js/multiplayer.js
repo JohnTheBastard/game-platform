@@ -313,10 +313,10 @@ function GameBoard(containerID) {
 function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
   var my = {};
   my.$firstPlayerAnchor = $("#firstPlayerGameBoard");
-  my.firstPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
+  my.firstPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin-1);
   my.firstPlayerGame = new GameBoard('container');
   my.$secondPlayerAnchor = $("#secondPlayerGameBoard");
-  my.secondPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
+  my.secondPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin-1);
   my.secondPlayerGame = new GameBoard('container2');
 
   my.initializeGameBoard = function(anchor,user,game, gameID, containerID) {
@@ -337,20 +337,19 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
 
 
 
-  my.advanceTheUser = function(user,game) {
-    var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (user.currentLevel + 1) +
-      ' in ' + game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
-    $('#gameplay').empty();
-    $('#gameplay').append(winMessage);
-
-    console.log("break: advanceTheUser ");
+  my.advanceTheUser = function(user,game, anchor, playerName) {
+    var lastLevel = false;
     if (user.currentLevel < user.numberOfLevelsToWin) {
       user.currentLevel++;
-    } else if (user.currentLevel === user.numberOfLevelsToWin) {
-      console.log("CONGRATULATIONS: You beat all the levels!");
+    } else if (user.currentLevel >= user.numberOfLevelsToWin) {
+      lastLevel = true;
+      anchor.empty();
+      anchor.append('<h3 id="winnerWinner"> WAHOOOOOO <br> ' + playerName + ' WON THE GAME <br> SORRY IF THATS <br> NOT YOU!!!! </h3>')
     } else {
       console.log("Error: level index out of bounds");
     }
+    return lastLevel;
+
   }
 
   function addCurrentStatus(user,game,counterID) {
@@ -360,19 +359,22 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
   }
 
 
-  my.processInput = function(anchor,user,game, gameID, containerID,counterID) {
+  my.processInput = function(anchor,user,game, gameID, containerID,counterID,playerName) {
     var currentAnchor = anchor;
     var currentGameID = gameID;
     var currentContainer = containerID;
     var currentGame = game;
     var currentUser = user;
     var playerCounterId = counterID;
+    var currentPlayerName = playerName;
 
     return function(keyvalue) {
       var xy = [(currentGame.sprite.x / cellWidth), (currentGame.sprite.y / cellWidth)];
       if (currentGame.winCondition) {
-        my.advanceTheUser(currentUser,currentGame);
-        my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
+        var lastLevelBeat = my.advanceTheUser(currentUser,currentGame,currentAnchor, currentPlayerName);
+        if(lastLevelBeat === false) {
+          my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
+        }
       } else if (listenToKeystrokes) {
         if (keyvalue == 37) {
           console.log("left");
@@ -402,9 +404,9 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
     }
   }
 
-  firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
-  secondPlayerKeyDownEvent = my.processInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter");
-  
+  firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter", 'Player 1' );
+  secondPlayerKeyDownEvent = my.processInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter", 'Player 2');
+
   my.scaleGameBoard = function(anchor,game) {
     var buffer = ($('header').height() + $('footer').height()) * 2;
     var frameHeight = $(window).height() - buffer;

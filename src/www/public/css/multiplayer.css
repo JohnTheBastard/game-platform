@@ -16,6 +16,10 @@
   margin: 0 auto;
 }
 
+#winnerWinner {
+  color: blue;
+}
+
 #waitingForUser {
   text-align: center;
   color: red;
