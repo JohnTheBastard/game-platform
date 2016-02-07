@@ -4,6 +4,6 @@ var localStorage = (function() {
     var jwt = window.location.search.split('=')[1];
 
     //modify the uri remove the token query
-    history.replaceState({}, document.title, "/play");
+    //history.replaceState({}, document.title, "/play");
     localStorage.setItem('token', jwt);
 })();

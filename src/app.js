@@ -21,7 +21,7 @@ const blobs = require('./routes/blobs');
 const login = require( './routes/login' );
 const play = require( './routes/play' );
 const guestplay = require( './routes/guestplay' );
-// const authenticated = require('./routes/authroute');
+const authenticated = require('./routes/authroute');
 function createApp() {
 
 	var app = express();
@@ -44,7 +44,6 @@ function createApp() {
 	// parse application/json
 	app.use( bodyParser.json() );
 	app.use( cookieParser() );
-
 	app.use( express.static( publicPath, { redirect : false } ) );
 	app.use( express.static( viewPath, { redirect : false } ) );
 //	app.use('/blobs', blobs);
@@ -62,7 +61,7 @@ function createApp() {
 	app.use(grant);
 
   app.use(login);
-	app.use('/play', play);  //authenticated,
+	app.use('/play', authenticated, play);
   app.use('/guestplay', guestplay);
 	app.use("/data", data);
 
