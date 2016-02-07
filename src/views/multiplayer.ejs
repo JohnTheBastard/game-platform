@@ -90,7 +90,7 @@
       }
 
       clientSocket.on('startGame', function(data){
-        window.addEventListener("keyup", secondPlayerInput, false);
+        window.addEventListener("keydown", secondPlayerInput, false);
         clientSocket.emit('otherUserCanStart', data);
       });
 
