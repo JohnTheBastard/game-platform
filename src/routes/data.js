@@ -15,8 +15,8 @@ router.get('/', function(req, res, next) {
 
 /* POST Level Completion */
 
-router.post('/', function(req, res, next) {
-	saveUserData(req.body, function(err, nextLevelID ){
+router.post('/', function( req, res, next ) {
+	saveUserData(req.body, function( err, nextLevelID ){
 		if(err) return next(err);
 		PushesRocksLevel.getLevel( nextLevelID, res.json.bind(res) );
 	});
