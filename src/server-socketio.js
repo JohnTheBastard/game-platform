@@ -73,7 +73,7 @@ module.exports = function startIO(server) {
 						game.currentMove = 1;
 						game.playerName = serverSocket.id;
 						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
-						game.save().then(function(game){ console.log('first',game)});
+						game.save();
 					} else if(room.secondPlayer === 'player') {
 						room.secondPlayer = serverSocket.id;
 						var game = new Game();
@@ -84,16 +84,23 @@ module.exports = function startIO(server) {
 						game.currentMove = 1;
 						game.playerName = serverSocket.id;
 						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
-						game.save().then(function(game){ console.log('second',game)});
+						game.save();
 					}
 					return room;
 				})
 				.then(function(room) {
+					if(room.usersInRoom === 2) {
+						serverSocket.to(room.name).emit('startGame', room.name);
+					}
 						room.save();
 				})
 				.catch(function(error) {
 					console.log(error);
 				})
+		});
+
+		serverSocket.on('otherUserCanStart', function(data){
+			serverSocket.broadcast.to(data).emit('startGame', 'you may now start');
 		});
 
 		serverSocket.on('move', function(data) {
@@ -109,6 +116,7 @@ module.exports = function startIO(server) {
 							gameData.moves = game.moves;
 							gameData.currentMove = game.currentMove;
 							serverSocket.broadcast.to(moveData.roomName).emit('broad',gameData);
+							serverSocket.broadcast.to(serverSocket.id).emit('local',moveData.keyCode);
 						});
 				})
 				.catch(function(error){

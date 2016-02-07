@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 var Room = new Schema({
     name: { type: String, required: true, unique: true },
     usersInRoom: Number,
-    creator: { type: String, required: true, unique: true },
     firstPlayer: String,
     secondPlayer: String,
-    numberOfLevelsToWin: Number
+    numberOfLevelsToWin: { type: Number, required: true },
+    diff: { type: String, required: true }
 }, {
     collection: 'multiPlayerRooms'
 });
