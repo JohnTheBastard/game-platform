@@ -12,24 +12,24 @@ let secondLevelID = "easy01-level04";
 /* GET Level */
 
 router.get('/', function(req, res, next) {
-	PushesRocksLevel.getLevel( firstLevelID, res );
+	getLevel( firstLevelID, res );
 });
 
-/*
+
 const getLevel = function(levelID, res, next){
 	PushesRocksLevel.findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
 		if(err) return next(err);
 		res.json(level);
 	});	
 };
-*/
+
 
 /* POST Level Completion */
 
 router.post('/', function(req, res, next) {
 	saveUserData(req.body, function(err, nextLevelID ){
 		if(err) return next(err);
-		PushesRocksLevel.getLevel( nextLevelID, res );
+		getLevel( nextLevelID, res );
 	});
 });
 
@@ -48,7 +48,7 @@ const saveUserData = function(newUserData, cb){
 };
 
 const nextID = function(levelID, cb) {
-	Level.find().lean().select("identifier").exec(function (err, identifiers) {
+	PushesRocksLevel.find().lean().select("identifier").exec(function (err, identifiers) {
 		if(err) return cb(err);
 		let idArr = identifiers.map( obj => obj.identifier );
 		let idIndex = 1 + idArr.indexOf(levelID);
