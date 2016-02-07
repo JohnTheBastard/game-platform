@@ -1,6 +1,7 @@
 'use strict';
 const db            = require('../models/db');
 const User          = require('../models/user');
+const PushesRocksLevel = require('./pushesRocksLevelSchema');
 const State         = require('../models/state');
 const token         = require('../models/token');
 const authenticated = require('./authroute');

@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const GameSaveData = require('.gameSaveData');
+const GameSaveData = require('./gameSaveDataSchema');
 const User = new mongoose.Schema({
 	twitter: {
 		screen_name: String,
 		user_id: String,
 	},
-	game_data: GameSaveData,
+	game_data: {Type: mongoose.Schema.Types.ObjectId, ref: 'GameSaveData'}
 	
 }, {
 	collection: 'user'
 });
-
-module.exports = mongoose.model('user', User);
+const user = mongoose.model('user', User);
+module.exports = user;
