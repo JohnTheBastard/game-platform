@@ -58,8 +58,12 @@
     <script type="text/javascript" src="../../../js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
     <script>
-      startGame();
       var currentRoom = $.trim($('#roomName').text());
+      var difficulty = $.trim($('#roomDiff').text());
+      var levelsToWin = Number($.trim($('#roomLevelsToWin').text()));
+      var startingLevel = 0;
+      startGame(startingLevel,difficulty,levelsToWin);
+
       var clientSocket = io('/multiplayer');
       clientSocket.emit('joinedRoom', currentRoom);
 
@@ -68,10 +72,17 @@
           secondPlayerKeyDownEvent(data.moves[ii]);
         }
         clientSocket.emit('movesCompleted', data.currentMove);
+        clientSocket.emit('firstPlayerCanMove', data);
+      });
+
+      clientSocket.on('firstPlayerMove', function(data){
+        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
+          firstPlayerKeyDownEvent(data.moves[ii]);
+        }
       });
 
       function secondPlayerInput(key) {
-        firstPlayerKeyDownEvent(key);
+        key.preventDefault();
         var input = {};
         input.keyCode = key.keyCode;
         input.roomName = currentRoom;
@@ -79,7 +90,7 @@
       }
 
       clientSocket.on('startGame', function(data){
-        window.addEventListener("keydown", secondPlayerInput, false);
+        window.addEventListener("keyup", secondPlayerInput, false);
         clientSocket.emit('otherUserCanStart', data);
       });
 
