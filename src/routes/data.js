@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const PushesRocksLevel = require('../models/pushesRocksLevelSchema');
+//const mongoose = require('mongoose');
 const User = require('../models/user.js');
 
 //const nextLevel = require('../utils/nextLevel').nextLevel;
@@ -12,24 +13,15 @@ let secondLevelID = "easy01-level04";
 /* GET Level */
 
 router.get('/', function(req, res, next) {
-	getLevel( firstLevelID, res );
+	PushesRocksLevel.getLevel( firstLevelID, res.json.bind(res) );
 });
-
-
-const getLevel = function(levelID, res, next){
-	PushesRocksLevel.findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
-		if(err) return next(err);
-		res.json(level);
-	});	
-};
-
 
 /* POST Level Completion */
 
 router.post('/', function(req, res, next) {
 	saveUserData(req.body, function(err, nextLevelID ){
 		if(err) return next(err);
-		getLevel( nextLevelID, res );
+		PushesRocksLevel.getLevel( nextLevelID, res.json.bind(res) );
 	});
 });
 
@@ -43,18 +35,9 @@ const saveUserData = function(newUserData, cb){
 	//pretend to save data
 	process.nextTick( function() { 
 		// pass back the next id
-		nextID( newUserData.levelID, cb );
+		PushesRocksLevel.getNextID( newUserData.levelID, cb );
 	});
 };
 
-const nextID = function(levelID, cb) {
-	PushesRocksLevel.find().lean().select("identifier").exec(function (err, identifiers) {
-		if(err) return cb(err);
-		let idArr = identifiers.map( obj => obj.identifier );
-		let idIndex = 1 + idArr.indexOf(levelID);
-		console.log("In nextID:", idArr[idIndex] );
-		cb( null, idArr[idIndex] );
-	});  	
-};
 
 module.exports = router;

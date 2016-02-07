@@ -7,14 +7,16 @@ const PushesRocksLevel = new mongoose.Schema({
 });
 
 PushesRocksLevel.statics.getLevel = function(levelID, cb){
-	PushesRocksLevel.findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
+	console.log(typeof cb);
+	mongoose.model('PushesRocksLevel').findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
 		if(err) return cb(err);
-		cb( null, level );
+		cb( level.data );
 	});	
 };
 
 PushesRocksLevel.statics.getNextID = function(levelID, cb) {
-	PushesRocksLevel.find().lean().select("identifier").exec(function (err, identifiers) {
+	console.log(typeof cb);
+	mongoose.model('PushesRocksLevel').find().lean().select("identifier").exec(function (err, identifiers) {
 		if(err) return cb(err);
 		let idArr = identifiers.map( obj => obj.identifier );
 		let idIndex = 1 + idArr.indexOf(levelID);
