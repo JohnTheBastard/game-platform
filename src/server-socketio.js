@@ -89,11 +89,18 @@ module.exports = function startIO(server) {
 					return room;
 				})
 				.then(function(room) {
+					if(room.usersInRoom === 2) {
+						serverSocket.to(room.name).emit('startGame', room.name);
+					}
 						room.save();
 				})
 				.catch(function(error) {
 					console.log(error);
 				})
+		});
+
+		serverSocket.on('otherUserCanStart', function(data){
+			serverSocket.broadcast.to(data).emit('startGame', 'you may now start');
 		});
 
 		serverSocket.on('move', function(data) {
