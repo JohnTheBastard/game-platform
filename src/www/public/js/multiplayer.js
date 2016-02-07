@@ -368,12 +368,11 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
     var currentUser = user;
     var playerCounterId = counterID;
 
-    return function(key) {
-      var keyvalue = key.keyCode;
+    return function(keyvalue) {
       var xy = [(currentGame.sprite.x / cellWidth), (currentGame.sprite.y / cellWidth)];
 
       // Keep key input from scrolling
-      key.preventDefault();
+
 
       if (currentGame.winCondition) {
         my.advanceTheUser(currentUser,currentGame);

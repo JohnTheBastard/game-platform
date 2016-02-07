@@ -72,10 +72,17 @@
           secondPlayerKeyDownEvent(data.moves[ii]);
         }
         clientSocket.emit('movesCompleted', data.currentMove);
+        clientSocket.emit('firstPlayerCanMove', data);
+      });
+
+      clientSocket.on('firstPlayerMove', function(data){
+        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
+          firstPlayerKeyDownEvent(data.moves[ii]);
+        }
       });
 
       function secondPlayerInput(key) {
-        firstPlayerKeyDownEvent(key);
+        key.preventDefault();
         var input = {};
         input.keyCode = key.keyCode;
         input.roomName = currentRoom;
@@ -83,7 +90,7 @@
       }
 
       clientSocket.on('startGame', function(data){
-        window.addEventListener("keydown", secondPlayerInput, false);
+        window.addEventListener("keyup", secondPlayerInput, false);
         clientSocket.emit('otherUserCanStart', data);
       });
 
