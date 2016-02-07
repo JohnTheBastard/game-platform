@@ -2,8 +2,8 @@
 
 module.exports = function startIO(server) {
 	const mongoose = require('mongoose');
-	const Room = require('./models/multiPlayerRooms');
-	const Game = require('./models/multiPlayerGame');
+	const Room = require('./models/multiplayerRooms');
+	const Game = require('./models/multiplayerGame');
 	const io = require('socket.io')(server);
 	let multiplayerIO = io.of('/multiplayer');
 	let roomIO = io.of('/rooms');

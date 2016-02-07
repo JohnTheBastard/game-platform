@@ -9,6 +9,7 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 		game.onDone = onDone;
 	});
 
+
 	function onDone(endData) {
 			$scope.saving = true;
 			$http.post('/data', endData).then(function(res){
