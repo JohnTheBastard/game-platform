@@ -12,24 +12,24 @@ const mongoose      = require('mongoose');
 let loginPath = path.join(__dirname, '../views/boxxle', 'login.html');
 
 
-/*
+
 const FOOFOO = new mongoose.Schema({  
 	identifier: String,
 	difficulty: String,
 	data: Object,
 });
 let foofoo = mongoose.model('fooFoo', FOOFOO);
-*/
+
 
 let firstLevel;
 const getFirstLevel = function() {
 	PushesRocksLevel.getLevel('easy01-level00', function(level) {
-//		firstLevel = new mongoose.model('fooFoo', FOOFOO)({	identifier: level.identifier, 
-		firstLevel = new PushesRocksLevel({	identifier: level.identifier, 
+		firstLevel = new foofoo({	identifier: level.identifier, 
+//		firstLevel = new PushesRocksLevel({	identifier: level.identifier, 
 											difficulty: level.difficulty, 
 											data: level.data });
 		console.log(' l:', level instanceof mongoose.model('pushesRocksLevel') );
-		console.log('fl:', firstLevel instanceof mongoose.model('pushesRocksLevel') );
+		console.log('fl:', firstLevel instanceof mongoose.model('foofoo') );
 	}); 	
 };
 
