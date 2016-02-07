@@ -62,7 +62,6 @@
       clientSocket.emit('joinedRoom', currentRoom);
 
       clientSocket.on('broad', function(data){
-        console.log(data);
         for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
           secondPlayerKeyDownEvent(data.moves[ii]);
         }
@@ -70,13 +69,17 @@
       });
 
       function secondPlayerInput(key) {
-        var input = {}
+        firstPlayerKeyDownEvent(key);
+        var input = {};
         input.keyCode = key.keyCode;
         input.roomName = currentRoom;
         clientSocket.emit('move', input );
       }
 
-      window.addEventListener("keydown", secondPlayerInput, false);
+      clientSocket.on('startGame', function(data){
+        window.addEventListener("keydown", secondPlayerInput, false);
+      });
+
 
     </script>
   </body>

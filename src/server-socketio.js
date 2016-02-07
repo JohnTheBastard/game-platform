@@ -109,6 +109,7 @@ module.exports = function startIO(server) {
 							gameData.moves = game.moves;
 							gameData.currentMove = game.currentMove;
 							serverSocket.broadcast.to(moveData.roomName).emit('broad',gameData);
+							serverSocket.broadcast.to(serverSocket.id).emit('local',moveData.keyCode);
 						});
 				})
 				.catch(function(error){
