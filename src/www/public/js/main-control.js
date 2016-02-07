@@ -24,7 +24,7 @@ app.config( [ '$routeProvider', function( $routeProvider ) {
 		})
 		.when('/guest', {
 			templateUrl: 'boxxle/guestplay.html',
-			controller: 'gameCtrl'
+			controller: 'guestCtrl'
 		})
 		.when('/rooms', {
 			templateUrl: 'boxxle/rooms.html',

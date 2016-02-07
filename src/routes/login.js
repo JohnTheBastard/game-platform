@@ -1,7 +1,7 @@
 'use strict';
 const db            = require('../models/db');
 const User          = require('../models/user');
-const PushesRocksLevel = require('./pushesRocksLevelSchema');
+const PushesRocksLevel = require('../models/pushesRocksLevelSchema');
 const State         = require('../models/state');
 const token         = require('../models/token');
 const router        = new (require( 'express' ).Router )();
@@ -9,7 +9,7 @@ const path          = require('path');
 const bodyParser    = require('body-parser');
 const mongoose      = require('mongoose');
 
-let loginPath = path.join(__dirname, '../views', 'login.html');
+let loginPath = path.join(__dirname, '../views/boxxle', 'login.html');
 
 router.get('/login', (req, res) => {
     res.sendFile(loginPath);

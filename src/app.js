@@ -58,6 +58,7 @@ function createApp() {
 	}));
 
 	app.use('/', routes);
+//	app.use('/', routes);
 	app.use(grant);
 
 	app.use(login);
