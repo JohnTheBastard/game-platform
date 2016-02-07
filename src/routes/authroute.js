@@ -1,4 +1,8 @@
 'use strict';
+
+/*
+ * Checks external routes for a valid jwt token
+ */
 const token       = require('../models/token');
 module.exports    = function authenticated (req, res, next) {
 	let accessToken = req.headers.token || req.query.token;
@@ -8,6 +12,6 @@ module.exports    = function authenticated (req, res, next) {
 		next();
 		}).catch(next);
 	} else {
-		res.redirect('/login');
+		res.redirect('/#/login');
 	}
 }

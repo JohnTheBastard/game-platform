@@ -1,3 +1,7 @@
+/*
+ * Checks CLICKABLE paths thats route
+ * within same page routes for a jwt token
+ */
 angular.module('myApp').controller('loginCtrl', function($scope, $window, $location) {
     $scope.checkToken = function() {
         //checking for a signed user token
