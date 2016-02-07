@@ -31,8 +31,5 @@ angular.module('myApp')
     clientSocket.on('roomError', function(data) {
       $scope.error = data;
     });
-
-
-
   }]
 );

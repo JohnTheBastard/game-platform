@@ -68,21 +68,17 @@
       clientSocket.emit('joinedRoom', currentRoom);
 
       clientSocket.on('broad', function(data){
-        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
-          secondPlayerKeyDownEvent(data.moves[ii]);
-        }
-        clientSocket.emit('movesCompleted', data.currentMove);
-        clientSocket.emit('firstPlayerCanMove', data);
+        secondPlayerKeyDownEvent(data.keyCode);
+        // clientSocket.emit('firstPlayerCanMove', data);
       });
 
-      clientSocket.on('firstPlayerMove', function(data){
-        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
-          firstPlayerKeyDownEvent(data.moves[ii]);
-        }
-      });
+      // clientSocket.on('moveFirstPlayer', function(data){
+      //     firstPlayerKeyDownEvent(data.keyCode);
+      // });
 
       function secondPlayerInput(key) {
         key.preventDefault();
+        firstPlayerKeyDownEvent(key.keyCode);
         var input = {};
         input.keyCode = key.keyCode;
         input.roomName = currentRoom;
@@ -90,7 +86,7 @@
       }
 
       clientSocket.on('startGame', function(data){
-        window.addEventListener("keydown", secondPlayerInput, false);
+        window.addEventListener("keyup", secondPlayerInput, false);
         clientSocket.emit('otherUserCanStart', data);
       });
 

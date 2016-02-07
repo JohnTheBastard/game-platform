@@ -104,56 +104,13 @@ module.exports = function startIO(server) {
 			serverSocket.broadcast.to(data).emit('startGame', 'you may now start');
 		});
 
-		serverSocket.on('firstPlayerCanMove', function(data){
-			serverSocket.broadcast.to(data.roomName).emit('firstBroad', data.keyCode);
-		});
-
 		serverSocket.on('move', function(data) {
-			var moveData = data;
-			Game.findOne({playerName: serverSocket.id})
-				.then(function(game){
-					game.moves.push(moveData.keyCode);
-					game.currentMove = game.moves.length;
-					game.save()
-						.then(function(game){
-							var gameData = {};
-							gameData.roomName = moveData.roomName;
-							gameData.movesCompleted = game.movesCompleted;
-							gameData.moves = game.moves;
-							gameData.currentMove = game.currentMove;
-							serverSocket.broadcast.to(moveData.roomName).emit('broad',gameData);
-						});
-				})
-				.catch(function(error){
-					console.log(error);
-				})
+			serverSocket.broadcast.to(data.roomName).emit('broad',data);
 		});
 
-		serverSocket.on('firstPlayerCanMove', function(data){
-			serverSocket.broadcast.to(data.roomName).emit('firstPlayerMove',data);
-		});
-
-		serverSocket.on('movesCompleted', function(data){
-			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
-				.then(function(room){
-					if(room.firstPlayer === serverSocket.id) {
-						Game.findOne({'playerName': room.secondPlayer })
-							.then(function(game) {
-								game.movesCompleted = data;
-								game.save();
-							})
-					} else if (room.secondPlayer === serverSocket.id) {
-						Game.findOne({'playerName': room.firstPlayer })
-							.then(function(game) {
-								game.movesCompleted = data;
-								game.save();
-							})
-					}
-				})
-				.catch(function(error){
-					console.log(error);
-				});
-		})
+		// serverSocket.on('firstPlayerCanMove', function(data){
+		// 	serverSocket.broadcast.to(data.roomName).emit('moveFirstPlayer',data);
+		// });
 
 		serverSocket.on('disconnect', function() {
 			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
