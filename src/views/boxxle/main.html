@@ -4,34 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
-    <!-- <script type="text/javascript" src='js/vendor/angular.min.js'></script> -->
-    <!-- <script type="text/javascript" src="js/vendor/angular-route.min.js"></script> -->
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
     <!-- <link rel="stylesheet" href="css/main.css"> -->
 </head>
 <body>
-    <div ng-app="myApp">
-        <!-- <div ng-controller="loginCtrl"> -->
             <div id="gameboy">
                 <section>
-                    <div id="userData">
-                        <form id="user">
-                            <label class="name">Username:
-                                <input id="username" type="text" placeholder="username" name="username" maxlength="30" required />
-                            </label>
-                            <br />
-                            <input id="save" class="defaultbutton" type="button" value="Save" onclick="localStorage.getInput()">
-                        </form>
-                    </div>
-                    <div ng-controller="loginCtrl"></div>
                     <button ng-click="checkToken()">Click to play!</button>
             </div>
             </section>
-
-            <main>
-                <div ng-view></div>
-            </main>
-
             <footer>
                 <p> &copy; 2015 Team Game Boyz</p>
             </footer>
