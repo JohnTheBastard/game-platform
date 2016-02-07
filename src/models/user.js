@@ -4,8 +4,8 @@ const User = new mongoose.Schema({
 	twitter: {
 		screen_name: String,
 		user_id: String,
-	},
-	game_data: {Type: mongoose.Schema.Types.ObjectId, ref: 'GameSaveData'}
+	}//},
+	//game_data: {Type: mongoose.Schema.Types.ObjectId, ref: 'GameSaveData'}
 	
 }, {
 	collection: 'user'

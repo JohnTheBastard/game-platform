@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const Level = require('../models/pushesRocksLevelSchema');
+const PushesRocksLevel = require('../models/pushesRocksLevelSchema');
 const User = require('../models/user.js');
 
 //const nextLevel = require('../utils/nextLevel').nextLevel;
@@ -12,22 +12,24 @@ let secondLevelID = "easy01-level04";
 /* GET Level */
 
 router.get('/', function(req, res, next) {
-	getLevel( firstLevelID, res, next );
+	PushesRocksLevel.getLevel( firstLevelID, res );
 });
 
+/*
 const getLevel = function(levelID, res, next){
-	Level.findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
+	PushesRocksLevel.findOne({identifier: levelID}).lean().select("data").exec(function (err, level) {
 		if(err) return next(err);
 		res.json(level);
 	});	
 };
+*/
 
 /* POST Level Completion */
 
 router.post('/', function(req, res, next) {
 	saveUserData(req.body, function(err, nextLevelID ){
 		if(err) return next(err);
-		getLevel( nextLevelID, res, next );
+		PushesRocksLevel.getLevel( nextLevelID, res );
 	});
 });
 

@@ -1,17 +1,5 @@
 const mongoose = require('mongoose');
-//const PushesRocksLevel = require('./pushesRocksLevelSchema');
-
-/* TEMP TEMP TEMP */
-const PushesRocksLevel = new mongoose.Schema({  
-	identifier: String,
-	difficulty: String,
-	data: Object,
-});
-
-const pushesRocksLevel = mongoose.model('pushesRocksLevel', PushesRocksLevel);
-
-/******************/
-
+const PushesRocksLevel = require('./pushesRocksLevelSchema');
 
 
 const PushesRocksBestScore = new mongoose.Schema({
@@ -22,15 +10,16 @@ const pushesRocksBestScore = mongoose.model('pushesRocksBestScore', PushesRocksB
 
 
 const PushesRocksUserData = new mongoose.Schema({
-	current_level: {Type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksLevel'},
+	current_level: {type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksLevel'},
 	scores: [PushesRocksBestScore]
 });
-const pushesRocksUserData = mongoose.model('pushesRocksUserData', pushesRocksUserData);
+const pushesRocksUserData = mongoose.model('pushesRocksUserData', PushesRocksUserData);
 
 
 const GameSaveData = new mongoose.Schema({
-	pushes_rocks: {Type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksUserData'}
+	pushes_rocks: {type: mongoose.Schema.Types.ObjectId, ref: 'pushesRocksUserData'}
 });
 
 const gameSaveData = mongoose.model('gameSaveData', GameSaveData);
 module.exports = gameSaveData;
+
