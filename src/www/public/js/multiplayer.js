@@ -354,7 +354,7 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
 
   function addCurrentStatus(user,game,counterID) {
     $(counterID).empty();
-    var status = '<p class="current"> Difficulty: ' + user.difficulty + '<p> Level: ' + (user.currentLevel + 1) + '<p> Steps: ' + game.sprite.stepCount + '</p>';
+    var status = '<p class="current"> Difficulty: ' + user.difficulty + '</p> <p> Level: ' + (user.currentLevel + 1) + ' </p> <p> Steps: ' + game.sprite.stepCount + '</p>';
     $(counterID).append(status);
   }
 
@@ -399,7 +399,7 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
         } else if (keyvalue == 32) {
           $('#gameplay').empty();
         }
-        addCurrentStatus(currentUser,currentGame,playerCounterId);
+        addCurrentStatus(currentUser,currentGame,playerCounterId, currentPlayerName);
       }
     }
   }

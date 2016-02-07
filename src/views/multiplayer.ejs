@@ -23,6 +23,7 @@
     </header>
 
     <div id="firstPlayerGameInfo">
+      <p> You are Player One </p>
       <div id='firstPlayerStatus'>
         <div id="firstPlayerCounter"> </div>
         <div id="firstPlayerGame">
@@ -40,8 +41,15 @@
 
     <h2 id='waitingForUser'> Welcome, waiting for User to Join......</h2>
 
+    <div id='message'>
+      <ul id='chatMessage'> </ul>
+      <br>
+      <input type='text' id='messageValue'> </input>
+      <div id='submitButton'> Send Message </div>
+    </div>
 
     <div id="secondPlayerGameInfo">
+      <p> Player 2 </p>
       <div id='secondPlayerStatus'>
         <div id="secondPlayerCounter"> </div>
           <div id="secondPlayerGame">
@@ -65,7 +73,11 @@
       var difficulty = $.trim($('#roomDiff').text());
       var waiting= $('#waitingForUser');
       var levelsToWin = Number($.trim($('#roomLevelsToWin').text()));
+      var chatMessageList = $('#chatMessage');
+      var messageValue = $('#messageValue');
+      var button = $('#submitButton');
       var startingLevel = 0;
+
       startGame(startingLevel,difficulty,levelsToWin);
 
       var clientSocket = io('/multiplayer');
@@ -88,16 +100,22 @@
         input.roomName = currentRoom;
         clientSocket.emit('move', input );
       }
+      function sendMessage(e) {
+        e.preventDefault();
+        var message = {};
+        message.roomName = currentRoom;
+        message.value = messageValue.val();
+        clientSocket.emit('messageSent', message);
+      }
 
       clientSocket.on('startGame', function(data){
         window.addEventListener("keyup", secondPlayerInput, false);
+        button.click(sendMessage);
         waiting.text('GO GO GO GO!!!!!');
         firstPlayerKeyDownEvent(13);
         secondPlayerKeyDownEvent(13);
         clientSocket.emit('otherUserCanStart', data);
       });
-
-
     </script>
   </body>
 </html>
