@@ -1,20 +1,18 @@
 "use strict";
-const db       = require('./db');
 const mongoose = require('mongoose');
-const LevelModel = require('./pushesRocksLevelSchema');
+const db       = require('../models/db');
+const Level = require('../models/pushesRocksLevelSchema');
 const levelData = require('../games/pushesRocks/pushesRocksLevels.json');
 
-
-let level = new LevelModel( levelData[0] );
-level.save((err, level) => console.log("ERROR: ", err, "\n", level));
+let cb = function(err, level){ 
+	if(err) console.log("ERROR: ", err, "\n  on level: ", level.identifier);
+};
 
 function loadPushesRocksLevelsIntoDB() {
-    //drop collection to prevent duplicates before gen
-/*
-    let rm = LevelModel.find().remove({});
+    let rm = Level.find().remove({});
     rm.exec();
     
-    levelData.forEach( data => new Level(data).save() );
-*/
+    levelData.forEach( data => new Level(data).save(cb) );
+
 }
 loadPushesRocksLevelsIntoDB();

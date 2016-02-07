@@ -3,7 +3,7 @@ app.config( [ '$routeProvider', function( $routeProvider ) {
 	$routeProvider
 		.when('/', {
 			templateUrl: 'boxxle/main.html',
-			ontroller: 'loginCtrl'
+			controller: 'loginCtrl'
 		})
 		.when('/login', {
 			templateUrl: 'boxxle/login.html',

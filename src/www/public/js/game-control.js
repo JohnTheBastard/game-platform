@@ -1,23 +1,27 @@
-var boxxleApp = angular.module('boxxleApp', []);
-boxxleApp.controller('gameCtrl', function($scope, $element, $http) {
+var app = angular.module('boxxleApp', []);
+app.controller('gameCtrl', function($scope, $element, $http) {
     var el = angular.element(document.querySelector('#gameBoard'));
-	var game = createBoxxer(el);
-    $scope.game = game;
+	var game;
+	$http.get('/data').then( function(res) {
+		console.log(res.data.data);
+		console.log("HTTP GET JUST HAPPENED");
+		game = createBoxxer(el, res.data.data);
+		game.onDone = onDone;
+	});
 
-	getLevel = function(levelID) {
-		return levelID;
-	};
+	function onDone(endData) {
+			$scope.saving = true;
+			$http.post('/data', endData).then(function(res){
+				console.log("HTTP POST JUST HAPPENED");
+				var newLevel = res.data;
+				console.log("CONSOLE LOGGING FROM GAME-CONTROL:", newLevel.data);
+				$scope.saving = false;
+				el.innerHTML="";
+				game = createBoxxer($element, newLevel.data );
+				game.onDone = onDone;
+			}, function(err){ console.log(err); } );
 
-	game.onDone = function(endData) {
-		$scope.saving = true;
-		$http.post('/data', endData).then(function(res){
-			//console.log(res.data);
-			var newLevel = res.data;
-			$scope.saving = false;
-			game = createBoxxer($element, getLevel(newLevel) );
-		}, function(err){ console.log(err); } );
-
-	};
-
+			$scope.game = game;
+		}
 
 });

@@ -424,7 +424,8 @@ function createBoxxer(anchor) {
 		key.preventDefault();
 
 		if ( my.game.winCondition ) {
-			my.onDone({"goo":"gob"});
+			console.log("CALLING ON DONE.");
+			my.onDone( { levelID: "fake01-level02" } );
 			my.advanceTheUser();
 			my.initializeGameBoard();
 		} else if ( listenToKeystrokes ) {
