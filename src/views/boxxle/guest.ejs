@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
+<html ng-app="boxxleApp">
   <head>
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
@@ -39,13 +39,13 @@
       </ul>
     </nav>
   </header>
-  <body ng-app="boxxleApp">
-    <div ng-controller='guestCtrl' id="status">
+  <body>
       <section class="center">
       <h5 class='center light-text' id="difficulty">Difficulty: </h5>
       <h5 class='center light-text' id="currentLevel">Level: </h5>
       <h5 class='center light-text' id="stepCount">Steps: </h5>
     </section>
+    <div ng-controller='gameCtrl' id="status">
           <div class='center' id="game">
               <div id="gameBoard">
                   <!-- Angular will put table here. -->

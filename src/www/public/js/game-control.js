@@ -1,14 +1,13 @@
 var boxApp = angular.module('boxxleApp', []);
 boxApp.controller('gameCtrl', function($scope, $element, $http) {
-    var el = angular.element(document.querySelector('#gameBoard'));
-	var game;
+  var el = angular.element(document.querySelector('#gameBoard'));
+  var game;
 
 	$http.get('/data').then( function(res) {
 		console.log(res.data.data);
 		game = createBoxxer(el, res.data.data);
 		game.onDone = onDone;
 	});
-
 
 	function onDone(endData) {
 			$scope.saving = true;
@@ -23,8 +22,4 @@ boxApp.controller('gameCtrl', function($scope, $element, $http) {
 			$scope.game = game;
 		}
 
-});
-boxApp.controller('guestCtrl', function($scope, $element, $http) {
-  var el = angular.element(document.querySelector('#gameBoard'));
-	$scope.guestGame = createBoxxer(el);
 });
