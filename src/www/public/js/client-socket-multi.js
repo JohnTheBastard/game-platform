@@ -30,7 +30,7 @@ function sendMessage(e) {
   e.preventDefault();
   var message = {};
   var numberOfListItems = chatMessageList.children().length;
-  if(numberOfListItems > 25 ) {
+  if(numberOfListItems > 17 ) {
     chatMessageList.empty();
   };
   message.roomName = currentRoom;
@@ -41,7 +41,7 @@ function sendMessage(e) {
 
 clientSocket.on('player2Message', function(data){
   var numberOfListItems = chatMessageList.children().length;
-  if(numberOfListItems > 25 ) {
+  if(numberOfListItems > 17 ) {
     chatMessageList.empty();
   };
   chatMessageList.append(data.html);
