@@ -19,14 +19,6 @@
   <body>
     <header>
   		<nav id="navBar">
-  			<!-- <div id="logo">
-  					<h1>Game</h1>
-  						<span id="B">B</span>
-  						<span id="O">O</span>
-  						<span id="Y">Y</span>
-  						<span id="Z">Z</span>
-  					<h2> Boxxle </h2>
-  				</div> -->
   			<ul>
   				<li class="sub" id="homeNav"><a href="/#/"><i class="fa fa-home fa-lg"></i> Home</a>
   					<aside></aside>
@@ -43,82 +35,58 @@
   					</ul>
   				</li>
   			</ul>
-
   		</nav>
   	</header>
-    <div id="firstPlayerGameInfo">
-      <div id='firstPlayerStatus'>
-        <div id="firstPlayerCounter"> </div>
-        <div id="firstPlayerGame">
-          <div id="firstPlayerGameBoard">
-            <!-- JS will put table here. -->
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div id='currentRoom'> <p>Welcome, you are currently in room <span id='roomName'><%=room%></span> </p>
-      <p>Level Difficulty  : <span id='roomDiff'><%=diff%></span> </p>
-      <p>Number Of Levels To Win  : <span id='roomLevelsToWin'><%=levelsToWin%></span> </p>
-    </div>
-
-    <div id="secondPlayerGameInfo">
-      <div id='secondPlayerStatus'>
-        <div id="secondPlayerCounter"> </div>
-          <div id="secondPlayerGame">
-            <div id="secondPlayerGameBoard">
+    <div id='mainWrapper'>
+      <div id="firstPlayerGameInfo">
+        <p class='players' id='one'>Player One</p>
+        <div id='firstPlayerStatus'>
+          <div id="firstPlayerCounter"> </div>
+          <div id="firstPlayerGame">
+            <div id="firstPlayerGameBoard">
               <!-- JS will put table here. -->
             </div>
           </div>
         </div>
+      </div>
+
+      <div id="secondPlayerGameInfo">
+        <p class='players' id='two'> Player 2 </p>
+        <div id='secondPlayerStatus'>
+          <div id="secondPlayerCounter"> </div>
+            <div id="secondPlayerGame">
+              <div id="secondPlayerGameBoard">
+                <!-- JS will put table here. -->
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div id="gamePlay">
+        <div id='currentRoom'> <p>Welcome, you are currently in room <span id='roomName'><%=room%></span> </p>
+          <p>Level Difficulty  : <span id='roomDiff'><%=diff%></span> </p>
+          <p>Number Of Levels To Win  : <span id='roomLevelsToWin'><%=levelsToWin%></span> </p>
+        </div>
+
+        <div id='waitingForUser'> Welcome, waiting for User to Join......</div>
+        <br>
+        <div id='message'>
+          Chat Room
+          <ul id='chatMessage'> </ul>
+        </div>
     </div>
 
-    <footer>
-      <p> &copy; 2015 Team Game Boyz </p>
-    </footer>
+      <div id='messageButtonWrapper'>
+        <input type='text' id='messageValue'> </input> <span id='submitButton'> Send Message </span>
+      </div>
+
+    </div>
 
     <script type="text/javascript" src="../../../js/vendor/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../../../js/levels.js"></script>
     <script type="text/javascript" src="../../../js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script>
-      var currentRoom = $.trim($('#roomName').text());
-      var difficulty = $.trim($('#roomDiff').text());
-      var levelsToWin = Number($.trim($('#roomLevelsToWin').text()));
-      var startingLevel = 0;
-      startGame(startingLevel,difficulty,levelsToWin);
-
-      var clientSocket = io('/multiplayer');
-      clientSocket.emit('joinedRoom', currentRoom);
-
-      clientSocket.on('broad', function(data){
-        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
-          secondPlayerKeyDownEvent(data.moves[ii]);
-        }
-        clientSocket.emit('movesCompleted', data.currentMove);
-        clientSocket.emit('firstPlayerCanMove', data);
-      });
-
-      clientSocket.on('firstPlayerMove', function(data){
-        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
-          firstPlayerKeyDownEvent(data.moves[ii]);
-        }
-      });
-
-      function secondPlayerInput(key) {
-        key.preventDefault();
-        var input = {};
-        input.keyCode = key.keyCode;
-        input.roomName = currentRoom;
-        clientSocket.emit('move', input );
-      }
-
-      clientSocket.on('startGame', function(data){
-        window.addEventListener("keydown", secondPlayerInput, false);
-        clientSocket.emit('otherUserCanStart', data);
-      });
-
-
-    </script>
+    <script type="text/javascript" src="../../../js/client-socket-multi.js"></script>
   </body>
 </html>

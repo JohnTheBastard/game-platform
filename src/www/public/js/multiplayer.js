@@ -313,10 +313,10 @@ function GameBoard(containerID) {
 function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
   var my = {};
   my.$firstPlayerAnchor = $("#firstPlayerGameBoard");
-  my.firstPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
+  my.firstPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin-1);
   my.firstPlayerGame = new GameBoard('container');
   my.$secondPlayerAnchor = $("#secondPlayerGameBoard");
-  my.secondPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin);
+  my.secondPlayer = new User(startingLevel,difficulty,numberOfLevelsToWin-1);
   my.secondPlayerGame = new GameBoard('container2');
 
   my.initializeGameBoard = function(anchor,user,game, gameID, containerID) {
@@ -337,115 +337,71 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
 
 
 
-  my.advanceTheUser = function(user,game) {
-    var winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (user.currentLevel + 1) +
-      ' in ' + game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
-    $('#gameplay').empty();
-    $('#gameplay').append(winMessage);
-
-    console.log("break: advanceTheUser ");
+  my.advanceTheUser = function(user,game, anchor, playerName) {
+    var lastLevel = false;
     if (user.currentLevel < user.numberOfLevelsToWin) {
       user.currentLevel++;
-    } else if (user.currentLevel === user.numberOfLevelsToWin) {
-      console.log("CONGRATULATIONS: You beat all the levels!");
+    } else if (user.currentLevel >= user.numberOfLevelsToWin) {
+      lastLevel = true;
+      anchor.empty();
+      anchor.append('<h3 id="winnerWinner"> WAHOOOOOO <br> ' + playerName + ' WON THE GAME <br> SORRY IF THATS <br> NOT YOU!!!! </h3>')
     } else {
       console.log("Error: level index out of bounds");
     }
+    return lastLevel;
+
   }
 
   function addCurrentStatus(user,game,counterID) {
     $(counterID).empty();
-    var status = '<p class="current"> Difficulty: ' + user.difficulty + '<p> Level: ' + (user.currentLevel + 1) + '<p> Steps: ' + game.sprite.stepCount + '</p>';
+    var status = '<p class="current"> Difficulty: ' + user.difficulty + '</p> <p> Level: ' + (user.currentLevel + 1) + ' </p> <p> Steps: ' + game.sprite.stepCount + '</p>';
     $(counterID).append(status);
   }
 
 
-  my.processInput = function(anchor,user,game, gameID, containerID,counterID) {
+  my.processInput = function(anchor,user,game, gameID, containerID,counterID,playerName) {
     var currentAnchor = anchor;
     var currentGameID = gameID;
     var currentContainer = containerID;
     var currentGame = game;
     var currentUser = user;
     var playerCounterId = counterID;
+    var currentPlayerName = playerName;
 
     return function(keyvalue) {
       var xy = [(currentGame.sprite.x / cellWidth), (currentGame.sprite.y / cellWidth)];
-
-      // Keep key input from scrolling
-
-
       if (currentGame.winCondition) {
-        my.advanceTheUser(currentUser,currentGame);
-        my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
+        var lastLevelBeat = my.advanceTheUser(currentUser,currentGame,currentAnchor, currentPlayerName);
+        if(lastLevelBeat === false) {
+          my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
+        }
       } else if (listenToKeystrokes) {
         if (keyvalue == 37) {
-          console.log("left");
-          deltaXY = [-1, 0];
+          deltaXY = [-1, 0]; // left
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 38) {
-          console.log("up");
-          deltaXY = [0, -1];
+          deltaXY = [0, -1]; // up
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 39) {
-          console.log("right");
-          deltaXY = [1, 0];
+          deltaXY = [1, 0]; // right
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 40) {
-          console.log("down");
-          deltaXY = [0, 1];
+          deltaXY = [0, 1]; // down
           currentGame.tryToMove(xy, deltaXY);
         }
 
         if (keyvalue == 13) {
           currentGame.draw();
         } else if (keyvalue == 32) {
-          $('#gameplay').empty();
+          my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
         }
-        addCurrentStatus(currentUser,currentGame,playerCounterId);
+        addCurrentStatus(currentUser,currentGame,playerCounterId, currentPlayerName);
       }
     }
   }
 
-  my.secondPlayerInput = function(anchor,user,game, gameID, containerID,counterID) {
-    var currentAnchor = anchor;
-    var currentGameID = gameID;
-    var currentContainer = containerID;
-    var currentGame = game;
-    var currentUser = user;
-    var playerCounterId = counterID;
-
-    return function(keyvalue) {
-      var xy = [(currentGame.sprite.x / cellWidth), (currentGame.sprite.y / cellWidth)];
-      if (currentGame.winCondition) {
-        my.advanceTheUser(currentUser,currentGame);
-        my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
-      } else if (listenToKeystrokes) {
-        if (keyvalue == 37) {
-          deltaXY = [-1, 0]; // move left
-          currentGame.tryToMove(xy, deltaXY);
-        } else if (keyvalue == 38) {
-          deltaXY = [0, -1]; // move up
-          currentGame.tryToMove(xy, deltaXY);
-        } else if (keyvalue == 39) {
-          deltaXY = [1, 0]; // move right
-          currentGame.tryToMove(xy, deltaXY);
-        } else if (keyvalue == 40) {
-          deltaXY = [0, 1]; // move down
-          currentGame.tryToMove(xy, deltaXY);
-        }
-
-        if (keyvalue == 13) {
-          currentGame.draw();
-        } else if (keyvalue == 32) {
-          $('#gameplay').empty();
-        }
-        addCurrentStatus(currentUser,currentGame,playerCounterId);
-      }
-    }
-  }
-
-  firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter" );
-  secondPlayerKeyDownEvent = my.secondPlayerInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter");
+  firstPlayerKeyDownEvent = my.processInput(my.$firstPlayerAnchor,my.firstPlayer,my.firstPlayerGame,'#firstPlayerGame','#container',"#firstPlayerCounter", 'Player 1' );
+  secondPlayerKeyDownEvent = my.processInput(my.$secondPlayerAnchor,my.secondPlayer,my.secondPlayerGame,'#secondPlayerGame','#container2', "#secondPlayerCounter", 'Player 2');
 
   my.scaleGameBoard = function(anchor,game) {
     var buffer = ($('header').height() + $('footer').height()) * 2;
