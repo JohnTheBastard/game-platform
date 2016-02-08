@@ -37,35 +37,39 @@
   display: block;
   width: 50%;
   max-width: 480px;
-  color: rgba(255, 255, 255, 1);
+  color: rgba(51, 51, 51, 1);
   font-size: 2rem;
   padding: 1rem;
   margin: .5rem auto;
   text-decoration: none;
   text-align: center;
   letter-spacing: .5rem;
+  border: 5px solid rgba(51, 51, 51, 1);
   border-radius: 7px;
-  background: rgba(51, 51, 51, 1);
+  background: #FDFDFD;
 }
 .med-button {
-  display: block;
+  display: inline-block;
   width: 30%;
   max-width: 240px;
-  color: rgba(255, 255, 255, 1);
-  font-size: 1rem;
-  padding: 1rem;
+  color: rgba(51, 51, 51, 1);
+  font-size: 2rem;
+  padding: .5rem;
   margin: .5rem auto;
   text-decoration: none;
   text-align: center;
   letter-spacing: .5rem;
+  border: 5px solid rgba(51, 51, 51, 1);
   border-radius: 7px;
-  background: rgba(51, 51, 51, 1);
+  background: #FDFDFD;
 }
 .big-button:hover {
-  background: rgba(81, 81, 81, 1);
+  border: 5px solid #CCCCCC;
+  color: #CCCCCC;
 }
 .med-button:hover {
-  background: rgba(81, 81, 81, 1);
+  border: 5px solid #CCCCCC;
+  color: #CCCCCC;
 }
 /******************
       LOGO
@@ -81,7 +85,6 @@
 /******************
       FOOTER
 ******************/
-
 footer {
     font-size: 0.75em;
     text-align: center;
