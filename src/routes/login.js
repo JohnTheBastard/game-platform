@@ -42,13 +42,13 @@ let getFirstLevel = function() {
 getFirstLevel();
 
 let prUser, newGameSave;
-const makeNewGameSaveDave = function() {
+const makeNewGameSaveData = function() {
 	PushesRocksLevel.getLevel('easy01-level00', function(level) {
 		let prUserData = new PushesRocksUserData({ current_level: level});
 		newGameSave = new GameSaveData({ pushes_rocks: prUserData});
 	}); 	
 };
-const saveNewGameData = function() {
+const saveNewGameSaveData = function() {
 	prUserData.save();
 	newGameSave.save();
 }
