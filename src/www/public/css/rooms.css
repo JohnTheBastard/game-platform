@@ -12,10 +12,6 @@ h1 {
   line-height: 0.8em;
 }
 
-.roomName {
-  color: blue;
-}
-
 .roomName:hover {
   cursor: pointer;
 }

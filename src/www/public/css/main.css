@@ -10,9 +10,9 @@ body {
     letter-spacing: .1rem;
     margin: 0;
     padding: 0;
-    background-color: #FDFDFD;
-    /*background-color: #25064C;*/
-    color: #414141;
+    /*background-color: #FDFDFD;*/
+    background-color: #25064C;
+    color: #FDFDFD;
 }
 a {
     text-decoration: none;
