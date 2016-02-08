@@ -1,0 +1,65 @@
+/******************
+    Palette
+******************/
+
+.main {
+    background: #FDFDFD;
+}
+.light {
+    background: #CCCCCC;
+}
+.dark {
+    background: #333333;
+}
+.light-accent {
+    background: #36175E;
+}
+.dark-accent {
+    background: #25064C;
+}
+.light-text {
+    color: #36175E;
+}
+.dark-text {
+    color: #25064C;
+}
+
+/*alternate palette*/
+/*.main {
+    background: #F2EDE4;
+}
+.light {
+    background: #D9D1C7;
+}
+.dark {
+    background: #8C8681;
+}
+.light-accent {
+    background: #666A73;
+}
+.dark-accent {
+    background: #2F3540;
+}
+.light-text {
+    color: #666A73;
+}
+.dark-text {
+    color: #2F3540;
+}*/
+
+/******************
+    GAME-COLORS
+******************/
+
+#B {
+    color: red;
+}
+#O {
+    color: blue;
+}
+#Y {
+    color: lightgreen;
+}
+#Z {
+    color: yellow;
+}

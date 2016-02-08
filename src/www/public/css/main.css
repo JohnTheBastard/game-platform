@@ -1,151 +1,48 @@
 /******************
-      GENERAL
+      MAIN
 ******************/
 
+* {
+    font-size: 1em;
+}
 body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .1rem;
+    margin: 0;
+    padding: 0;
+    background-color: #FDFDFD;
+    color: #414141;
 }
-
-
 a {
-  text-decoration: none;
+    text-decoration: none;
+    color: #FFF;
 }
-
-#gameboy {
-  max-width: 100%;
-}
-
-
-/******************
-      HEADING
-******************/
-
-header {
-  float: left;
-  margin: 0 0 30px 0;
-  padding: 5px 0 0 0;
-  width: 100%;
-}
-
-#logo {
-  text-align: center;
-  margin: 0;
-}
-
 h1 {
-  font-family: 'Press Start 2P', cursive;
-  margin: 15px 0;
-  font-size: 1.75em;
-  line-height: 0.8em;
+    font-size: 7rem;
 }
-
 h2 {
-  font-size: 0.75em;
-  margin: 5px 0 0;
-  font-family: 'Press Start 2P', cursive;
+    font-size: 6rem;
 }
-
-
+h3 {
+    font-size: 5rem;
+}
+h4 {
+    font-size: 4rem;
+}
+h5 {
+    font-size: 3rem;
+}
+h6 {
+    font-size: 2rem;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
 /******************
-    NAVIGATION
+      FONTS
 ******************/
 
-nav {
-  font-family: 'Press Start 2P', cursive;
-  text-align: center;
-  padding: 10px 0;
-  margin: 20px 0 0;
-}
-
-nav ul {
-  list-style: none;
-  margin: 0 10px;
-  padding: 0;
-}
-
-nav li {
-  display: inline-block;
-}
-
-nav a {
-  padding: 15px 10px;
-}
-
-/******************
-      FOOTER
-******************/
-
-footer {
-  font-size: 0.75em;
-  text-align: center;
-  clear: both;
-  padding-top: 50px;
-  font-family: 'Press Start 2P', cursive;
-}
-
-
-/******************
-  HOME PAGE IMAGE
-******************/
-
-section {
-  text-align: center;
-}
-
-
-
-/******************
-      COLORS
-******************/
-
-/* site body */
-body {
-  background-color: white;
-  color: #ccc;
-}
-
-/* black header */
-header {
-  background: black;
-  border-color: orange;
-}
-/* logo text */
-h1, h2 {
-  color: white;
-}
-
-#B {
-  color: red;
-}
-
-#O {
-  color: blue;
-}
-
-#Y {
-  color: lightgreen;
-}
-
-#Z {
-  color: yellow;
-}
-/* nav background */
-nav {
-  background: #48484A;
-}
-
-/* links */
-a {
-  color: #fff;
-}
-
-/* nav link */
-nav a, nav a:visited {
-  color: #fff;
-}
-/* selected nav link */
-nav a.selected, nav a:hover {
-  color: #F2B604;
+.game-font {
+    font-family: 'Press Start 2P', cursive;
 }

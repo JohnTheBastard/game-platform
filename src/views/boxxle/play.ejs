@@ -3,26 +3,56 @@
   <head>
     <meta charset="utf-8">
     <title> Game Boyz | Final Project </title>
+
     <script type="text/javascript" src= "js/vendor/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/vendor/angular.min.js"></script>
+
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+  	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+
     <link type="text/css" rel="stylesheet" href="css/boxxle.css">
-    <link  type="text/css" rel="stylesheet" href="css/main.css">
+  	<link rel="stylesheet" type="text/css" href="css/main.css">
+  	<link rel="stylesheet" type="text/css" href="css/layout.css">
+  	<link rel="stylesheet" type="text/css" href="css/colors.css">
+
+  	<link rel="stylesheet" type="text/css" href="css/nav.css">
+  	<link rel="stylesheet" type="text/css" href="css/rooms.css">
+
   </head>
   <body ng-app="boxxleApp">
     <header>
-      <div id="logo">
-        <h1> Game <span id="B">B</span><span id="O">O</span><span id="Y">Y</span><span id="Z">Z</span></h1>
-        <h2> Boxxle </h2>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html" >Home</a></li>
-          <li><a href="description.html" >Description</a></li>
-        </ul>
-      </nav>
-    </header>
-    <div id="gameplay">
+  		<nav id="navBar">
+  			<!-- <div id="logo">
+  					<h1>Game</h1>
+  						<span id="B">B</span>
+  						<span id="O">O</span>
+  						<span id="Y">Y</span>
+  						<span id="Z">Z</span>
+  					<h2> Boxxle </h2>
+  				</div> -->
+  			<ul>
+  				<li class="sub" id="homeNav"><a href="/#/"><i class="fa fa-home fa-lg"></i> Home</a>
+  					<aside></aside>
+  					<ul>
+  						<li><a href="/#/about">about</a></li>
+  					</ul>
+  				</li>
+  				<li class="sub"><a href="" ng-click="checkToken()"><i class="fa fa-edit fa-lg"></i>Play</a>
+  					<aside></aside>
+  					<ul>
+  						<li><a href="/#/rooms">Multiplayer</a></li>
+  						</ul>
+  						</li>
+  						<li><a href="/#/" onclick="localStorage.removeItem('token')"><i class="fa fa-edit fa-lg"></i>Logout</a>
+  							<aside></aside>
+  								</li>
+  					</ul>
+  				</li>
+  			</ul>
+
+  		</nav>
+  	</header>
+    <!-- <div id="gameplay">
       <p class='playParagraphs'> Hey, welcome to the Boxxle Game Page. By now you should have
          already entered a username and should be ready to play. If you
          are still a little hazy on how the game works here is a basic
@@ -36,13 +66,15 @@
          the level and have no where to go. Simply refresh the page to start the level over. </p>
 
       <p class='playParagraphs'> Press Space Bar to clear these paragraphs. Enjoy the Game! </p>
-    </div>
+    </div> -->
 
     <div ng-controller='gameCtrl' id="status">
-
-      <div id="counter">
-      </div>
-          <div id="game">
+      <section class="center-select">
+      <h5 class='center light-text' id="difficulty">Difficulty: </h5>
+      <h5 class='center light-text' id="currentLevel">Level: </h5>
+      <h5 class='center light-text' id="stepCount">Steps: </h5>
+    </section>
+          <div  class='center' id="game">
               <div id="gameBoard">
                   <!-- Angular will put table here. -->
               </div>
