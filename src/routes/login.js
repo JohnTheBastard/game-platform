@@ -41,15 +41,17 @@ let getFirstLevel = function() {
 };
 getFirstLevel();
 
-let newGameSave;
-const getGameSave = function() {
+let prUser, newGameSave;
+const makeNewGameSaveDave = function() {
 	PushesRocksLevel.getLevel('easy01-level00', function(level) {
 		let prUserData = new PushesRocksUserData({ current_level: level});
 		newGameSave = new GameSaveData({ pushes_rocks: prUserData});
-		prUserData.save();
-		newGameSave.save();
 	}); 	
 };
+const saveNewGameData = function() {
+	prUserData.save();
+	newGameSave.save();
+}
 
 router.get('/login', (req, res) => {
     res.sendFile(loginPath);
@@ -57,7 +59,7 @@ router.get('/login', (req, res) => {
 mongoose.Promise = Promise; 
 
 router.get('/twitter', (req, res, next) => {
-	getGameSave(); 			//start this now, incase we need it
+	makeNewGameSaveData(); 			//start this now, incase we need it
 	User.findOne({
 		twitter: {
 			screen_name: req.query.raw.screen_name,
@@ -66,6 +68,7 @@ router.get('/twitter', (req, res, next) => {
 	})
 	.then((user) => {
 		if (user) return user;
+		saveNewGameSaveData();
 		return new User({
 			twitter: {
 				screen_name: req.query.raw.screen_name,
