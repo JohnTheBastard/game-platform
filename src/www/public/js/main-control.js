@@ -13,7 +13,6 @@ app.factory('socket', function(socketFactory) {
 window.routes = {
     '/': {
         templateUrl: 'boxxle/main.html',
-        controller: 'loginCtrl',
         authRequired: false
     },
     '/login': {
@@ -29,12 +28,12 @@ window.routes = {
         authRequired: true
     },
     '/guest': {
-        templateUrl: 'boxxle/guestplay.html',
+        templateUrl: 'boxxle/play2.html',
         authRequired: false
     },
     '/rooms': {
         templateUrl: 'boxxle/rooms.html',
-        controller: 'roomCtrl',
+        //controller: 'roomCtrl',
         authRequired: true
     }
 };
@@ -66,4 +65,29 @@ app.config(['$routeProvider', function($routeProvider) {
             }
         }
     });
+});
+angular.module('myApp').controller('gameCtrl', function($scope, $element, $http) {
+    var el = angular.element(document.querySelector('#gameBoard'));
+	var game;
+
+	$http.get('/data').then( function(res) {
+		console.log(res.data.data);
+		game = createBoxxer(el, res.data.data);
+		game.onDone = onDone;
+	});
+
+
+	function onDone(endData) {
+			$scope.saving = true;
+			$http.post('/data', endData).then(function(res){
+				var newLevel = res.data;
+				$scope.saving = false;
+				el.innerHTML="";
+				game = createBoxxer($element, newLevel.data );
+				game.onDone = onDone;
+			}, function(err){ console.log(err); } );
+
+			$scope.game = game;
+		}
+
 });

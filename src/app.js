@@ -16,6 +16,7 @@ const data = require('./routes/data');
 const routes = require('./routes/index');
 const login = require( './routes/login' );
 const play = require( './routes/play' );
+const guest = require( './routes/guest-play' );
 const authenticated = require('./routes/authroute');
 
 function createApp() {
@@ -58,6 +59,7 @@ function createApp() {
 
 	app.use(login);
 	app.use('/play', authenticated, play);
+  app.use('/guest', guest);
 	app.use("/data", data);
 
 	/* * * * * * * * * *

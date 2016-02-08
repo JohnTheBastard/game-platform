@@ -1,5 +1,5 @@
-var app = angular.module('boxxleApp', []);
-app.controller('gameCtrl', function($scope, $element, $http) {
+var boxApp = angular.module('boxxleApp', []);
+boxApp.controller('gameCtrl', function($scope, $element, $http) {
     var el = angular.element(document.querySelector('#gameBoard'));
 	var game;
 
@@ -24,9 +24,7 @@ app.controller('gameCtrl', function($scope, $element, $http) {
 		}
 
 });
-
-
-app.controller('guestCtrl', function($scope, $element, $http) {
-    var el = angular.element(document.querySelector('#gameBoard'));
-	createBoxxer(el);
+boxApp.controller('guestCtrl', function($scope, $element, $http) {
+  var el = angular.element(document.querySelector('#gameBoard'));
+	$scope.guestGame = createBoxxer(el);
 });

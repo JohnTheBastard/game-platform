@@ -9,11 +9,11 @@
 	<script src='js/vendor/angular.min.js'></script>
 	<script src='js/vendor/angular-route.min.js'></script>
 
-	<script type="text/javascript" src="js/main-control.js"></script>
-	<script type="text/javascript" src="js/login-control.js"></script>
-
 	<script type="text/javascript" src= "js/levels.js"></script>
 	<script type="text/javascript" src= "js/boxer.js"></script>
+	<script type="text/javascript" src="js/main-control.js"></script>
+	<script type="text/javascript" src="js/login-control.js"></script>
+	<script type="text/javascript" src="js/game-control.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/login.css">
 
 	<script src='/socket.io/socket.io.js'></script>
@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="js/room-controller.js"></script>
 </head>
 <body ng-controller='loginCtrl'>
+</div>
 	<header>
 		<nav id="navBar">
 			<!-- <div id="logo">
@@ -42,7 +43,7 @@
 				<li class="sub" id="blogNav"><a href="" ng-click="checkToken()"><i class="fa fa-edit fa-lg"></i>Play</a>
 					<aside></aside>
 					<ul>
-						<li><a href="#/guest">guest</a></li>
+						<li><a href="/guest">guest</a></li>
 						<li><a href="" ng-click="roomToken()">Multiplayer</a></li>
 						</ul>
 						</li>
