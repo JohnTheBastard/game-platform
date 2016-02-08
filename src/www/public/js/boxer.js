@@ -16,20 +16,16 @@ if ( mobile ) {
 var listenToKeystrokes = true;
 
 
-/*
-var wallURL = "../img/RedBrick.png";
-var floorURL = "../img/FloorTile.png";
-var crateURL = "../img/WoodenCrate.png";
-var crateOnDotURL = "../img/WoodenCrateOnDot.png";
-var dotsURL  = "../img/DotTile.png";
-var spriteURL = "../img/Sprite.gif";
-*/
+// var wallURL = "../img/RedBrick.png";
+// var floorURL = "../img/FloorTile.png";
+// var crateURL = "../img/WoodenCrate.png";
+// var crateOnDotURL = "../img/WoodenCrateOnDot.png";
+// var dotsURL  = "../img/DotTile.png";
+// var spriteURL = "../img/Sprite.gif";
 
 /*rockin shit*/
-//var crateURL = "../img/rawck.png";
-//var crateOnDotURL = "../img/Heavy_Boulder.png";
 var crateURL = "../img/boulder.png";
-var crateOnDotURL = "../img/boulderOnDot.png";
+var crateOnDotURL = "../img/boulderondot.png";
 var wallURL = "../img/dirt.png";
 var floorURL = "../img/dirt2.png";
 var dotsURL  = "../img/dirtDot.png";
@@ -422,9 +418,9 @@ function createBoxxer(anchor) {
 	$('#currentLevel').empty();
 	$('#stepCount').empty();
 	$('#startTxt').empty();
-	$('#difficulty').append('Difficulty: ' + my.user.difficulty);
-	$('#currentLevel').append('Level: ' + my.user.currentLevel);
-	$('#stepCount').append('Steps: ' + my.game.sprite.stepCount);
+	$('#difficulty').append('Difficulty: ' + my.user.difficulty)
+	$('#currentLevel').append('Level: ' + my.user.currentLevel)
+	$('#stepCount').append('Steps: ' + my.game.sprite.stepCount)
 	}
 
 	my.processInput = function(key) {

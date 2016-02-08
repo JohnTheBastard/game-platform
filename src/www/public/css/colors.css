@@ -23,6 +23,9 @@
 .dark-text {
     color: #25064C;
 }
+.light-text-green {
+    color: lightgreen;
+}
 
 /*alternate palette*/
 /*.main {

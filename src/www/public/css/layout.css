@@ -37,38 +37,40 @@
   display: block;
   width: 50%;
   max-width: 480px;
-  color: rgba(51, 51, 51, 1);
+  color: #FDFDFD;
   font-size: 2rem;
   padding: 1rem;
   margin: .5rem auto;
   text-decoration: none;
   text-align: center;
   letter-spacing: .5rem;
-  border: 5px solid rgba(51, 51, 51, 1);
+  border: 5px solid #FDFDFD;
   border-radius: 7px;
-  background: #FDFDFD;
+  background: #25064C;
 }
 .med-button {
   display: inline-block;
   width: 30%;
   max-width: 240px;
-  color: rgba(51, 51, 51, 1);
+  color: #FDFDFD;
   font-size: 2rem;
   padding: .5rem;
   margin: .5rem auto;
   text-decoration: none;
   text-align: center;
   letter-spacing: .5rem;
-  border: 5px solid rgba(51, 51, 51, 1);
+  border: 5px solid #FDFDFD;
   border-radius: 7px;
-  background: #FDFDFD;
+  background: #25064C;
 }
 .big-button:hover {
   border: 5px solid #CCCCCC;
+  background: #36175E;
   color: #CCCCCC;
 }
 .med-button:hover {
   border: 5px solid #CCCCCC;
+  background: #36175E;
   color: #CCCCCC;
 }
 /******************
