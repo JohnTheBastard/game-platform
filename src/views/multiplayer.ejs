@@ -22,100 +22,55 @@
       </nav>
     </header>
 
-    <div id="firstPlayerGameInfo">
-      <p> You are Player One </p>
-      <div id='firstPlayerStatus'>
-        <div id="firstPlayerCounter"> </div>
-        <div id="firstPlayerGame">
-          <div id="firstPlayerGameBoard">
-            <!-- JS will put table here. -->
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id='currentRoom'> <p>Welcome, you are currently in room <span id='roomName'><%=room%></span> </p>
-      <p>Level Difficulty  : <span id='roomDiff'><%=diff%></span> </p>
-      <p>Number Of Levels To Win  : <span id='roomLevelsToWin'><%=levelsToWin%></span> </p>
-    </div>
-
-    <h2 id='waitingForUser'> Welcome, waiting for User to Join......</h2>
-
-    <div id='message'>
-      <ul id='chatMessage'> </ul>
-      <br>
-      <input type='text' id='messageValue'> </input>
-      <div id='submitButton'> Send Message </div>
-    </div>
-
-    <div id="secondPlayerGameInfo">
-      <p> Player 2 </p>
-      <div id='secondPlayerStatus'>
-        <div id="secondPlayerCounter"> </div>
-          <div id="secondPlayerGame">
-            <div id="secondPlayerGameBoard">
+    <div id='mainWrapper'>
+      <div id="firstPlayerGameInfo">
+        <p class='players' id='one'>Player One</p>
+        <div id='firstPlayerStatus'>
+          <div id="firstPlayerCounter"> </div>
+          <div id="firstPlayerGame">
+            <div id="firstPlayerGameBoard">
               <!-- JS will put table here. -->
             </div>
           </div>
         </div>
+      </div>
+
+      <div id="secondPlayerGameInfo">
+        <p class='players' id='two'> Player 2 </p>
+        <div id='secondPlayerStatus'>
+          <div id="secondPlayerCounter"> </div>
+            <div id="secondPlayerGame">
+              <div id="secondPlayerGameBoard">
+                <!-- JS will put table here. -->
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div id="gamePlay">
+        <div id='currentRoom'> <p>Welcome, you are currently in room <span id='roomName'><%=room%></span> </p>
+          <p>Level Difficulty  : <span id='roomDiff'><%=diff%></span> </p>
+          <p>Number Of Levels To Win  : <span id='roomLevelsToWin'><%=levelsToWin%></span> </p>
+        </div>
+
+        <h2 id='waitingForUser'> Welcome, waiting for User to Join......</h2>
+        <br>
+        <div id='message'>
+          Chat Room
+          <ul id='chatMessage'> </ul>
+        </div>
     </div>
 
-    <footer>
-      <p> &copy; 2015 Team Game Boyz </p>
-    </footer>
+      <div id='messageButtonWrapper'>
+        <input type='text' id='messageValue'> </input> <span id='submitButton'> Send Message </span>
+      </div>
+
+    </div>
 
     <script type="text/javascript" src="../../../js/vendor/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../../../js/levels.js"></script>
     <script type="text/javascript" src="../../../js/multiplayer.js"></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script>
-      var currentRoom = $.trim($('#roomName').text());
-      var difficulty = $.trim($('#roomDiff').text());
-      var waiting= $('#waitingForUser');
-      var levelsToWin = Number($.trim($('#roomLevelsToWin').text()));
-      var chatMessageList = $('#chatMessage');
-      var messageValue = $('#messageValue');
-      var button = $('#submitButton');
-      var startingLevel = 0;
-
-      startGame(startingLevel,difficulty,levelsToWin);
-
-      var clientSocket = io('/multiplayer');
-      clientSocket.emit('joinedRoom', currentRoom);
-
-      clientSocket.on('broad', function(data){
-        secondPlayerKeyDownEvent(data.keyCode);
-        // clientSocket.emit('firstPlayerCanMove', data);
-      });
-
-      // clientSocket.on('moveFirstPlayer', function(data){
-      //     firstPlayerKeyDownEvent(data.keyCode);
-      // });
-
-      function secondPlayerInput(key) {
-        key.preventDefault();
-        firstPlayerKeyDownEvent(key.keyCode);
-        var input = {};
-        input.keyCode = key.keyCode;
-        input.roomName = currentRoom;
-        clientSocket.emit('move', input );
-      }
-      function sendMessage(e) {
-        e.preventDefault();
-        var message = {};
-        message.roomName = currentRoom;
-        message.value = messageValue.val();
-        clientSocket.emit('messageSent', message);
-      }
-
-      clientSocket.on('startGame', function(data){
-        window.addEventListener("keyup", secondPlayerInput, false);
-        button.click(sendMessage);
-        waiting.text('GO GO GO GO!!!!!');
-        firstPlayerKeyDownEvent(13);
-        secondPlayerKeyDownEvent(13);
-        clientSocket.emit('otherUserCanStart', data);
-      });
-    </script>
+    <script type="text/javascript" src="../../../js/client-socket-multi.js"></script>
   </body>
 </html>

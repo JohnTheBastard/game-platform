@@ -377,27 +377,23 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
         }
       } else if (listenToKeystrokes) {
         if (keyvalue == 37) {
-          console.log("left");
-          deltaXY = [-1, 0];
+          deltaXY = [-1, 0]; // left
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 38) {
-          console.log("up");
-          deltaXY = [0, -1];
+          deltaXY = [0, -1]; // up
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 39) {
-          console.log("right");
-          deltaXY = [1, 0];
+          deltaXY = [1, 0]; // right
           currentGame.tryToMove(xy, deltaXY);
         } else if (keyvalue == 40) {
-          console.log("down");
-          deltaXY = [0, 1];
+          deltaXY = [0, 1]; // down
           currentGame.tryToMove(xy, deltaXY);
         }
 
         if (keyvalue == 13) {
           currentGame.draw();
         } else if (keyvalue == 32) {
-          $('#gameplay').empty();
+          my.initializeGameBoard(currentAnchor,currentUser,currentGame,currentGameID,currentContainer);
         }
         addCurrentStatus(currentUser,currentGame,playerCounterId, currentPlayerName);
       }

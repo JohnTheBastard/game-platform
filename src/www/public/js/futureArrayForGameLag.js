@@ -18,7 +18,7 @@ module.exports = function startIO(server) {
 		.catch(function (error) {
 			socket.emit('roomError', 'Sorry the database is down');
 		});
-	};
+	}
 
 	roomIO.on('connection', function(serverSocket) {
 		showAllRooms(Room, serverSocket);
@@ -30,7 +30,7 @@ module.exports = function startIO(server) {
 				})
 				.catch(function(error) {
 					console.log(error);
-					serverSocket.emit('roomError', 'Sorry either that room as been taken or the criteria to create a room was not met.');
+					serverSocket.emit('roomError', 'Sorry that room has already been taken.');
 				});
 		});
 
@@ -48,7 +48,7 @@ module.exports = function startIO(server) {
 				})
 				.catch(function(error) {
 					socket.emit('roomError', 'Sorry the database is down');
-				})
+				});
 		});
 
 		serverSocket.on('disconnect', function(){
@@ -66,8 +66,26 @@ module.exports = function startIO(server) {
 				.then(function(room) {
 					if(room.firstPlayer === 'player') {
 						room.firstPlayer = serverSocket.id;
+						var game = new Game();
+						game.roomName = room.name;
+						game.startingLevel = 0;
+						game.moves = [13];
+						game.movesCompleted = 0;
+						game.currentMove = 1;
+						game.playerName = serverSocket.id;
+						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
+						game.save();
 					} else if(room.secondPlayer === 'player') {
 						room.secondPlayer = serverSocket.id;
+						var game = new Game();
+						game.roomName = room.name;
+						game.startingLevel = 0;
+						game.moves = [13];
+						game.movesCompleted = 0;
+						game.currentMove = 1;
+						game.playerName = serverSocket.id;
+						game.numberOfLevelsToWin = room.numberOfLevelsToWin;
+						game.save();
 					}
 					return room;
 				})
@@ -79,21 +97,64 @@ module.exports = function startIO(server) {
 				})
 				.catch(function(error) {
 					console.log(error);
-				})
+				});
 		});
 
 		serverSocket.on('otherUserCanStart', function(data){
 			serverSocket.broadcast.to(data).emit('startGame', 'you may now start');
 		});
 
-		serverSocket.on('move', function(data) {
-			serverSocket.broadcast.to(data.roomName).emit('broad',data);
+		serverSocket.on('firstPlayerCanMove', function(data){
+			serverSocket.broadcast.to(data.roomName).emit('firstBroad', data.keyCode);
 		});
 
-		serverSocket.on('messageSent', function(data) {
-			data.html = '<li class="player2Message listMessage"> Player 2: '+data.value+'</li>';
-			serverSocket.broadcast.to(data.roomName).emit('player2Message',data);
-		})
+		serverSocket.on('move', function(data) {
+			var moveData = data;
+			Game.findOne({playerName: serverSocket.id})
+				.then(function(game){
+					game.moves.push(moveData.keyCode);
+					game.currentMove = game.moves.length;
+					game.save()
+						.then(function(game){
+							var gameData = {};
+							gameData.roomName = moveData.roomName;
+							gameData.movesCompleted = game.movesCompleted;
+							gameData.moves = game.moves;
+							gameData.currentMove = game.currentMove;
+							serverSocket.broadcast.to(moveData.roomName).emit('broad',gameData);
+						});
+				})
+				.catch(function(error){
+					console.log(error);
+				});
+		});
+
+		serverSocket.on('firstPlayerCanMove', function(data){
+			serverSocket.broadcast.to(data.roomName).emit('firstPlayerMove',data);
+		});
+
+		serverSocket.on('movesCompleted', function(data){
+			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
+				.then(function(room){
+					if(room.firstPlayer === serverSocket.id) {
+						Game.findOne({'playerName': room.secondPlayer })
+							.then(function(game) {
+								game.movesCompleted = data;
+								game.save();
+							});
+					} else if (room.secondPlayer === serverSocket.id) {
+						Game.findOne({'playerName': room.firstPlayer })
+							.then(function(game) {
+								game.movesCompleted = data;
+								game.save();
+							});
+					}
+				})
+				.catch(function(error){
+					console.log(error);
+				});
+		});
+
 		serverSocket.on('disconnect', function() {
 			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
 				.then(function(room) {
@@ -104,9 +165,8 @@ module.exports = function startIO(server) {
 						} else if (room.secondPlayer === serverSocket.id) {
 							room.secondPlayer = 'player';
 						}
-						room.save().then(function(room) {
-							serverSocket.broadcast.to(room.name).emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
-						});
+						serverSocket.broadcast.to(room.name).emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
+						room.save();
 					} else if (room.usersInRoom < 2) {
 						Room.findOneAndRemove({name: room.name})
 							.then(function(room){
@@ -114,7 +174,7 @@ module.exports = function startIO(server) {
 							})
 							.catch(function(error){
 								console.log(error);
-							})
+							});
 					}
 				})
 				.catch(function(error){

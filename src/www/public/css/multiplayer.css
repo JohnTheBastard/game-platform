@@ -1,26 +1,64 @@
+/* Basic */
 * {
   color: black;
 }
+
+body {
+  margin-bottom: 20px;
+}
+
+
+/* Messages */
 #message {
   text-align: center;
   color: black;
-}
-#firstPlayerGameInfo {
-  position: absolute;
-  top: 200px;
-  left: 5px;
-}
-
-#secondPlayerGameInfo {
-  position: absolute;
-  top: 200px;
-  right: 5px;
+  width: 500px;
+  height: 500px;
+  max-width: 100%;
+  background-color: #ccc;
+  border: 5px solid black;
+  margin: 0 auto;
+  margin-bottom: 10px;
 }
 
-#currentRoom {
+#messageValue {
+  border: 2px solid black;
+}
+
+#messageButtonWrapper {
   text-align: center;
+  clear:both;
+}
+
+#chatMessage {
+  text-align: left;
+  list-style: none;
   margin: 0 auto;
 }
+
+#submitButton {
+  font-size: .7em;
+  margin-left: 5px;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-weight: bolder;
+}
+
+#submitButton:hover {
+  cursor: pointer;
+}
+.player1Message {
+  color: purple;
+}
+.player2Message {
+  color: green;
+}
+
+
+/* Game Wrapers */
 
 #winnerWinner {
   color: blue;
@@ -29,6 +67,41 @@
 #waitingForUser {
   text-align: center;
   color: red;
+}
+
+.current {
+  margin-top: 20px;
+}
+
+.container-class {
+  height: auto;
+  outline: none;
+  margin: 0 auto;
+}
+.container-class div, img {
+    background-color: black;
+    width: 32px;
+    height: 32px;
+    float: left;
+}
+
+.players {
+  text-align: center;
+}
+
+/*FIRST PLAYER */
+#one {
+  color: purple;
+  font-weight: bold;
+}
+#firstPlayerGameInfo {
+  float: left;
+  margin-left: 50px;
+}
+
+#currentRoom {
+  text-align: center;
+  margin: 0 auto;
 }
 
 #firstPlayerGame {
@@ -55,24 +128,19 @@
   height: 150px;
   background-color: #ccc;
   color: black;
+  margin: 0 75px;
+
 }
 
-.current {
-  margin-top: 20px;
+/* SECOND PLAYER */
+#two {
+  color: green;
+  font-weight: bold;
 }
 
-.container-class {
-  height: auto;
-  outline: none;
-  margin: 0 auto;
-}
-
-
-.container-class div, img {
-    background-color: black;
-    width: 32px;
-    height: 32px;
-    float: left;
+#secondPlayerGameInfo {
+  float: right;
+  margin-right: 50px;
 }
 
 #secondPlayerGame {
@@ -99,11 +167,5 @@
   height: 150px;
   background-color: #ccc;
   color: black;
-}
-
-footer {
-  position: absolute;
-  bottom: 10px;
-  right: 0;
-  left: 0;
+  margin: 0 75px;
 }

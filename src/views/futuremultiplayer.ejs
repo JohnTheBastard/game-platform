@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> Game | Boyz</title>
+    <link rel="stylesheet" href="../../../css/main.css">
+    <link rel="stylesheet" href="../../../css/multiplayer.css">
+    <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+
+    <link type="text/css" rel="stylesheet" href="../../../css/boxxle.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/layout.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/colors.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/nav.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/rooms.css">
+    <link rel="stylesheet" href="../../../css/multiplayer.css">
+  </head>
+  <body>
+    <header>
+  		<nav id="navBar">
+  			<!-- <div id="logo">
+  					<h1>Game</h1>
+  						<span id="B">B</span>
+  						<span id="O">O</span>
+  						<span id="Y">Y</span>
+  						<span id="Z">Z</span>
+  					<h2> Boxxle </h2>
+  				</div> -->
+  			<ul>
+  				<li class="sub" id="homeNav"><a href="/#/"><i class="fa fa-home fa-lg"></i> Home</a>
+  					<aside></aside>
+  					<ul>
+  						<li><a href="/#/about">about</a></li>
+  					</ul>
+  				</li>
+          <li><a href="/play"><i class="fa fa-edit fa-lg"></i>Single Player</a>
+  					<aside></aside>
+  						</li>
+  						<li><a href="/#/" onclick="localStorage.removeItem('token')"><i class="fa fa-edit fa-lg"></i>Logout</a>
+  							<aside></aside>
+  								</li>
+  					</ul>
+  				</li>
+  			</ul>
+
+  		</nav>
+  	</header>
+    <div id="firstPlayerGameInfo">
+      <div id='firstPlayerStatus'>
+        <div id="firstPlayerCounter"> </div>
+        <div id="firstPlayerGame">
+          <div id="firstPlayerGameBoard">
+            <!-- JS will put table here. -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='currentRoom'> <p>Welcome, you are currently in room <span id='roomName'><%=room%></span> </p>
+      <p>Level Difficulty  : <span id='roomDiff'><%=diff%></span> </p>
+      <p>Number Of Levels To Win  : <span id='roomLevelsToWin'><%=levelsToWin%></span> </p>
+    </div>
+
+    <div id="secondPlayerGameInfo">
+      <div id='secondPlayerStatus'>
+        <div id="secondPlayerCounter"> </div>
+          <div id="secondPlayerGame">
+            <div id="secondPlayerGameBoard">
+              <!-- JS will put table here. -->
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <footer>
+      <p> &copy; 2015 Team Game Boyz </p>
+    </footer>
+
+    <script type="text/javascript" src="../../../js/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../../../js/levels.js"></script>
+    <script type="text/javascript" src="../../../js/multiplayer.js"></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+      var currentRoom = $.trim($('#roomName').text());
+      var difficulty = $.trim($('#roomDiff').text());
+      var levelsToWin = Number($.trim($('#roomLevelsToWin').text()));
+      var startingLevel = 0;
+      startGame(startingLevel,difficulty,levelsToWin);
+
+      var clientSocket = io('/multiplayer');
+      clientSocket.emit('joinedRoom', currentRoom);
+
+      clientSocket.on('broad', function(data){
+        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
+          secondPlayerKeyDownEvent(data.moves[ii]);
+        }
+        clientSocket.emit('movesCompleted', data.currentMove);
+        clientSocket.emit('firstPlayerCanMove', data);
+      });
+
+      clientSocket.on('firstPlayerMove', function(data){
+        for(var ii = data.movesCompleted; ii < data.currentMove; ii++) {
+          firstPlayerKeyDownEvent(data.moves[ii]);
+        }
+      });
+
+      function secondPlayerInput(key) {
+        key.preventDefault();
+        var input = {};
+        input.keyCode = key.keyCode;
+        input.roomName = currentRoom;
+        clientSocket.emit('move', input );
+      }
+
+      clientSocket.on('startGame', function(data){
+        window.addEventListener("keydown", secondPlayerInput, false);
+        clientSocket.emit('otherUserCanStart', data);
+      });
+
+
+    </script>
+  </body>
+</html>
