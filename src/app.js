@@ -4,7 +4,7 @@ const favicon = require('serve-favicon');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
+const loadLevels = require('./utils/loadpushesRocksLevelsIntoDB')
 const session      = require('express-session');
 const Grant        = require('grant-express'),
       grant        = new Grant( require('./config/grantConfig') );
