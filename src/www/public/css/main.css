@@ -19,24 +19,39 @@ a {
 }
 h1 {
     font-size: 7rem;
+    margin: .2rem;
+    padding: 0;
 }
 h2 {
     font-size: 6rem;
+    margin: .2rem;
+    padding: 0;
 }
 h3 {
     font-size: 5rem;
+    margin: .2rem;
+    padding: 0;
 }
 h4 {
     font-size: 4rem;
+    margin: .2rem;
+    padding: 0;
 }
 h5 {
     font-size: 3rem;
+    margin: .2rem;
+    padding: 0;
 }
 h6 {
     font-size: 2rem;
+    margin: .2rem;
+    padding: 0;
 }
 p {
+    font-size: 1.2rem;
     margin: 0;
+    padding: 0;
+    margin: .2rem;
     padding: 0;
 }
 /******************
