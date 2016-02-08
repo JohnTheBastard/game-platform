@@ -23,6 +23,14 @@ var crateOnDotURL = "../img/WoodenCrateOnDot.png";
 var dotsURL  = "../img/DotTile.png";
 var spriteURL = "../img/Sprite.gif";
 
+/*rockin shit*/
+// var crateURL = "../img/rawck.png";
+// var crateOnDotURL = "../img/Heavy_Boulder.png";
+// var wallURL = "../img/dirt.png";
+// var floorURL = "../img/dirt2.png";
+// var dotsURL  = "../img/dirtDot.png";
+// var spriteURL = "../img/Sprite.gif";
+
 var pad = function (num, size) {
 	var s = num+"";
 	while (s.length < size) s = "0" + s;
@@ -409,6 +417,7 @@ function createBoxxer(anchor) {
 	$('#difficulty').empty();
 	$('#currentLevel').empty();
 	$('#stepCount').empty();
+	$('#startTxt').empty();
 	$('#difficulty').append('Difficulty: ' + my.user.difficulty)
 	$('#currentLevel').append('Level: ' + my.user.currentLevel)
 	$('#stepCount').append('Steps: ' + my.game.sprite.stepCount)
