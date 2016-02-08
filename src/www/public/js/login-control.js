@@ -24,4 +24,7 @@ angular.module('myApp').controller('loginCtrl', function($scope, $window, $locat
             console.log('no token');
         }
     }
+    $scope.logout = function() {
+    localStorage.setItem('token', null);
+    } 
 });
