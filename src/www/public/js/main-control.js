@@ -33,7 +33,7 @@ window.routes = {
     },
     '/rooms': {
         templateUrl: 'boxxle/rooms.html',
-        //controller: 'roomCtrl',
+        controller: 'roomCtrl',
         authRequired: true
     }
 };
