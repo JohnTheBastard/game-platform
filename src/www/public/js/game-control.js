@@ -14,7 +14,7 @@ boxApp.controller('gameCtrl', function($scope, $element, $http) {
 				var newLevel = res.data;
 				$scope.saving = false;
 				el.innerHTML="";
-				game = createBoxxer($element, newLevel.data );
+				game = createBoxxer(el, newLevel.data );
 				game.onDone = onDone;
 			}, function(err){ console.log(err); } );
 
