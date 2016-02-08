@@ -4,7 +4,8 @@ var localStorage = (function() {
     console.log('localStore level');
   } else {
     localStorage.setItem("Level", JSON.stringify('0'));
-    // localStorage.setItem("Scores", JSON.stringify( this.levelScores ) );
+    localStorage.setItem("Name", JSON.stringify('Guest'));
+    localStorage.setItem("Scores", JSON.stringify( {"easy":[0,0,0,0,0,0,0,0,0,0,0],"hard":[0,0,0,0,0,0,0,0,0,0]}) );
     localStorage.setItem("Difficulty", JSON.stringify('easy') );
     localStorage.setItem("Initialized", JSON.stringify( 'true' ) );
   }
