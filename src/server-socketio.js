@@ -109,7 +109,6 @@ module.exports = function startIO(server) {
 
 	messageIO.on('connection', function(serverSocket) {
 		serverSocket.on('joinedMessage', function(data){
-			console.log('joining', data)
 			serverSocket.join(data);
 		});
 		serverSocket.on('messageSent', function(data) {
