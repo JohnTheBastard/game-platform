@@ -57,7 +57,6 @@ app.config(['$routeProvider', function($routeProvider) {
         for (var ii in window.routes) {
 
         // check the authRequired true/false values with indexOf
-        //TODO: change indexOf to more semantic window.routes.authRequired true/false check
             if (next.indexOf(ii) != -1) {
                 if (window.routes[ii].authRequired && !jwt) {
                     event.defaultPrevented = true;
