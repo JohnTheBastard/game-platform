@@ -7,6 +7,7 @@ module.exports = function startIO(server) {
 	const io = require('socket.io')(server);
 	let multiplayerIO = io.of('/multiplayer');
 	let roomIO = io.of('/rooms');
+	let messageIO = io.of('/message');
 
 	mongoose.Promise = Promise;
 
@@ -90,36 +91,29 @@ module.exports = function startIO(server) {
 			serverSocket.broadcast.to(data.roomName).emit('broad',data);
 		});
 
-		serverSocket.on('messageSent', function(data) {
-			data.html = '<li class="player2Message listMessage"> Player 2: '+data.value+'</li>';
-			serverSocket.broadcast.to(data.roomName).emit('player2Message',data);
-		})
 
 		serverSocket.on('disconnect', function() {
 			Room.findOne( { $or:[ {'firstPlayer':serverSocket.id}, {'secondPlayer':serverSocket.id} ]})
 				.then(function(room) {
-					if(room.usersInRoom === 2) {
-						room.usersInRoom--;
-						if(room.firstPlayer === serverSocket.id) {
-							room.firstPlayer = 'player';
-						} else if (room.secondPlayer === serverSocket.id) {
-							room.secondPlayer = 'player';
-						}
-						room.save().then(function(room) {
-							serverSocket.broadcast.to(room.name).emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
-						});
-					} else if (room.usersInRoom < 2) {
-						Room.findOneAndRemove({name: room.name})
-							.then(function(room){
-								console.log('everyone left');
-							})
-					}
+						serverSocket.broadcast.to(room.name).emit('userLeft', 'Sorry it seems you have lost connection with the user. Please Wait');
+						return room;
+					})
+				.then(function(room) {
+					room.remove().then(function(room) {console.log('room removed')});
 				})
 				.catch(function(error){
 					console.log(error);
 				});
-
+			});
 		});
 
+	messageIO.on('connection', function(serverSocket) {
+		serverSocket.on('joinedMessage', function(data){
+			serverSocket.join(data);
+		});
+		serverSocket.on('messageSent', function(data) {
+			data.html = '<li class="player2Message listMessage"> Player 2: '+data.value+'</li>';
+			serverSocket.broadcast.to(data.roomName).emit('player2Message',data);
+		})
 	});
 };
