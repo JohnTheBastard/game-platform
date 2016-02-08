@@ -1,41 +1,48 @@
 /******************
       MAIN
 ******************/
+
 * {
-  font-size: 1em;
+    font-size: 1em;
 }
 body {
-  font-family: 'Oswald', sans-serif;
-  letter-spacing: .1rem;
-  margin: 0;
-  padding: 0;
-  background-color: #FDFDFD;
-  color: #414141;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .1rem;
+    margin: 0;
+    padding: 0;
+    background-color: #FDFDFD;
+    color: #414141;
 }
 a {
-  text-decoration: none;
-  color: #FFF;
+    text-decoration: none;
+    color: #FFF;
 }
 h1 {
-  font-family: 'Press Start 2P', cursive;
-  margin: 15px 0;
-  font-size: 1.75em;
-  line-height: 0.8em;
+    font-size: 7rem;
 }
 h2 {
-  font-size: 0.75em;
-  margin: 5px 0 0;
-  font-family: 'Press Start 2P', cursive;
+    font-size: 6rem;
 }
-
+h3 {
+    font-size: 5rem;
+}
+h4 {
+    font-size: 4rem;
+}
+h5 {
+    font-size: 3rem;
+}
+h6 {
+    font-size: 2rem;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
 /******************
-      FOOTER
+      FONTS
 ******************/
 
-footer {
-  font-size: 0.75em;
-  text-align: center;
-  clear: both;
-  padding-top: 50px;
-  font-family: 'Press Start 2P', cursive;
+.game-font {
+    font-family: 'Press Start 2P', cursive;
 }

@@ -14,7 +14,7 @@
   	<link rel="stylesheet" type="text/css" href="css/main.css">
   	<link rel="stylesheet" type="text/css" href="css/layout.css">
   	<link rel="stylesheet" type="text/css" href="css/colors.css">
-  	<link rel="stylesheet" type="text/css" href="css/login.css">
+
   	<link rel="stylesheet" type="text/css" href="css/nav.css">
   	<link rel="stylesheet" type="text/css" href="css/rooms.css">
 
@@ -52,7 +52,7 @@
 
   		</nav>
   	</header>
-    <div id="gameplay">
+    <!-- <div id="gameplay">
       <p class='playParagraphs'> Hey, welcome to the Boxxle Game Page. By now you should have
          already entered a username and should be ready to play. If you
          are still a little hazy on how the game works here is a basic
@@ -66,13 +66,15 @@
          the level and have no where to go. Simply refresh the page to start the level over. </p>
 
       <p class='playParagraphs'> Press Space Bar to clear these paragraphs. Enjoy the Game! </p>
-    </div>
+    </div> -->
 
     <div ng-controller='gameCtrl' id="status">
-
-      <div id="counter">
-      </div>
-          <div id="game">
+      <section class="center-select">
+      <h5 class='center light-text' id="difficulty">Difficulty: </h5>
+      <h5 class='center light-text' id="currentLevel">Level: </h5>
+      <h5 class='center light-text' id="stepCount">Steps: </h5>
+    </section>
+          <div  class='center' id="game">
               <div id="gameBoard">
                   <!-- Angular will put table here. -->
               </div>
