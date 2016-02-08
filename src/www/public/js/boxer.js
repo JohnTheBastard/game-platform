@@ -85,10 +85,10 @@ function User() {
 
 		if ( !this.isInitialized ) {
 		    console.log("false = " + this.isInitialized + " I'm not initialized.");
-		    for( ii=0; ii < levelData.easy.length; ii++ ) {
+		    for( ii=0; ii < oldLevelData.easy.length; ii++ ) {
 				this.levelScores.easy[ii] = 0;
 		    }
-		    for( ii=0; ii < levelData.hard.length; ii++ ) {
+		    for( ii=0; ii < oldLevelData.hard.length; ii++ ) {
 				this.levelScores.hard[ii] = 0;
 		    }
 		    this.saveData();
@@ -373,11 +373,8 @@ function createBoxxer(anchor) {
 		$('#container').css( 'width', my.game.boardDimensionInPixels );
 	};
 
-	// I don't really understand window.onload behavior
-	// so I'm probably doing this wrong.
-	window.onload = function () {
+//calling this without windowOnload fixed render onload error.
 		my.initializeGameBoard();
-	};
 
 
 	my.advanceTheUser = function () {
@@ -409,12 +406,11 @@ function createBoxxer(anchor) {
 	};
 
 	function addCurrentStatus() {
-		$('#difficulty').empty();
-		$('#currentLevel').empty();
-		$('#stepCount').empty();
-	  $('#difficulty').append('Difficulty: ' + my.user.difficulty);
-		$('#currentLevel').append('Level: ' + (my.user.currentLevel))
-		$('#stepCount').append('Steps: ' + my.game.sprite.stepCount)
+	$('#counter').empty();
+	var status ='<p class="current"> Difficulty: ' + my.user.difficulty
+	    + '<p> Level: ' + (my.user.currentLevel + 1) + '<p> Steps: '
+	    + my.game.sprite.stepCount + '</p>';
+	  $('#counter').append(status);
 	}
 
 	my.processInput = function(key) {
@@ -425,8 +421,7 @@ function createBoxxer(anchor) {
 		key.preventDefault();
 
 		if ( my.game.winCondition ) {
-			console.log("CALLING ON DONE.");
-			my.onDone( { levelID: "fake01-level02" } );
+			my.onDone({"goo":"gob"});
 			my.advanceTheUser();
 			my.initializeGameBoard();
 		} else if ( listenToKeystrokes ) {
