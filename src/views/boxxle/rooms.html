@@ -4,7 +4,7 @@
   <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/rooms.css">
 
- <h1 id='header'> Multiplayer Rooms </h1>
+ <h5 id='header'> Multiplayer Rooms </h5>
 
   <div id='wrapper'>
     <h6> Create Room </h6>
@@ -21,7 +21,7 @@
     <input type='radio' ng-model='levels' value='5'> 5 </input><br>
 
     <input id='submit' ng-click='createRoom()' type='button'  value='Create Room'>
-    <h5> {{error}} </h5>
+    <p> {{error}} </p>
 
     <h6>Join Room </h6>
     <ul ng-repeat='room in rooms'>

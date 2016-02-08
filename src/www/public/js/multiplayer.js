@@ -15,34 +15,20 @@ if (mobile) {
 
 var listenToKeystrokes = true;
 
-var wallURL = "../../../img/RedBrick.png";
-var floorURL = "../../../img/FloorTile.png";
-var crateURL = "../../../img/WoodenCrate.png";
-var crateOnDotURL = "../../../img/WoodenCrateOnDot.png"
-var dotsURL = "../../../img/DotTile.png";
+// var wallURL = "../../../img/RedBrick.png";
+// var floorURL = "../../../img/FloorTile.png";
+// var crateURL = "../../../img/WoodenCrate.png";
+// var crateOnDotURL = "../../../img/WoodenCrateOnDot.png"
+// var dotsURL = "../../../img/DotTile.png";
+// var spriteURL = "../../../img/Sprite.gif";
+
+var crateURL = "../../../img/boulder.png";
+var crateOnDotURL = "../../../img/boulderOnDot.png";
+var wallURL = "../../../img/dirt.png";
+var floorURL = "../../../img/dirt2.png";
+var dotsURL  = "../../../img/dirtDot.png";
 var spriteURL = "../../../img/Sprite.gif";
 
-var pad = function(num, size) {
-  var s = num + "";
-  while (s.length < size) s = "0" + s;
-  return s;
-}
-
-var removeClass = function() {
-  $('#hiddenlist').removeClass('hide');
-  $('#gameboyIMG').removeClass('hide');
-}
-
-
-var welcomeBack = function() {
-  var name = JSON.parse(localStorage.getItem("Name"));
-  var welcome = ('<p class="welcome"> Welcome back, ' + name + '. To continue ' +
-    'playing from your last game, click the Gameboy or the "Play" tab above. ' +
-    'If you would like to start over, please clear your web data. </p>');
-  $('.initialParagraphs').remove();
-  $('#user').replaceWith(welcome);
-
-}
 
 function User(startingLevel, diff, amountOfLevelsToWin) {
   this.currentLevel = startingLevel;
@@ -344,7 +330,7 @@ function startGame(startingLevel,difficulty,numberOfLevelsToWin) {
     } else if (user.currentLevel >= user.numberOfLevelsToWin) {
       lastLevel = true;
       anchor.empty();
-      anchor.append('<h3 id="winnerWinner"> WAHOOOOOO <br> ' + playerName + ' WON THE GAME <br> SORRY IF THATS <br> NOT YOU!!!! </h3>')
+      anchor.append('<div id="winnerWinner">'+ playerName + ' WON THE GAME <br> SORRY IF THATS <br> NOT YOU!!!! </div>')
     } else {
       console.log("Error: level index out of bounds");
     }
