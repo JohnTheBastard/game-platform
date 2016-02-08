@@ -1,34 +1,28 @@
 
   <meta charset="utf-8">
   <title> Game Boyz | Final Project </title>
-  <div> Room Name  :
+  <section class='center-ninety'>
+  <div><h6>Room Name  : </h6><br>
     <input ng-model='roomName' type="text"/>
   </div>
-  <br>
-  Level Difficulty  : <br>
+  <h6>Level Difficulty  : </h6><br>
   <input type='radio' ng-model='diff' value='easy'> easy </input><br>
   <input type='radio' ng-model='diff' value='hard'> hard </input><br>
-  <br>
-  Number of Levels to Win  : <br>
+  <h6>Levels to Win  : </h6><br>
   <input type='radio' ng-model='levels' value='1'> 1 </input><br>
   <input type='radio' ng-model='levels' value='3'> 3 </input><br>
   <input type='radio' ng-model='levels' value='5'> 5 </input><br>
-  <br>
-  <br>
-  <input id='submit' ng-click='createRoom()' type='button'  value='Create Room'>
-  <h5> {{error}} </h5>
-  <h3>Rooms Available: </h3>
-  <ul ng-repeat='room in rooms'>
-    <li>
-      <div ng-click='joinRoom(room)'>Room Name: {{room.name}} </div>
-      <ul>
-        <li> Difficulty: {{room.diff}} </li>
-        <li> Number of Levels to Win: {{room.numberOfLevelsToWin}} </li>
-        <li> Number of Users in Room: {{room.usersInRoom}} <span> {{room.roomIsFull}} </span> </li>
-      </ul>
-    </li>
-  </ul>
-
+  <input class='med-button' id='submit' ng-click='createRoom()' type='button'  value='Create Room'>
+  </input>
+  <h6> {{error}} </h6>
+  <h6>Rooms Available: </h6>
+  <section ng-repeat='room in rooms'>
+      <button class='med-button light dark-text' ng-click='joinRoom(room)'>Join Room: {{room.name}} </button>
+        <div> Difficulty: {{room.diff}} </div>
+        <div> Levels to Win: {{room.numberOfLevelsToWin}} </div>
+        <div> Users in Room: {{room.usersInRoom}} <span> {{room.roomIsFull}} </span> </div>
+  </section>
+</section>
     <footer>
       <p> &copy; 2015 Team Game Boyz </p>
     </footer>

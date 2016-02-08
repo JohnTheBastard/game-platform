@@ -37,7 +37,6 @@ window.routes = {
         authRequired: true
     }
 };
-
 //Checks paths that could be manually navigated to for a jwt token
 app.config(['$routeProvider', function($routeProvider) {
     for (var path in window.routes) {
