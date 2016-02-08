@@ -406,11 +406,12 @@ function createBoxxer(anchor) {
 	};
 
 	function addCurrentStatus() {
-	$('#counter').empty();
-	var status ='<p class="current"> Difficulty: ' + my.user.difficulty
-	    + '<p> Level: ' + (my.user.currentLevel + 1) + '<p> Steps: '
-	    + my.game.sprite.stepCount + '</p>';
-	  $('#counter').append(status);
+	$('#difficulty').empty();
+	$('#currentLevel').empty();
+	$('#stepCount').empty();
+	$('#difficulty').append('Difficulty: ' + my.user.difficulty)
+	$('#currentLevel').append('Level: ' + my.user.currentLevel)
+	$('#stepCount').append('Steps: ' + my.game.sprite.stepCount)
 	}
 
 	my.processInput = function(key) {
