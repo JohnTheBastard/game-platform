@@ -59,8 +59,8 @@ function createApp() {
 
 	app.use(login);
 	app.use('/play', authenticated, play);
-  app.use('/guest', guest);
-	app.use("/data", data);
+    app.use('/guest', guest);
+	app.use('/data', data);
 
 	/* * * * * * * * * *
 	 * multiplayer     *

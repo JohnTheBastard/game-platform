@@ -86,7 +86,44 @@ router.get('/twitter', (req, res, next) => {
 	}).catch(next);
 });
 
+/* New Code:
+function createNewUser(){
+	return PushesRocksLevel.getLevel('easy01-level00')
+		.then( level => {
+			return new PushesRocksUserData({ current_level: level.id }).save();
+		})
+		.then( userData => {
+			return new GameSaveData({ pushes_rocks: userData.id }).save();
+		})
+		.then( gameData => {
+			return new User({
+				twitter: {
+					screen_name: req.query.raw.screen_name,
+					user_id: req.query.raw.user_id
+				},
+				game_data: gameData.id
+			}).save();
+		});
+}
 
+router.get('/login', (req, res) => {
+    res.sendFile(loginPath);
+});
+mongoose.Promise = Promise; 
+​
+router.get('/twitter', (req, res, next) => {
+	User.findOne({
+		twitter: {
+			screen_name: req.query.raw.screen_name,
+			user_id: req.query.raw.user_id
+		}
+	})
+	.then( user => user ? user : User.createNew() ) //createNewUser() )
+	.then( user => token.sign(user) )
+	.then( token => res.send({ token }) )
+	.catch(next);
+});
+*/
 
 
 

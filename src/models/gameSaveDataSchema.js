@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const PushesRocksLevel = require('./pushesRocksLevelSchema');
 
 const PushesRocksBestScore = new mongoose.Schema({
+    // probably want user_id
 	level: String,
 	score: Number
 });
