@@ -99,7 +99,7 @@ module.exports = function startIO(server) {
 						return room;
 					})
 				.then(function(room) {
-					room.remove().then(function(room) {console.log('room removed')});
+					room.remove().then(function(room) {console.log('room removed');});
 				})
 				.catch(function(error){
 					console.log(error);
@@ -114,6 +114,6 @@ module.exports = function startIO(server) {
 		serverSocket.on('messageSent', function(data) {
 			data.html = '<li class="player2Message listMessage"> Player 2: '+data.value+'</li>';
 			serverSocket.broadcast.to(data.roomName).emit('player2Message',data);
-		})
+		});
 	});
 };

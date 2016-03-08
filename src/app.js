@@ -1,22 +1,19 @@
-const express = require('express');
-const path = require('path');
-const favicon = require('serve-favicon');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const loadLevels = require('./utils/loadpushesRocksLevelsIntoDB')
-const session      = require('express-session');
-const Grant        = require('grant-express'),
-      grant        = new Grant( require('./config/grantConfig') );
-
-const multiplayer = require('./routes/multiplayer');
-
-const data = require('./routes/data');
-
-const routes = require('./routes/index');
-const login = require( './routes/login' );
-const play = require( './routes/play' );
-const guest = require( './routes/guest-play' );
+const express       = require('express');
+const path          = require('path');
+const favicon       = require('serve-favicon');
+const morgan        = require('morgan');
+const cookieParser  = require('cookie-parser');
+const bodyParser    = require('body-parser');
+const loadLevels    = require('./utils/loadpushesRocksLevelsIntoDB');
+const session       = require('express-session');
+const Grant         = require('grant-express'),
+      grant         = new Grant( require('./config/grantConfig') );
+const multiplayer   = require('./routes/multiplayer');
+const data          = require('./routes/data');
+const routes        = require('./routes/index');
+const login         = require( './routes/login' );
+const play          = require( './routes/play' );
+const guest         = require( './routes/guest-play' );
 const authenticated = require('./routes/authroute');
 
 function createApp() {
