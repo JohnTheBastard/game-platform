@@ -14,25 +14,6 @@ const mongoose      = require('mongoose');
 
 let loginPath = path.join(__dirname, '../views/boxxle', 'login.html');
 
-
-/* DEMONSTRATION CODE */
-const wtf = function() {
-	User.find()
-	.populate('game_data')
-	.then( user => new GameSaveData(user.game_data) ) 
-	.populate('pushes_rocks')
-	.then( game_data => PushesRocksUserData(game_data.pushes_rocks) ) 
-	.populate('current_level')
-	.then( pushes_rocks => PushesRocksLevel(pushes_rocks.current_level) )
-	.exec(function (err, current_level) {
-		console.log( "user.game_data.pushes_rocks.current_level: ", JSON.stringify(current_level) );
-	})
-	.then( () => console.log("I'm done!") );
-};
-//wtf();
-/**********************/
-
-
 let firstLevel;
 let getFirstLevel = function() { 
 	PushesRocksLevel.getLevel('easy01-level00', function(level) {
@@ -41,10 +22,10 @@ let getFirstLevel = function() {
 };
 getFirstLevel();
 
-let prUser, newGameSave;
+let prUserData, newGameSave;
 const makeNewGameSaveData = function() {
 	PushesRocksLevel.getLevel('easy01-level00', function(level) {
-		let prUserData = new PushesRocksUserData({ current_level: level});
+        prUserData = new PushesRocksUserData({ current_level: level});
 		newGameSave = new GameSaveData({ pushes_rocks: prUserData});
 	}); 	
 };
@@ -59,7 +40,7 @@ router.get('/login', (req, res) => {
 mongoose.Promise = Promise; 
 
 router.get('/twitter', (req, res, next) => {
-	makeNewGameSaveData(); 			//start this now, incase we need it
+	makeNewGameSaveData(); 			//start this now, incase we need it. fix later
 	User.findOne({
 		twitter: {
 			screen_name: req.query.raw.screen_name,
