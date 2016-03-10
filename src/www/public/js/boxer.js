@@ -332,7 +332,7 @@ function GameBoard() {
 		var dy = deltaXY[1];
 
 		var nextLocation = this.coordinates[ x + dx ][ y + dy ];
-		var twoAway;
+		var twoAway = {};
 
 		// Make sure two spaces away is on the board
 		if ( ( 0 <= x + 2*dx && x + 2*dx < this.boardData.dimension ) &&
@@ -341,7 +341,6 @@ function GameBoard() {
 			twoAway.exists = true;
 		} else {
 			// Two spaces away would be off the board
-			twoAway = {};
 			twoAway.exists = false;
 		}
 
@@ -381,7 +380,6 @@ class GameInstance {
         this.scaleGameBoardHandler = this.scaleGameBoard.bind(this);    
         this.scaleGameBoard();
         this.eventListeners();
-        console.log("this:", this);
     }
     
     // this (mostly) should be handled by the game-controller
@@ -397,9 +395,7 @@ class GameInstance {
 	
 	processInput(key) {
 		let keyvalue = key.keyCode;
-		 console.log("this, in processInput():", this);
 		let xy = [ (this.game.sprite.x / cellWidth), (this.game.sprite.y / cellWidth) ];
-		let deltaXY;
 
 		// Keep key input from scrolling
 		key.preventDefault();
@@ -409,30 +405,14 @@ class GameInstance {
 			//this.advanceTheUser();
 			//this.initializeGameBoard();
 		} else if ( listenToKeystrokes ) {
-			if (keyvalue === 37) {
-				console.log("left");
-				deltaXY = [ -1, 0 ];
-				this.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue === 38) {
-				console.log("up");
-				deltaXY = [ 0, -1 ];
-				this.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue === 39) {
-				console.log("right");
-				deltaXY = [ 1, 0 ];
-				this.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue === 40) {
-				console.log("down");
-				deltaXY = [ 0, 1 ];
-				this.game.tryToMove( xy, deltaXY );
-		    }
+			let deltaXY = [ 0, 0 ];
+			if      ( keyvalue === 37 ) deltaXY = [ -1,  0 ];
+		    else if ( keyvalue === 38 ) deltaXY = [  0, -1 ];
+		    else if ( keyvalue === 39 ) deltaXY = [  1,  0 ];
+		    else if ( keyvalue === 40 ) deltaXY = [  0,  1 ];
 		    
-		    if (keyvalue === 13) {
-				this.game.draw();
-		    } else if (keyvalue === 32) {
-				$('#gameplay').empty();
-		    }
-		    this.addCurrentStatus();
+		    this.game.tryToMove( xy, deltaXY );
+            this.addCurrentStatus();
 		}
 	}
 	

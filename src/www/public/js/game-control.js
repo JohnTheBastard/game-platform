@@ -5,8 +5,7 @@ boxApp.controller('gameCtrl', function($scope, $element, $http) {
 
 
 	$http.get('/data').then( function(res) {
-    	console.log("res, res.data:", res, res.data);
-//		game = createBoxxer(el, res.data.data);
+    	//console.log("res, res.data:", res, res.data);
 		game = new GameInstance(el, res.data.data);
 		game.onDone = onDone;
 	});
