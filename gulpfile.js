@@ -1,3 +1,4 @@
+'use strict';
 const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const babel = require('gulp-babel');
@@ -24,15 +25,15 @@ const sourcemaps = require('gulp-sourcemaps');
 const stylish = require('jshint-stylish');
 const uglify = require('gulp-uglify');
     
-var reload = browserSync.reload;
+const reload = browserSync.reload;
     
-var lint = lazypipe()
-	.pipe(jshint)
-	.pipe(jshint.reporter, stylish);
+const lint = lazypipe()
+    .pipe(jshint)
+    .pipe(jshint.reporter, stylish);
 
-var jsTransform = lazypipe()
-	.pipe(babel)
-	.pipe(uglify);
+const jsTransform = lazypipe()
+    .pipe(babel)
+    .pipe(uglify);
 
     
 gulp.task( 'validate', function() {
@@ -51,12 +52,6 @@ gulp.task( 'run-tests', function() {
 	} ) );
 });
 
-//gulp.task('build', () => {
-//	return gulp.src('./src/**/*.js')
-//			   .pipe( lint() )
-//			   .pipe( jsTransform() )
-//			   .pipe(gulp.dest('dist'));
-//});
     
 gulp.task( 'watch-test', function(){
 	gulp.watch( [ './src/**' ], [ 'run-tests' ] );
@@ -64,13 +59,11 @@ gulp.task( 'watch-test', function(){
 
     
 gulp.task( 'default', ['run-tests', 'validate'] );  // gulp wants a default but we never use it
-
 gulp.task( 'test-all', ['run-tests', 'validate', 'watch-test' ] );
-
 gulp.task( 'test-with-args', function() {
-	var testFiles = [];
+	let testFiles = [];
 	// grab every other arg because we don't want the --option flags that's before each file
-	for (var ii = 4; ii < process.argv.length; ii+=2 ) {
+	for (let ii = 4; ii < process.argv.length; ii+=2 ) {
 		testFiles.push( './src/test/' + process.argv[ii] + 'Tests.js' );
 	}
 	return gulp.src( testFiles, {read: false} )
@@ -85,9 +78,33 @@ gulp.task( 'test-with-args', function() {
 } );
 
 
-gulp.task( 'express-start', function() {
+gulp.task('build-boxer', () => {
+	return gulp.src('./src/www/public/js/boxer.js')
+			   .pipe( lint() )
+			   .pipe( sourcemaps.init() )
+			   .pipe( babel() )
+			   .pipe( concat('boxer.js') )
+			   .pipe( sourcemaps.write('.') )
+			   .pipe( gulp.dest('./src/www/public/js/dist') );
+});
+
+gulp.task( 'watch-boxer', [ 'build-boxer' ], () => {
+    gulp.watch( [ './src/www/public/js/*.js' ], (event) => {
+        gulp.run( [ 'build-boxer' ] );
+        console.log(event.path); 
+        livereload.changed( {body: { files: __dirname }} );
+	});
+});
+
+gulp.task( 'dev-start', [ 'express-start' ], () => { 
+    gulp.run( [ 'watch-boxer' ] ) 
+    livereload.changed( {body: { files: __dirname }} );
+});
+
+gulp.task( 'express-start', () => {
 	nodemon({
 		script: './src/www/index.js',
+		ignore: [ 'src/www/public/*' ]
     })
 	.on('restart', function () {
 		console.log('restarted!');
@@ -97,11 +114,10 @@ gulp.task( 'express-start', function() {
 	livereload.listen(35729);
 	
 	gulp.watch(['./views/**/*.jade' ], function(event){
-		var fileName = require('path').relative('3000', event.path);
+		let fileName = require('path').relative('3000', event.path);
 		livereload.changed({
 			body: { files: [fileName] }
 		});
 	});
-
-	
 });
+

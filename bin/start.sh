@@ -24,6 +24,8 @@ elif [ ${args[0]} = "test" ]; then
 		
 		$( npm run gulp -- $files | tee /dev/tty )
 	fi
+#elif [ ${args[0]} = "foo" ]; then
+#    $( npm run foo | tee /dev/tty )
 elif [ ${args[0]} = "db" ]; then
 	$( mongod --dbpath ./data/db | tee /dev/tty )
 else
