@@ -1,11 +1,10 @@
-/* * * * * * * * * * * * * * * *
- * BOXER GAME                  *
- * Created by  John Hearn      *
- *             Max Jacobson    *
- *             Doug Popadince  *
- * CF201       Fall 2015       *
- * * * * * * * * * * * * * * * */
-
+/* * * * * * * * * * * * * *
+ * PUSHES ROCKS GAME       *
+ * Created by  John Hearn  *
+ * CF401       March 2016  *
+ * * * * * * * * * * * * * */
+ 
+'use strict';
 const mobile = false;
 let cellWidth;
 if(mobile) cellWidth = 16;
@@ -176,6 +175,8 @@ function GameBoard() {
 
     // Chrome needs me to access parameter arrays this way.
     this.updateCell = function( xy, tileType, tileURL, rockStatus) {
+        xy[0] = Number( xy[0] );  //TODO: see if I actually need this
+        xy[1] = Number( xy[1] );        
 		this.coordinates[ xy[0] ][ xy[1] ].tile = tileType;
 		this.coordinates[ xy[0] ][ xy[1] ].$img.attr( 'src', tileURL );
 		this.coordinates[ xy[0] ][ xy[1] ].hasRock = rockStatus;
@@ -207,7 +208,7 @@ function GameBoard() {
 			this.$elementJQ.append( this.coordinates[jj][ii].$div );
 		    }
 		}
-
+        
 		// update floor tiles
 		for ( let ii = 0; ii < this.boardData.floor.length; ii++ ) {
 		    this.updateCell(this.boardData.floor[ii], "floor", floorURL, false );
@@ -216,20 +217,15 @@ function GameBoard() {
 		for ( let ii = 0; ii < this.boardData.dots.length; ii++ ) {
 		    this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false );
 		}
-
 		// make our rocks
 		for ( let ii = 0; ii < this.boardData.rocks.length; ii++ ) {
 		    this.rocks.push( new Rock( this.boardData.rocks[ii] ) );
-		    this.rocks[ii].onDot = this.coordinates[ this.boardData.rocks[ii][0] ][ this.boardData.rocks[ii][1] ].isADot();
-		    this.coordinates[ this.boardData.rocks[ii][0] ][ this.boardData.rocks[ii][1] ].hasRock = true;
-		    if ( this.rocks[ii].onDot) {
-				this.rocks[ii].$rockImg.attr('src', rockOnDotURL );
-		    }
+		    this.rocks[ii].onDot = this.coordinates[ Number(this.boardData.rocks[ii][0]) ][ Number(this.boardData.rocks[ii][1]) ].isADot();
+		    this.coordinates[ Number(this.boardData.rocks[ii][0]) ][ Number(this.boardData.rocks[ii][1]) ].hasRock = true;
+		    if( this.rocks[ii].onDot) this.rocks[ii].$rockImg.attr('src', rockOnDotURL );
 		}
-
 		// make a sprite
 		this.sprite = new Sprite( this.boardData.start );
-
 		this.draw();
     };
 
@@ -302,8 +298,8 @@ function GameBoard() {
 		    self.sprite.x = x + ( cellWidth * deltaXY[0] * fraction );
 		    self.sprite.y = y + ( cellWidth * deltaXY[1] * fraction );
 		    if ( withRock ) {
-			self.rocks[rockIndex].x = xRock + ( cellWidth * deltaXY[0] * fraction );
-			self.rocks[rockIndex].y = yRock + ( cellWidth * deltaXY[1] * fraction );
+			    self.rocks[rockIndex].x = xRock + ( cellWidth * deltaXY[0] * fraction );
+                self.rocks[rockIndex].y = yRock + ( cellWidth * deltaXY[1] * fraction );
 		    }
 		    requestAnimationFrame(draw);
 		}
@@ -317,7 +313,7 @@ function GameBoard() {
 			clearInterval(interval);
 			drawFrame(1);
 		    if ( withRock ) {
-				self.updateRockStatus(rockIndex, [xRock/cellWidth, yRock/cellWidth ],
+				self.updateRockStatus( rockIndex, [ xRock/cellWidth, yRock/cellWidth ],
 					[ xRock/cellWidth + deltaXY[0],  yRock/cellWidth + deltaXY[1] ] );
 			}
 			self.sprite.stepCount++;
@@ -363,14 +359,19 @@ function GameBoard() {
 }
 
 class GameInstance {
-    constructor(anchor, level, playerData) {
+    constructor(anchor, level) {
         this.$anchor = anchor;
         //this.player = new Player( playerData );
         this.user = new User();
         this.game = new GameBoard();
         this.$anchor.empty();
         this.user.init();
-        this.game.init( levelData[this.user.difficulty][this.user.currentLevel] );
+        
+        console.log( "db/json:", level );
+        console.log( "js file:", levelData[this.user.difficulty][this.user.currentLevel] );
+        
+        //this.game.init( levelData[this.user.difficulty][this.user.currentLevel] );
+        this.game.init(level);
         this.$anchor.append( this.game.$elementJQ );
         this.$anchor.append( this.game.$canvasJQ );
         $('#game').css( { 'width': this.game.boardDimensionInPixels - 10,

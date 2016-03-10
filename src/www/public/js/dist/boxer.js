@@ -1,16 +1,14 @@
-"use strict";
+/* * * * * * * * * * * * * *
+ * PUSHES ROCKS GAME       *
+ * Created by  John Hearn  *
+ * CF401       March 2016  *
+ * * * * * * * * * * * * * */
+
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/* * * * * * * * * * * * * * * *
- * BOXER GAME                  *
- * Created by  John Hearn      *
- *             Max Jacobson    *
- *             Doug Popadince  *
- * CF201       Fall 2015       *
- * * * * * * * * * * * * * * * */
 
 var mobile = false;
 var cellWidth = undefined;
@@ -185,6 +183,8 @@ function GameBoard() {
 
 	// Chrome needs me to access parameter arrays this way.
 	this.updateCell = function (xy, tileType, tileURL, rockStatus) {
+		xy[0] = Number(xy[0]); //TODO: see if I actually need this
+		xy[1] = Number(xy[1]);
 		this.coordinates[xy[0]][xy[1]].tile = tileType;
 		this.coordinates[xy[0]][xy[1]].$img.attr('src', tileURL);
 		this.coordinates[xy[0]][xy[1]].hasRock = rockStatus;
@@ -225,20 +225,15 @@ function GameBoard() {
 		for (var ii = 0; ii < this.boardData.dots.length; ii++) {
 			this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false);
 		}
-
 		// make our rocks
 		for (var ii = 0; ii < this.boardData.rocks.length; ii++) {
 			this.rocks.push(new Rock(this.boardData.rocks[ii]));
-			this.rocks[ii].onDot = this.coordinates[this.boardData.rocks[ii][0]][this.boardData.rocks[ii][1]].isADot();
-			this.coordinates[this.boardData.rocks[ii][0]][this.boardData.rocks[ii][1]].hasRock = true;
-			if (this.rocks[ii].onDot) {
-				this.rocks[ii].$rockImg.attr('src', rockOnDotURL);
-			}
+			this.rocks[ii].onDot = this.coordinates[Number(this.boardData.rocks[ii][0])][Number(this.boardData.rocks[ii][1])].isADot();
+			this.coordinates[Number(this.boardData.rocks[ii][0])][Number(this.boardData.rocks[ii][1])].hasRock = true;
+			if (this.rocks[ii].onDot) this.rocks[ii].$rockImg.attr('src', rockOnDotURL);
 		}
-
 		// make a sprite
 		this.sprite = new Sprite(this.boardData.start);
-
 		this.draw();
 	};
 
@@ -369,7 +364,7 @@ function GameBoard() {
 }
 
 var GameInstance = function () {
-	function GameInstance(anchor, level, playerData) {
+	function GameInstance(anchor, level) {
 		_classCallCheck(this, GameInstance);
 
 		this.$anchor = anchor;
@@ -378,7 +373,12 @@ var GameInstance = function () {
 		this.game = new GameBoard();
 		this.$anchor.empty();
 		this.user.init();
-		this.game.init(levelData[this.user.difficulty][this.user.currentLevel]);
+
+		console.log("db/json:", level);
+		console.log("js file:", levelData[this.user.difficulty][this.user.currentLevel]);
+
+		//this.game.init( levelData[this.user.difficulty][this.user.currentLevel] );
+		this.game.init(level);
 		this.$anchor.append(this.game.$elementJQ);
 		this.$anchor.append(this.game.$canvasJQ);
 		$('#game').css({ 'width': this.game.boardDimensionInPixels - 10,

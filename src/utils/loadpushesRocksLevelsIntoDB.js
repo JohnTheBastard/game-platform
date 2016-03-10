@@ -11,7 +11,6 @@ let cb = function(err, level){
 function loadPushesRocksLevelsIntoDB() {
     let rm = Level.find().remove({});
     rm.exec();
-
     levelData.forEach( data => new Level(data).save(cb) );
 }
 loadPushesRocksLevelsIntoDB();
