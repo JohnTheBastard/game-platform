@@ -13,18 +13,20 @@ else       cellWidth = 32;
 
 let listenToKeystrokes = true;
 
-const crateURL = "../img/boulder.png";
-const crateOnDotURL = "../img/boulderondot.png";
+const rockURL = "../img/boulder.png";
+const rockOnDotURL = "../img/boulderondot.png";
 const wallURL = "../img/dirt.png";
 const floorURL = "../img/dirt2.png";
 const dotsURL  = "../img/dirtDot.png";
 const spriteURL = "../img/Sprite.gif";
 
+/*
 const pad = (num, size) => {
 	let s = num+"";
 	while (s.length < size) s = "0" + s;
 	return s;
 };
+
 
 const removeClass = () => {
 	$('#hiddenlist').removeClass('hide');
@@ -32,6 +34,7 @@ const removeClass = () => {
 };
 
 
+// TODO: this doesn't belong to the game and probably doesn't need to exist at all.
 const welcomeBack = () => {
 	let name = JSON.parse( localStorage.getItem( "Name" ) );
 	var welcome = ('<p class="welcome"> Welcome back, ' + name + '. To continue ' +
@@ -40,6 +43,15 @@ const welcomeBack = () => {
 	$('.initialParagraphs').remove();
 	$('#user').replaceWith(welcome);
 };
+*/
+
+class Player {
+    constructor() {
+        //this.currentLevel = 0;
+        //this.levelScores = { easy: [ ], hard: [ ] };
+        //this.difficulty = "easy";
+    }
+}
 
 function User() {
 	this.currentLevel = 0;
@@ -71,14 +83,11 @@ function User() {
 		    } else if( stringToCast === "false" ) {
 				return false;
 		    } else {
-				console.log("You're attempt to cast " + castToBool + " to a boolean failed." );
+				console.log("Your attempt to cast " + castToBool + " to a boolean failed." );
 		    }
 		}
 
 		this.isInitialized = castToBool( JSON.parse(localStorage.getItem("Initialized") ) );
-		//console.log(localStorage.getItem("Initialized"));
-		//console.log(this.isInitialized);
-
 
 		if ( !this.isInitialized ) {
 		    console.log("false = " + this.isInitialized + " I'm not initialized.");
@@ -91,48 +100,51 @@ function User() {
 		    this.saveData();
 		} else {
 		    //console.log( "true = " + this.isInitialized + " I'm already initialized.");
-		    removeClass();
+		    //removeClass();
 		    this.loadData();
-		    welcomeBack();
+		    //welcomeBack();
 		}
     };
 }
 
-function Coord(tileType, tileURL) {
-    this.$div = $( '<div></div>' );
-    this.$img = $( '<img></img>' );
-    this.tile = tileType;
-    this.$img.attr( 'src', tileURL );
-    this.$div.append( this.$img );
-    this.hasCrate = false;
-
-    this.isADot = function() {
-		if ( this.tile === "dot" ) {
-		    return true;
-		} else {
-		    return false;
-		}
-    };
+class Coord {
+    constructor( tileType, tileURL ) {
+        this.$div = $( '<div></div>' );
+        this.$img = $( '<img></img>' );
+        this.tile = tileType;
+        this.$img.attr( 'src', tileURL );
+        this.$div.append( this.$img );
+        this.hasRock = false;
+    }
+    isADot() {
+		if ( this.tile === "dot" ) return true;
+		else return false;
+    }
 }
 
-function Crate( xy ) {
-    this.x = xy[0] * cellWidth;
-    this.y = xy[1] * cellWidth;
-    this.onDot = false;
-    this.$crateImg = $('<img></img>').attr('src', crateURL );
-}
+class Rock {
+    constructor( xy ) {
+        this.x = xy[0] * cellWidth;
+        this.y = xy[1] * cellWidth;
+        this.onDot = false;
+        this.$rockImg = $('<img></img>').attr('src', rockURL );
+    }
+} 
 
-function Sprite( xy ) {
-    this.x = xy[0] * cellWidth;
-    this.y = xy[1] * cellWidth;
-    this.$img = $('<img></img>').attr('src', spriteURL );
-    this.stepCount = 0;
+class Sprite {
+    constructor( xy ) {
+        this.x = xy[0] * cellWidth;
+        this.y = xy[1] * cellWidth;
+        this.$img = $('<img></img>').attr('src', spriteURL );
+        this.stepCount = 0;
+    }
+
 }
 
 function GameBoard() {
     this.winCondition = false;
     this.coordinates = [];
-    this.crates = [];
+    this.rocks = [];
 
     this.$canvasJQ = $('<canvas></canvas>');
     this.canvas = this.$canvasJQ[0];
@@ -152,10 +164,10 @@ function GameBoard() {
 		    delete this.coordinates[ii];
 		}
 		this.coordinates = [];
-		for ( let ii = 0; ii < this.crates.length; ii++ ) {
-		    delete this.crates[ii];
+		for ( let ii = 0; ii < this.rocks.length; ii++ ) {
+		    delete this.rocks[ii];
 		}
-		this.crates = [];
+		this.rocks = [];
 		delete this.sprite;
 		this.$elementJQ.empty();
 		this.winCondition = false;
@@ -163,10 +175,10 @@ function GameBoard() {
 
 
     // Chrome needs me to access parameter arrays this way.
-    this.updateCell = function( xy, tileType, tileURL, crateStatus) {
+    this.updateCell = function( xy, tileType, tileURL, rockStatus) {
 		this.coordinates[ xy[0] ][ xy[1] ].tile = tileType;
 		this.coordinates[ xy[0] ][ xy[1] ].$img.attr( 'src', tileURL );
-		this.coordinates[ xy[0] ][ xy[1] ].hasCrate = crateStatus;
+		this.coordinates[ xy[0] ][ xy[1] ].hasRock = rockStatus;
     };
 
     this.init = function( levelData ) {
@@ -205,16 +217,14 @@ function GameBoard() {
 		    this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false );
 		}
 
-		// make our crates
-		for ( let ii = 0; ii < this.boardData.crate.length; ii++ ) {
-		    this.crates.push( new Crate( this.boardData.crate[ii] ) );
-		    this.crates[ii].onDot =
-			this.coordinates[ this.boardData.crate[ii][0] ][ this.boardData.crate[ii][1] ].isADot();
-		    this.coordinates[ this.boardData.crate[ii][0] ][ this.boardData.crate[ii][1] ].hasCrate = true;
-		    if ( this.crates[ii].onDot) {
-				this.crates[ii].$crateImg.attr('src', crateOnDotURL );
+		// make our rocks
+		for ( let ii = 0; ii < this.boardData.rocks.length; ii++ ) {
+		    this.rocks.push( new Rock( this.boardData.rocks[ii] ) );
+		    this.rocks[ii].onDot = this.coordinates[ this.boardData.rocks[ii][0] ][ this.boardData.rocks[ii][1] ].isADot();
+		    this.coordinates[ this.boardData.rocks[ii][0] ][ this.boardData.rocks[ii][1] ].hasRock = true;
+		    if ( this.rocks[ii].onDot) {
+				this.rocks[ii].$rockImg.attr('src', rockOnDotURL );
 		    }
-
 		}
 
 		// make a sprite
@@ -223,54 +233,54 @@ function GameBoard() {
 		this.draw();
     };
 
-    this.findCrate = function( xy ) {
-		for ( let ii = 0; ii < this.crates.length; ii++ ) {
-		    if ( xy[0] === this.crates[ii].x && xy[1] === this.crates[ii].y ) {
+    this.findRock = function( xy ) {
+		for ( let ii = 0; ii < this.rocks.length; ii++ ) {
+		    if ( xy[0] === this.rocks[ii].x && xy[1] === this.rocks[ii].y ) {
 			return ii;
 		    }
 		}
-		console.log("Error: crate not found.");
+		console.log("Error: rock not found.");
     };
 
     this.checkWinCondition = function() {
 		var onDotCounter = 0;
-		for ( let ii = 0; ii < this.crates.length; ii++ ) {
-		    if ( this.crates[ii].onDot ) {
+		for ( let ii = 0; ii < this.rocks.length; ii++ ) {
+		    if ( this.rocks[ii].onDot ) {
 				onDotCounter++;
 		    }
 		}
-		if ( onDotCounter === this.crates.length ) {
+		if ( onDotCounter === this.rocks.length ) {
 		    return true;
 		} else {
 		    return false;
 		}
     };
 
-    this.updateCrateStatus = function(crateIndex, oldPosition, newPosition) {
-		this.coordinates[ oldPosition[0] ][ oldPosition[1] ].hasCrate = false;
-		this.coordinates[ newPosition[0] ][ newPosition[1] ].hasCrate = true;
+    this.updateRockStatus = function( rockIndex, oldPosition, newPosition ) {
+		this.coordinates[ oldPosition[0] ][ oldPosition[1] ].hasRock = false;
+		this.coordinates[ newPosition[0] ][ newPosition[1] ].hasRock = true;
 
 		if ( this.coordinates[ newPosition[0] ][ newPosition[1] ].isADot() ){
-			this.crates[crateIndex].onDot = true;
-			this.crates[crateIndex].$crateImg.attr('src', crateOnDotURL );
+			this.rocks[rockIndex].onDot = true;
+			this.rocks[rockIndex].$rockImg.attr('src', rockOnDotURL );
 		} else {
-			this.crates[crateIndex].onDot = false;
-			this.crates[crateIndex].$crateImg.attr('src', crateURL );
+			this.rocks[rockIndex].onDot = false;
+			this.rocks[rockIndex].$rockImg.attr('src', rockURL );
 		}
 
 		this.winCondition = this.checkWinCondition();
     };
 
-    // draw our sprite and crates to the canvas
+    // draw our sprite and rocks to the canvas
     this.draw = function() {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height );
-		for ( let ii = 0; ii < this.crates.length; ii++ ) {
-			this.context.drawImage( this.crates[ii].$crateImg[0], this.crates[ii].x, this.crates[ii].y );
+		for ( let ii = 0; ii < this.rocks.length; ii++ ) {
+			this.context.drawImage( this.rocks[ii].$rockImg[0], this.rocks[ii].x, this.rocks[ii].y );
 		}
 		this.context.drawImage(this.sprite.$img[0], this.sprite.x, this.sprite.y );
     };
 
-    this.move = function(deltaXY, withCrate) {
+    this.move = function(deltaXY, withRock) {
 		listenToKeystrokes = false;
 		var x = this.sprite.x;
 		var y = this.sprite.y;
@@ -279,11 +289,11 @@ function GameBoard() {
 		var counter = 0;
 		var frames = cellWidth;
 
-		if ( withCrate ) {
+		if ( withRock ) {
 
-		    var crateIndex = self.findCrate([ x + deltaXY[0]*cellWidth ,  y + deltaXY[1]*cellWidth ]);
-		    var xCrate = self.crates[crateIndex].x;
-		    var yCrate = self.crates[crateIndex].y;
+		    var rockIndex = self.findRock([ x + deltaXY[0]*cellWidth ,  y + deltaXY[1]*cellWidth ]);
+		    var xRock = self.rocks[rockIndex].x;
+		    var yRock = self.rocks[rockIndex].y;
 		}
 
 		function drawFrame(fraction) {
@@ -291,9 +301,9 @@ function GameBoard() {
 		    // a valid location when setTimeout calls drawFrame(1)
 		    self.sprite.x = x + ( cellWidth * deltaXY[0] * fraction );
 		    self.sprite.y = y + ( cellWidth * deltaXY[1] * fraction );
-		    if ( withCrate ) {
-			self.crates[crateIndex].x = xCrate + ( cellWidth * deltaXY[0] * fraction );
-			self.crates[crateIndex].y = yCrate + ( cellWidth * deltaXY[1] * fraction );
+		    if ( withRock ) {
+			self.rocks[rockIndex].x = xRock + ( cellWidth * deltaXY[0] * fraction );
+			self.rocks[rockIndex].y = yRock + ( cellWidth * deltaXY[1] * fraction );
 		    }
 		    requestAnimationFrame(draw);
 		}
@@ -306,9 +316,9 @@ function GameBoard() {
 		setTimeout(function(){
 			clearInterval(interval);
 			drawFrame(1);
-		    if ( withCrate ) {
-				self.updateCrateStatus(crateIndex, [xCrate/cellWidth, yCrate/cellWidth ],
-					[ xCrate/cellWidth + deltaXY[0],  yCrate/cellWidth + deltaXY[1] ] );
+		    if ( withRock ) {
+				self.updateRockStatus(rockIndex, [xRock/cellWidth, yRock/cellWidth ],
+					[ xRock/cellWidth + deltaXY[0],  yRock/cellWidth + deltaXY[1] ] );
 			}
 			self.sprite.stepCount++;
 			listenToKeystrokes = true;
@@ -337,9 +347,9 @@ function GameBoard() {
 
 		if ( nextLocation.tile === "wall" ) {
 			return;
-		} else if ( nextLocation.hasCrate ) {
-			if ( twoAway.exists && !twoAway.hasCrate && twoAway.tile !== "wall" ) {
-				// move with crate
+		} else if ( nextLocation.hasRock ) {
+			if ( twoAway.exists && !twoAway.hasRock && twoAway.tile !== "wall" ) {
+				// move with rock
 				this.move(deltaXY, true);
 		    }
 		    return;
@@ -354,8 +364,9 @@ function GameBoard() {
 }
 
 class GameInstance {
-    constructor(anchor, level) {
+    constructor(anchor, level, playerData) {
         this.$anchor = anchor;
+        //this.player = new Player( playerData );
         this.user = new User();
         this.game = new GameBoard();
         this.$anchor.empty();
@@ -372,15 +383,16 @@ class GameInstance {
         this.eventListeners();
         console.log("this:", this);
     }
-        
+    
+    // this (mostly) should be handled by the game-controller
     addCurrentStatus() {
         $('#difficulty').empty();
         $('#currentLevel').empty();
         $('#stepCount').empty();
-        $('#startTxt').empty();
-        $('#difficulty').append('Difficulty: ' + this.user.difficulty)
-        $('#currentLevel').append('Level: ' + this.user.currentLevel)
-        $('#stepCount').append('Steps: ' + this.game.sprite.stepCount)
+        $('#startTxt').empty();  // does this even exist?
+        $('#difficulty').append('Difficulty: ' + this.user.difficulty);
+        $('#currentLevel').append('Level: ' + this.user.currentLevel);
+        $('#stepCount').append('Steps: ' + this.game.sprite.stepCount);  //this probably needs to live in-game
 	}
 	
 	processInput(key) {
@@ -479,130 +491,4 @@ class GameInstance {
 	};
 */
     
-}
-
-
-function createBoxxer(anchor) {
-	var my = {};
-	my.$anchor = anchor;
-	my.user = new User();
-	my.game = new GameBoard( );
-
-	my.initializeGameBoard = function() {
-		my.$anchor.empty();
-		my.user.init();
-		my.game.init( levelData[my.user.difficulty][my.user.currentLevel] );
-		my.$anchor.append( my.game.$elementJQ );
-		my.$anchor.append( my.game.$canvasJQ );
-		$('#game').css( { 'width': my.game.boardDimensionInPixels - 10,
-				  'height': my.game.boardDimensionInPixels - 25 } );
-		$('#container').css( 'width', my.game.boardDimensionInPixels );
-	};
-
-    //calling this without windowOnload fixed render onload error.
-    my.initializeGameBoard();
-
-	my.advanceTheUser = function () {
-        let winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (my.user.currentLevel + 1)  +
-            ' in ' + my.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
-        $('#gameplay').empty();
-        $('#gameplay').append(winMessage);
-        
-        console.log( "break: advanceTheUser " );
-        if ( my.user.levelScores[my.user.difficulty][my.user.currentLevel] > my.game.sprite.stepCount
-             && 0 < my.user.levelScores[my.user.difficulty][my.user.currentLevel] ) {
-            my.user.levelScores[my.user.difficulty][my.user.currentLevel ] = my.game.sprite.stepCount;
-        }
-        if( my.user.currentLevel < ( levelData[my.user.difficulty].length - 1 ) ) {
-            my.user.levelScores[my.user.difficulty][my.user.currentLevel ] = my.game.sprite.stepCount;
-            my.user.currentLevel++;
-        } else if( my.user.difficulty === "easy"
-        	       && my.user.currentLevel === levelData[my.user.difficulty].length -1) {
-            my.user.difficulty = "hard";
-            my.user.currentLevel = 0;
-        } else if( my.user.difficulty === "hard"
-                   && my.user.currentLevel === levelData[my.user.difficulty].length - 1 ) {
-            console.log("CONGRATULATIONS: You beat all the levels!" );
-        } else {
-            console.log("Error: level index out of bounds");
-        }
-    
-        my.user.saveData();
-	};
-
-	function addCurrentStatus() {
-        $('#difficulty').empty();
-        $('#currentLevel').empty();
-        $('#stepCount').empty();
-        $('#startTxt').empty();
-        $('#difficulty').append('Difficulty: ' + my.user.difficulty)
-        $('#currentLevel').append('Level: ' + my.user.currentLevel)
-        $('#stepCount').append('Steps: ' + my.game.sprite.stepCount)
-	}
-
-	my.processInput = function(key) {
-		let keyvalue = key.keyCode;
-		let xy = [ (my.game.sprite.x / cellWidth), (my.game.sprite.y / cellWidth) ];
-		let deltaXY;
-
-		// Keep key input from scrolling
-		key.preventDefault();
-
-		if ( my.game.winCondition ) {
-			my.onDone({"goo":"gob"});            //TODO: return something useful
-			my.advanceTheUser();
-			my.initializeGameBoard();
-		} else if ( listenToKeystrokes ) {
-			if (keyvalue === 37) {
-				console.log("left");
-				deltaXY = [ -1, 0 ];
-				my.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue === 38) {
-				console.log("up");
-				deltaXY = [ 0, -1 ];
-				my.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue === 39) {
-				console.log("right");
-				deltaXY = [ 1, 0 ];
-				my.game.tryToMove( xy, deltaXY );
-		    } else if (keyvalue === 40) {
-				console.log("down");
-				deltaXY = [ 0, 1 ];
-				my.game.tryToMove( xy, deltaXY );
-		    }
-
-		    if (keyvalue === 13) {
-				my.game.draw();
-		    } else if (keyvalue === 32) {
-				$('#gameplay').empty();
-		    }
-		    addCurrentStatus();
-		}
-
-	};
-
-	my.scaleGameBoard = function() {
-		var buffer = ( $('header').height() + $('footer').height() ) * 2;
-		var frameHeight = $(window).height() - buffer;
-		var frameWidth = $(window).width();
-		var frameSize = Math.min( frameHeight, frameWidth );
-		var scale;
-
-		if ( my.game.boardDimensionInPixels < frameSize ) {
-			scale =  1;
-		} else {
-			scale = ( frameSize / my.game.boardDimensionInPixels ).toFixed(2);
-			my.$anchor.parent().css( 'transform', 'scale( ' + scale + ', ' + scale + ')');
-		}
-	};
-
-	my.scaleGameBoard();
-
-	my.eventListeners= function() {
-		window.addEventListener("keydown", my.processInput, false);
-		window.addEventListener("resize",  my.scaleGameBoard, false );
-	};
-	my.eventListeners();
-
-	return my;
 }
