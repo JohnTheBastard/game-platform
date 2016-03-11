@@ -79,17 +79,18 @@ gulp.task( 'test-with-args', function() {
 
 
 gulp.task('build-boxer', () => {
-	return gulp.src('./src/www/public/js/boxer.js')
+    console.log("yo");
+	return gulp.src('./src/www/public/js/pushesRocksGame/pushesRocksMonolith.js')
 			   .pipe( lint() )
 			   .pipe( sourcemaps.init() )
 			   .pipe( babel() )
-			   .pipe( concat('boxer.js') )
+			   .pipe( concat('pushesRocks.bundle.js') )
 			   .pipe( sourcemaps.write('.') )
-			   .pipe( gulp.dest('./src/www/public/js/dist') );
+			   .pipe( gulp.dest('./src/www/public/js/pushesRocksGame/dist') );
 });
 
 gulp.task( 'watch-boxer', [ 'build-boxer' ], () => {
-    gulp.watch( [ './src/www/public/js/*.js' ], (event) => {
+    gulp.watch( [ './src/www/public/js/pushesRocksGame/*.js' ], (event) => {
         gulp.run( [ 'build-boxer' ] );
         console.log(event.path); 
         livereload.changed( {body: { files: __dirname }} );
