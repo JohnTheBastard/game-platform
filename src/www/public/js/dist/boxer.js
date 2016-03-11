@@ -10,79 +10,70 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var mobile = false;
-var cellWidth = undefined;
-if (mobile) cellWidth = 16;else cellWidth = 32;
-
-var listenToKeystrokes = true;
-
-var rockURL = "../img/boulder.png";
-var rockOnDotURL = "../img/boulderondot.png";
-var wallURL = "../img/dirt.png";
-var floorURL = "../img/dirt2.png";
-var dotsURL = "../img/dirtDot.png";
-var spriteURL = "../img/Sprite.gif";
-
-var Player = function Player() {
-    //this.currentLevel = 0;
-    //this.levelScores = { easy: [ ], hard: [ ] };
-    //this.difficulty = "easy";
-
-    _classCallCheck(this, Player);
+var pushesRocksConstants = {
+    urls: {
+        rock: "../img/boulder.png",
+        rockOnDot: "../img/boulderondot.png",
+        wall: "../img/dirt.png",
+        floor: "../img/dirt2.png",
+        dot: "../img/dirtDot.png",
+        sprite: "../img/Sprite.gif"
+    },
+    cellWidth: 32
 };
 
+/* //move local storage to guest controller
 function User() {
     this.currentLevel = 0;
-    this.levelScores = { easy: [], hard: [] };
+    this.levelScores = { easy: [ ], hard: [ ] };
     this.difficulty = "easy";
 
-    this.saveData = function () {
+    this.saveData = function() {
         // localStorage.setItem("Name", JSON.stringify( this.name ) );
-        localStorage.setItem("Level", JSON.stringify(this.currentLevel));
-        localStorage.setItem("Scores", JSON.stringify(this.levelScores));
-        localStorage.setItem("Difficulty", JSON.stringify(this.difficulty));
-        localStorage.setItem("Initialized", JSON.stringify('true'));
+        localStorage.setItem("Level", JSON.stringify( this.currentLevel ) );
+        localStorage.setItem("Scores", JSON.stringify( this.levelScores ) );
+        localStorage.setItem("Difficulty", JSON.stringify(this.difficulty ) );
+        localStorage.setItem("Initialized", JSON.stringify( 'true' ) );
     };
 
-    this.loadData = function () {
-        this.name = JSON.parse(localStorage.getItem("Name"));
-        this.currentLevel = JSON.parse(localStorage.getItem("Level"));
-        this.levelScores = JSON.parse(localStorage.getItem("Scores"));
-        this.difficulty = JSON.parse(localStorage.getItem("Difficulty"));
+    this.loadData = function() {
+        this.name = JSON.parse( localStorage.getItem( "Name" ) );
+        this.currentLevel = JSON.parse( localStorage.getItem( "Level" ) );
+        this.levelScores = JSON.parse( localStorage.getItem( "Scores" ) );
+        this.difficulty = JSON.parse( localStorage.getItem( "Difficulty" ) );
     };
 
-    this.init = function () {
+
+    this.init = function() {
         // My attempt to use Boolean() to cast our localStorage string
         // was returning true regardless of the value so I wrote my own.
         function castToBool(stringToCast) {
-            if (stringToCast === "true") {
+            if( stringToCast === "true" ) {
                 return true;
-            } else if (stringToCast === "false") {
+            } else if( stringToCast === "false" ) {
                 return false;
             } else {
-                console.log("Your attempt to cast " + castToBool + " to a boolean failed.");
+                console.log("Your attempt to cast " + castToBool + " to a boolean failed." );
             }
         }
 
-        this.isInitialized = castToBool(JSON.parse(localStorage.getItem("Initialized")));
+        this.isInitialized = castToBool( JSON.parse(localStorage.getItem("Initialized") ) );
 
-        if (!this.isInitialized) {
+        if ( !this.isInitialized ) {
             console.log("false = " + this.isInitialized + " I'm not initialized.");
-            for (var ii = 0; ii < oldLevelData.easy.length; ii++) {
+            for( let ii=0; ii < oldLevelData.easy.length; ii++ ) {
                 this.levelScores.easy[ii] = 0;
             }
-            for (var ii = 0; ii < oldLevelData.hard.length; ii++) {
+            for( let ii=0; ii < oldLevelData.hard.length; ii++ ) {
                 this.levelScores.hard[ii] = 0;
             }
             this.saveData();
         } else {
-            //console.log( "true = " + this.isInitialized + " I'm already initialized.");
-            //removeClass();
             this.loadData();
-            //welcomeBack();
         }
     };
 }
+*/
 
 var Coord = function () {
     function Coord(tileType, tileURL) {
@@ -109,25 +100,28 @@ var Coord = function () {
 var Rock = function Rock(xy) {
     _classCallCheck(this, Rock);
 
-    this.x = xy[0] * cellWidth;
-    this.y = xy[1] * cellWidth;
+    this.x = xy[0] * pushesRocksConstants.cellWidth;
+    this.y = xy[1] * pushesRocksConstants.cellWidth;
     this.onDot = false;
-    this.$rockImg = $('<img></img>').attr('src', rockURL);
+    this.$rockImg = $('<img></img>').attr('src', pushesRocksConstants.urls.rock);
 };
 
 var Sprite = function Sprite(xy) {
     _classCallCheck(this, Sprite);
 
-    this.x = xy[0] * cellWidth;
-    this.y = xy[1] * cellWidth;
-    this.$img = $('<img></img>').attr('src', spriteURL);
+    this.x = xy[0] * pushesRocksConstants.cellWidth;
+    this.y = xy[1] * pushesRocksConstants.cellWidth;
+    this.$img = $('<img></img>').attr('src', pushesRocksConstants.urls.sprite);
     this.stepCount = 0;
 };
 
 var GameBoard = function () {
     function GameBoard(levelData) {
+        var _this = this;
+
         _classCallCheck(this, GameBoard);
 
+        this.listenToKeystrokes = true;
         this.winCondition = false;
         this.coordinates = [];
         this.rocks = [];
@@ -142,8 +136,7 @@ var GameBoard = function () {
         this.element.style.position = "absolute";
 
         this.boardData = levelData;
-        console.log("boardData", this.boardData);
-        this.boardDimensionInPixels = this.boardData.dimension * cellWidth;
+        this.boardDimensionInPixels = this.boardData.dimension * pushesRocksConstants.cellWidth;
         this.canvas.width = this.boardDimensionInPixels;
         this.canvas.height = this.boardDimensionInPixels;
         this.canvas.style.position = "absolute";
@@ -158,27 +151,30 @@ var GameBoard = function () {
         for (var ii = 0; ii < this.boardData.dimension; ii++) {
             for (var jj = 0; jj < this.boardData.dimension; jj++) {
                 this.coordinates.push([]);
-                this.coordinates[jj].push(new Coord("wall", wallURL));
+                this.coordinates[jj].push(new Coord("wall", pushesRocksConstants.urls.wall));
                 this.$elementJQ.append(this.coordinates[jj][ii].$div);
             }
         }
 
         // update floor tiles
-        for (var ii = 0; ii < this.boardData.floor.length; ii++) {
-            this.updateCell(this.boardData.floor[ii], "floor", floorURL, false);
-        }
+        this.boardData.floor.forEach(function (tile) {
+            return _this.updateCell(tile, "floor", pushesRocksConstants.urls.floor, false);
+        });
+
         // update dot tiles
-        for (var ii = 0; ii < this.boardData.dots.length; ii++) {
-            this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false);
-        }
+        this.boardData.dots.forEach(function (tile) {
+            return _this.updateCell(tile, "dot", pushesRocksConstants.urls.dot, false);
+        });
+
         // make our rocks
-        for (var ii = 0; ii < this.boardData.rocks.length; ii++) {
-            this.rocks.push(new Rock(this.boardData.rocks[ii]));
+        this.boardData.rocks.forEach(function (rock) {
+            _this.rocks.push(new Rock(rock));
             //TODO: fix model so coords are numbers not strings.
-            this.rocks[ii].onDot = this.coordinates[Number(this.boardData.rocks[ii][0])][Number(this.boardData.rocks[ii][1])].isADot();
-            this.coordinates[Number(this.boardData.rocks[ii][0])][Number(this.boardData.rocks[ii][1])].hasRock = true;
-            if (this.rocks[ii].onDot) this.rocks[ii].$rockImg.attr('src', rockOnDotURL);
-        }
+            rock.onDot = _this.coordinates[Number(rock[0])][Number(rock[1])].isADot();
+            _this.coordinates[Number(rock[0])][Number(rock[1])].hasRock = true;
+            if (rock.onDot) rock.$rockImg.attr('src', pushesRocksConstants.urls.rockOnDot);
+        });
+
         // make a sprite
         this.sprite = new Sprite(this.boardData.start);
         this.draw();
@@ -205,7 +201,7 @@ var GameBoard = function () {
     }, {
         key: "updateCell",
         value: function updateCell(xy, tileType, tileURL, rockStatus) {
-            xy[0] = Number(xy[0]); //TODO: see if I actually need this
+            xy[0] = Number(xy[0]); //TODO: this should be fixed in the model
             xy[1] = Number(xy[1]);
             this.coordinates[xy[0]][xy[1]].tile = tileType;
             this.coordinates[xy[0]][xy[1]].$img.attr('src', tileURL);
@@ -237,10 +233,10 @@ var GameBoard = function () {
 
             if (this.coordinates[newPosition[0]][newPosition[1]].isADot()) {
                 this.rocks[rockIndex].onDot = true;
-                this.rocks[rockIndex].$rockImg.attr('src', rockOnDotURL);
+                this.rocks[rockIndex].$rockImg.attr('src', pushesRocksConstants.urls.rockOnDot);
             } else {
                 this.rocks[rockIndex].onDot = false;
-                this.rocks[rockIndex].$rockImg.attr('src', rockURL);
+                this.rocks[rockIndex].$rockImg.attr('src', pushesRocksConstants.urls.rock);
             }
 
             this.winCondition = this.checkWinCondition();
@@ -278,10 +274,12 @@ var GameBoard = function () {
             } else if (nextLocation.hasRock) {
                 if (twoAway.exists && !twoAway.hasRock && twoAway.tile !== "wall") {
                     // move with rock
+                    this.sprite.stepCount++;
                     this.move(deltaXY, true);
                 }
                 return;
             } else if (nextLocation.tile === "floor" || nextLocation.tile === "dot") {
+                this.sprite.stepCount++;
                 this.move(deltaXY, false);
                 return;
             } else {
@@ -291,16 +289,18 @@ var GameBoard = function () {
     }, {
         key: "move",
         value: function move(deltaXY, withRock) {
-            listenToKeystrokes = false;
+            var _this2 = this;
+
+            this.listenToKeystrokes = false;
             var x = this.sprite.x;
             var y = this.sprite.y;
             var self = this;
             var draw = this.draw.bind(this);
             var counter = 0;
-            var frames = cellWidth;
+            var frames = pushesRocksConstants.cellWidth;
 
             if (withRock) {
-                var rockIndex = self.findRock([x + deltaXY[0] * cellWidth, y + deltaXY[1] * cellWidth]);
+                var rockIndex = self.findRock([x + deltaXY[0] * pushesRocksConstants.cellWidth, y + deltaXY[1] * pushesRocksConstants.cellWidth]);
                 var xRock = self.rocks[rockIndex].x;
                 var yRock = self.rocks[rockIndex].y;
             }
@@ -308,11 +308,11 @@ var GameBoard = function () {
             function drawFrame(fraction) {
                 // This looks weird, but we'll be sure that the sprite ends in
                 // a valid location when setTimeout calls drawFrame(1)
-                self.sprite.x = x + cellWidth * deltaXY[0] * fraction;
-                self.sprite.y = y + cellWidth * deltaXY[1] * fraction;
+                self.sprite.x = x + pushesRocksConstants.cellWidth * deltaXY[0] * fraction;
+                self.sprite.y = y + pushesRocksConstants.cellWidth * deltaXY[1] * fraction;
                 if (withRock) {
-                    self.rocks[rockIndex].x = xRock + cellWidth * deltaXY[0] * fraction;
-                    self.rocks[rockIndex].y = yRock + cellWidth * deltaXY[1] * fraction;
+                    self.rocks[rockIndex].x = xRock + pushesRocksConstants.cellWidth * deltaXY[0] * fraction;
+                    self.rocks[rockIndex].y = yRock + pushesRocksConstants.cellWidth * deltaXY[1] * fraction;
                 }
                 requestAnimationFrame(draw);
             }
@@ -320,16 +320,15 @@ var GameBoard = function () {
             var interval = setInterval(function () {
                 counter++;
                 drawFrame(counter / frames);
-            }, 256 / cellWidth);
+            }, 256 / pushesRocksConstants.cellWidth);
 
             setTimeout(function () {
                 clearInterval(interval);
                 drawFrame(1);
                 if (withRock) {
-                    self.updateRockStatus(rockIndex, [xRock / cellWidth, yRock / cellWidth], [xRock / cellWidth + deltaXY[0], yRock / cellWidth + deltaXY[1]]);
+                    self.updateRockStatus(rockIndex, [xRock / pushesRocksConstants.cellWidth, yRock / pushesRocksConstants.cellWidth], [xRock / pushesRocksConstants.cellWidth + deltaXY[0], yRock / pushesRocksConstants.cellWidth + deltaXY[1]]);
                 }
-                self.sprite.stepCount++;
-                listenToKeystrokes = true;
+                _this2.listenToKeystrokes = true;
             }, 256);
         }
     }]);
@@ -342,11 +341,8 @@ var GameInstance = function () {
         _classCallCheck(this, GameInstance);
 
         this.$anchor = anchor;
-        //this.player = new Player( playerData );
-        this.user = new User();
         this.game = new GameBoard(level);
         this.$anchor.empty();
-        this.user.init();
         this.$anchor.append(this.game.$elementJQ);
         this.$anchor.append(this.game.$canvasJQ);
         $('#game').css({ 'width': this.game.boardDimensionInPixels - 10,
@@ -358,40 +354,27 @@ var GameInstance = function () {
         this.eventListeners();
     }
 
-    // this (mostly) should be handled by the game-controller
-
     _createClass(GameInstance, [{
-        key: "addCurrentStatus",
-        value: function addCurrentStatus() {
-            $('#difficulty').empty();
-            $('#currentLevel').empty();
-            $('#stepCount').empty();
-            $('#startTxt').empty(); // does this even exist?
-            $('#difficulty').append('Difficulty: ' + this.user.difficulty);
-            $('#currentLevel').append('Level: ' + this.user.currentLevel);
-            $('#stepCount').append('Steps: ' + this.game.sprite.stepCount); //this probably needs to live in-game
-        }
-    }, {
         key: "processInput",
         value: function processInput(key) {
             var keyvalue = key.keyCode;
-            var xy = [this.game.sprite.x / cellWidth, this.game.sprite.y / cellWidth];
+            var xy = [this.game.sprite.x / pushesRocksConstants.cellWidth, this.game.sprite.y / pushesRocksConstants.cellWidth];
 
             // Keep key input from scrolling
             key.preventDefault();
 
             if (this.game.winCondition) {
                 this.onDone({ "goo": "gob" }); //TODO: do something useful
-                this.clearTheBoard();
-                //this.advanceTheUser();
-                //this.initializeGameBoard();
-            } else if (listenToKeystrokes) {
-                    var deltaXY = [0, 0];
-                    if (keyvalue === 37) deltaXY = [-1, 0];else if (keyvalue === 38) deltaXY = [0, -1];else if (keyvalue === 39) deltaXY = [1, 0];else if (keyvalue === 40) deltaXY = [0, 1];
+                this.game.clearTheBoard();
+            } else if (this.game.listenToKeystrokes) {
+                var deltaXY = false;
+                if (keyvalue === 37) deltaXY = [-1, 0];else if (keyvalue === 38) deltaXY = [0, -1];else if (keyvalue === 39) deltaXY = [1, 0];else if (keyvalue === 40) deltaXY = [0, 1];
 
+                if (deltaXY) {
                     this.game.tryToMove(xy, deltaXY);
-                    this.addCurrentStatus();
+                    this.updateStepCount(this.game.sprite.stepCount);
                 }
+            }
         }
     }, {
         key: "scaleGameBoard",
@@ -421,37 +404,6 @@ var GameInstance = function () {
             window.removeEventListener("keydown", this.processInputHandler, false);
             window.removeEventListener("resize", this.scaleGameBoardHandler, false);
         }
-
-        /*  // We don't need this when the user is logged in
-            advanceTheUser() {
-                let winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (this.user.currentLevel + 1)  +
-                    ' in ' + this.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
-                $('#gameplay').empty();
-                $('#gameplay').append(winMessage);
-                
-                console.log( "break: advanceTheUser " );
-                if ( this.user.levelScores[this.user.difficulty][this.user.currentLevel] > this.game.sprite.stepCount
-                     && 0 < this.user.levelScores[this.user.difficulty][this.user.currentLevel] ) {
-                    this.user.levelScores[this.user.difficulty][this.user.currentLevel ] = this.game.sprite.stepCount;
-                }
-                if( this.user.currentLevel < ( levelData[this.user.difficulty].length - 1 ) ) {
-                    this.user.levelScores[this.user.difficulty][this.user.currentLevel ] = this.game.sprite.stepCount;
-                    this.user.currentLevel++;
-                } else if( this.user.difficulty === "easy"
-                           && this.user.currentLevel === levelData[this.user.difficulty].length -1) {
-                    this.user.difficulty = "hard";
-                    this.user.currentLevel = 0;
-                } else if( this.user.difficulty === "hard"
-                           && this.user.currentLevel === levelData[this.user.difficulty].length - 1 ) {
-                    console.log("CONGRATULATIONS: You beat all the levels!" );
-                } else {
-                    console.log("Error: level index out of bounds");
-                }
-            
-                this.user.saveData();
-            };
-        */
-
     }]);
 
     return GameInstance;

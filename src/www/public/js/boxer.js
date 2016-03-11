@@ -5,28 +5,19 @@
  * * * * * * * * * * * * * */
  
 'use strict';
-const mobile = false;
-let cellWidth;
-if(mobile) cellWidth = 16;
-else       cellWidth = 32;
+const pushesRocksConstants = {
+    urls: {
+        rock:      "../img/boulder.png",
+        rockOnDot: "../img/boulderondot.png",
+        wall:      "../img/dirt.png",
+        floor:     "../img/dirt2.png",
+        dot:       "../img/dirtDot.png",
+        sprite:    "../img/Sprite.gif"
+    },
+    cellWidth: 32
+};
 
-let listenToKeystrokes = true;
-
-const rockURL = "../img/boulder.png";
-const rockOnDotURL = "../img/boulderondot.png";
-const wallURL = "../img/dirt.png";
-const floorURL = "../img/dirt2.png";
-const dotsURL  = "../img/dirtDot.png";
-const spriteURL = "../img/Sprite.gif";
-
-class Player {
-    constructor() {
-        //this.currentLevel = 0;
-        //this.levelScores = { easy: [ ], hard: [ ] };
-        //this.difficulty = "easy";
-    }
-}
-
+/* //move local storage to guest controller
 function User() {
     this.currentLevel = 0;
     this.levelScores = { easy: [ ], hard: [ ] };
@@ -73,13 +64,12 @@ function User() {
             }
             this.saveData();
         } else {
-            //console.log( "true = " + this.isInitialized + " I'm already initialized.");
-            //removeClass();
             this.loadData();
-            //welcomeBack();
         }
     };
 }
+*/
+
 
 class Coord {
     constructor( tileType, tileURL ) {
@@ -98,18 +88,18 @@ class Coord {
 
 class Rock {
     constructor( xy ) {
-        this.x = xy[0] * cellWidth;
-        this.y = xy[1] * cellWidth;
+        this.x = xy[0] * pushesRocksConstants.cellWidth;
+        this.y = xy[1] * pushesRocksConstants.cellWidth;
         this.onDot = false;
-        this.$rockImg = $('<img></img>').attr('src', rockURL );
+        this.$rockImg = $('<img></img>').attr('src', pushesRocksConstants.urls.rock );
     }
 } 
 
 class Sprite {
     constructor( xy ) {
-        this.x = xy[0] * cellWidth;
-        this.y = xy[1] * cellWidth;
-        this.$img = $('<img></img>').attr('src', spriteURL );
+        this.x = xy[0] * pushesRocksConstants.cellWidth;
+        this.y = xy[1] * pushesRocksConstants.cellWidth;
+        this.$img = $('<img></img>').attr('src', pushesRocksConstants.urls.sprite );
         this.stepCount = 0;
     }
 
@@ -117,6 +107,7 @@ class Sprite {
 
 class GameBoard {
     constructor(levelData) {
+        this.listenToKeystrokes = true;
         this.winCondition = false;
         this.coordinates = [];
         this.rocks = [];
@@ -131,8 +122,7 @@ class GameBoard {
         this.element.style.position = "absolute";
         
         this.boardData = levelData;
-        console.log("boardData", this.boardData);
-        this.boardDimensionInPixels = this.boardData.dimension * cellWidth;
+        this.boardDimensionInPixels = this.boardData.dimension * pushesRocksConstants.cellWidth;
         this.canvas.width = this.boardDimensionInPixels;
         this.canvas.height = this.boardDimensionInPixels;
         this.canvas.style.position = "absolute";
@@ -147,27 +137,26 @@ class GameBoard {
         for ( let ii = 0; ii < this.boardData.dimension; ii++ ) {
             for ( let jj = 0; jj < this.boardData.dimension; jj++ ) {
                 this.coordinates.push( [ ] );
-                this.coordinates[jj].push( new Coord( "wall", wallURL ) );
+                this.coordinates[jj].push( new Coord( "wall", pushesRocksConstants.urls.wall ) );
                 this.$elementJQ.append( this.coordinates[jj][ii].$div );
             }
         }
         
         // update floor tiles
-        for ( let ii = 0; ii < this.boardData.floor.length; ii++ ) {
-            this.updateCell(this.boardData.floor[ii], "floor", floorURL, false );
-        }
+        this.boardData.floor.forEach( tile => this.updateCell( tile, "floor", pushesRocksConstants.urls.floor, false ) );
+
         // update dot tiles
-        for ( let ii = 0; ii < this.boardData.dots.length; ii++ ) { 
-            this.updateCell(this.boardData.dots[ii], "dot", dotsURL, false );
-        }
+        this.boardData.dots.forEach( tile => this.updateCell( tile, "dot", pushesRocksConstants.urls.dot, false ) );
+
         // make our rocks
-        for ( let ii = 0; ii < this.boardData.rocks.length; ii++ ) {
-            this.rocks.push( new Rock( this.boardData.rocks[ii] ) );
+        this.boardData.rocks.forEach( rock => {
+            this.rocks.push( new Rock(rock) );
             //TODO: fix model so coords are numbers not strings.
-            this.rocks[ii].onDot = this.coordinates[ Number(this.boardData.rocks[ii][0]) ][ Number(this.boardData.rocks[ii][1]) ].isADot();
-            this.coordinates[ Number(this.boardData.rocks[ii][0]) ][ Number(this.boardData.rocks[ii][1]) ].hasRock = true;
-            if( this.rocks[ii].onDot) this.rocks[ii].$rockImg.attr('src', rockOnDotURL );
-        }
+            rock.onDot = this.coordinates[ Number(rock[0]) ][ Number(rock[1]) ].isADot();
+            this.coordinates[ Number(rock[0]) ][ Number(rock[1]) ].hasRock = true;
+            if( rock.onDot) rock.$rockImg.attr('src', pushesRocksConstants.urls.rockOnDot );
+        });
+
         // make a sprite
         this.sprite = new Sprite( this.boardData.start );
         this.draw();
@@ -190,7 +179,7 @@ class GameBoard {
     }
     
     updateCell( xy, tileType, tileURL, rockStatus) {
-        xy[0] = Number( xy[0] );  //TODO: see if I actually need this
+        xy[0] = Number( xy[0] );  //TODO: this should be fixed in the model
         xy[1] = Number( xy[1] );        
         this.coordinates[ xy[0] ][ xy[1] ].tile = tileType;
         this.coordinates[ xy[0] ][ xy[1] ].$img.attr( 'src', tileURL );
@@ -220,10 +209,10 @@ class GameBoard {
         
         if( this.coordinates[ newPosition[0] ][ newPosition[1] ].isADot() ){
             this.rocks[rockIndex].onDot = true;
-            this.rocks[rockIndex].$rockImg.attr('src', rockOnDotURL );
+            this.rocks[rockIndex].$rockImg.attr('src', pushesRocksConstants.urls.rockOnDot );
         } else {
             this.rocks[rockIndex].onDot = false;
-            this.rocks[rockIndex].$rockImg.attr('src', rockURL );
+            this.rocks[rockIndex].$rockImg.attr('src', pushesRocksConstants.urls.rock );
         }
         
         this.winCondition = this.checkWinCondition();
@@ -260,11 +249,13 @@ class GameBoard {
         } else if( nextLocation.hasRock ) {
             if( twoAway.exists && !twoAway.hasRock && twoAway.tile !== "wall" ) {
                 // move with rock
+                this.sprite.stepCount++;
                 this.move(deltaXY, true);
             }
             return;
         } else if( ( nextLocation.tile === "floor" ) ||
                     ( nextLocation.tile === "dot") ) {
+            this.sprite.stepCount++;
             this.move(deltaXY, false);
             return;
         } else {
@@ -273,16 +264,16 @@ class GameBoard {
     }
     
     move( deltaXY, withRock ) {
-        listenToKeystrokes = false;
+        this.listenToKeystrokes = false;
         let x = this.sprite.x;
         let y = this.sprite.y;
         let self = this;
         let draw = this.draw.bind(this);
         let counter = 0;
-        let frames = cellWidth;
+        let frames = pushesRocksConstants.cellWidth;
         
         if( withRock ) {
-            var rockIndex = self.findRock([ x + deltaXY[0]*cellWidth ,  y + deltaXY[1]*cellWidth ]);
+            var rockIndex = self.findRock([ x + deltaXY[0]*pushesRocksConstants.cellWidth ,  y + deltaXY[1]*pushesRocksConstants.cellWidth ]);
             var xRock = self.rocks[rockIndex].x;
             var yRock = self.rocks[rockIndex].y;
         }
@@ -290,11 +281,11 @@ class GameBoard {
         function drawFrame(fraction) {
             // This looks weird, but we'll be sure that the sprite ends in
             // a valid location when setTimeout calls drawFrame(1)
-            self.sprite.x = x + ( cellWidth * deltaXY[0] * fraction );
-            self.sprite.y = y + ( cellWidth * deltaXY[1] * fraction );
+            self.sprite.x = x + ( pushesRocksConstants.cellWidth * deltaXY[0] * fraction );
+            self.sprite.y = y + ( pushesRocksConstants.cellWidth * deltaXY[1] * fraction );
             if( withRock ) {
-                self.rocks[rockIndex].x = xRock + ( cellWidth * deltaXY[0] * fraction );
-                self.rocks[rockIndex].y = yRock + ( cellWidth * deltaXY[1] * fraction );
+                self.rocks[rockIndex].x = xRock + ( pushesRocksConstants.cellWidth * deltaXY[0] * fraction );
+                self.rocks[rockIndex].y = yRock + ( pushesRocksConstants.cellWidth * deltaXY[1] * fraction );
             }
             requestAnimationFrame(draw);
         }
@@ -302,17 +293,16 @@ class GameBoard {
         let interval = setInterval( () => {
             counter++;
             drawFrame(counter/frames);
-        }, 256 / cellWidth );
+        }, 256 / pushesRocksConstants.cellWidth );
         
-        setTimeout(function(){
+        setTimeout(() => {
             clearInterval(interval);
             drawFrame(1);
             if ( withRock ) {
-                self.updateRockStatus( rockIndex, [ xRock/cellWidth, yRock/cellWidth ],
-                                       [ xRock/cellWidth + deltaXY[0],  yRock/cellWidth + deltaXY[1] ] );
+                self.updateRockStatus( rockIndex, [ xRock/pushesRocksConstants.cellWidth, yRock/pushesRocksConstants.cellWidth ],
+                                       [ xRock/pushesRocksConstants.cellWidth + deltaXY[0],  yRock/pushesRocksConstants.cellWidth + deltaXY[1] ] );
             }
-            self.sprite.stepCount++;
-            listenToKeystrokes = true;
+            this.listenToKeystrokes = true;
         }, 256);
     }
 }
@@ -320,11 +310,8 @@ class GameBoard {
 class GameInstance {
     constructor(anchor, level) {
         this.$anchor = anchor;
-        //this.player = new Player( playerData );
-        this.user = new User();
         this.game = new GameBoard(level);
         this.$anchor.empty();
-        this.user.init();
         this.$anchor.append( this.game.$elementJQ );
         this.$anchor.append( this.game.$canvasJQ );
         $('#game').css( { 'width': this.game.boardDimensionInPixels - 10,
@@ -336,38 +323,28 @@ class GameInstance {
         this.eventListeners();
     }
     
-    // this (mostly) should be handled by the game-controller
-    addCurrentStatus() {
-        $('#difficulty').empty();
-        $('#currentLevel').empty();
-        $('#stepCount').empty();
-        $('#startTxt').empty();  // does this even exist?
-        $('#difficulty').append('Difficulty: ' + this.user.difficulty);
-        $('#currentLevel').append('Level: ' + this.user.currentLevel);
-        $('#stepCount').append('Steps: ' + this.game.sprite.stepCount);  //this probably needs to live in-game
-    }
-    
     processInput(key) {
         let keyvalue = key.keyCode;
-        let xy = [ (this.game.sprite.x / cellWidth), (this.game.sprite.y / cellWidth) ];
+        let xy = [ (this.game.sprite.x / pushesRocksConstants.cellWidth), (this.game.sprite.y / pushesRocksConstants.cellWidth) ];
         
         // Keep key input from scrolling
         key.preventDefault();
         
         if ( this.game.winCondition ) {
             this.onDone({"goo":"gob"});            //TODO: do something useful
-            this.clearTheBoard()
-            //this.advanceTheUser();
-            //this.initializeGameBoard();
-        } else if ( listenToKeystrokes ) {
-            let deltaXY = [ 0, 0 ];
+            this.game.clearTheBoard();
+
+        } else if ( this.game.listenToKeystrokes ) {
+            let deltaXY = false;
             if      ( keyvalue === 37 ) deltaXY = [ -1,  0 ];
             else if ( keyvalue === 38 ) deltaXY = [  0, -1 ];
             else if ( keyvalue === 39 ) deltaXY = [  1,  0 ];
             else if ( keyvalue === 40 ) deltaXY = [  0,  1 ];
             
-            this.game.tryToMove( xy, deltaXY );
-            this.addCurrentStatus();
+            if( deltaXY ) {
+                this.game.tryToMove( xy, deltaXY );
+                this.updateStepCount( this.game.sprite.stepCount );
+            }
         }
     }
     
@@ -395,35 +372,4 @@ class GameInstance {
         window.removeEventListener("keydown", this.processInputHandler, false);
         window.removeEventListener("resize",  this.scaleGameBoardHandler, false );
     }
-    
-/*  // We don't need this when the user is logged in
-    advanceTheUser() {
-        let winMessage = '<p id ="winner"> Congrats!!!! You beat level ' + (this.user.currentLevel + 1)  +
-            ' in ' + this.game.sprite.stepCount + ' steps. Press any key to move on to the next level. </p>';
-        $('#gameplay').empty();
-        $('#gameplay').append(winMessage);
-        
-        console.log( "break: advanceTheUser " );
-        if ( this.user.levelScores[this.user.difficulty][this.user.currentLevel] > this.game.sprite.stepCount
-             && 0 < this.user.levelScores[this.user.difficulty][this.user.currentLevel] ) {
-            this.user.levelScores[this.user.difficulty][this.user.currentLevel ] = this.game.sprite.stepCount;
-        }
-        if( this.user.currentLevel < ( levelData[this.user.difficulty].length - 1 ) ) {
-            this.user.levelScores[this.user.difficulty][this.user.currentLevel ] = this.game.sprite.stepCount;
-            this.user.currentLevel++;
-        } else if( this.user.difficulty === "easy"
-                   && this.user.currentLevel === levelData[this.user.difficulty].length -1) {
-            this.user.difficulty = "hard";
-            this.user.currentLevel = 0;
-        } else if( this.user.difficulty === "hard"
-                   && this.user.currentLevel === levelData[this.user.difficulty].length - 1 ) {
-            console.log("CONGRATULATIONS: You beat all the levels!" );
-        } else {
-            console.log("Error: level index out of bounds");
-        }
-    
-        this.user.saveData();
-    };
-*/
-    
 }
