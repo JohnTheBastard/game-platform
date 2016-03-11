@@ -17,60 +17,6 @@ const pushesRocksConstants = {
     cellWidth: 32
 };
 
-/* //move local storage to guest controller
-function User() {
-    this.currentLevel = 0;
-    this.levelScores = { easy: [ ], hard: [ ] };
-    this.difficulty = "easy";
-
-    this.saveData = function() {
-        // localStorage.setItem("Name", JSON.stringify( this.name ) );
-        localStorage.setItem("Level", JSON.stringify( this.currentLevel ) );
-        localStorage.setItem("Scores", JSON.stringify( this.levelScores ) );
-        localStorage.setItem("Difficulty", JSON.stringify(this.difficulty ) );
-        localStorage.setItem("Initialized", JSON.stringify( 'true' ) );
-    };
-
-    this.loadData = function() {
-        this.name = JSON.parse( localStorage.getItem( "Name" ) );
-        this.currentLevel = JSON.parse( localStorage.getItem( "Level" ) );
-        this.levelScores = JSON.parse( localStorage.getItem( "Scores" ) );
-        this.difficulty = JSON.parse( localStorage.getItem( "Difficulty" ) );
-    };
-
-
-    this.init = function() {
-        // My attempt to use Boolean() to cast our localStorage string
-        // was returning true regardless of the value so I wrote my own.
-        function castToBool(stringToCast) {
-            if( stringToCast === "true" ) {
-                return true;
-            } else if( stringToCast === "false" ) {
-                return false;
-            } else {
-                console.log("Your attempt to cast " + castToBool + " to a boolean failed." );
-            }
-        }
-
-        this.isInitialized = castToBool( JSON.parse(localStorage.getItem("Initialized") ) );
-
-        if ( !this.isInitialized ) {
-            console.log("false = " + this.isInitialized + " I'm not initialized.");
-            for( let ii=0; ii < oldLevelData.easy.length; ii++ ) {
-                this.levelScores.easy[ii] = 0;
-            }
-            for( let ii=0; ii < oldLevelData.hard.length; ii++ ) {
-                this.levelScores.hard[ii] = 0;
-            }
-            this.saveData();
-        } else {
-            this.loadData();
-        }
-    };
-}
-*/
-
-
 class Coord {
     constructor( tileType, tileURL ) {
         this.$div = $( '<div></div>' );
@@ -102,7 +48,6 @@ class Sprite {
         this.$img = $('<img></img>').attr('src', pushesRocksConstants.urls.sprite );
         this.stepCount = 0;
     }
-
 }
 
 class GameBoard {
@@ -161,8 +106,7 @@ class GameBoard {
         this.sprite = new Sprite( this.boardData.start );
         this.draw();
     }
-    
-    // Probably no need for this anymore
+    // Probably no need for this anymore, but want to be sure we're not leaking memory
     clearTheBoard() {
         for ( let ii = 0; ii < this.coordinates.length; ii++ ) {
             //console.log("clearing board");
@@ -177,7 +121,6 @@ class GameBoard {
         this.$elementJQ.empty();
         this.winCondition = false;
     }
-    
     updateCell( xy, tileType, tileURL, rockStatus) {
         xy[0] = Number( xy[0] );  //TODO: this should be fixed in the model
         xy[1] = Number( xy[1] );        
@@ -185,14 +128,12 @@ class GameBoard {
         this.coordinates[ xy[0] ][ xy[1] ].$img.attr( 'src', tileURL );
         this.coordinates[ xy[0] ][ xy[1] ].hasRock = rockStatus;
     }
-    
     findRock( xy ) {
         for ( let ii = 0; ii < this.rocks.length; ii++ ) {
             if ( xy[0] === this.rocks[ii].x && xy[1] === this.rocks[ii].y ) return ii;
         }
         console.log("Error: rock not found.");
     }
-    
     checkWinCondition() {
         let onDotCounter = 0;
         for ( let ii = 0; ii < this.rocks.length; ii++ ) {
@@ -202,7 +143,6 @@ class GameBoard {
         if( onDotCounter === this.rocks.length ) return true;
         else return false;
     }
-    
     updateRockStatus( rockIndex, oldPosition, newPosition ) {
         this.coordinates[ oldPosition[0] ][ oldPosition[1] ].hasRock = false;
         this.coordinates[ newPosition[0] ][ newPosition[1] ].hasRock = true;
@@ -217,7 +157,6 @@ class GameBoard {
         
         this.winCondition = this.checkWinCondition();
     }
-    
     draw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height );
         for ( let ii = 0; ii < this.rocks.length; ii++ ) {
@@ -225,7 +164,6 @@ class GameBoard {
         }
         this.context.drawImage(this.sprite.$img[0], this.sprite.x, this.sprite.y );
     }
-    
     tryToMove( xy, deltaXY ) {
         let x = xy[0];
         let y = xy[1];
@@ -262,7 +200,6 @@ class GameBoard {
             console.log("error");
         }
     }
-    
     move( deltaXY, withRock ) {
         this.listenToKeystrokes = false;
         let x = this.sprite.x;
@@ -277,7 +214,6 @@ class GameBoard {
             var xRock = self.rocks[rockIndex].x;
             var yRock = self.rocks[rockIndex].y;
         }
-        
         function drawFrame(fraction) {
             // This looks weird, but we'll be sure that the sprite ends in
             // a valid location when setTimeout calls drawFrame(1)
@@ -289,12 +225,10 @@ class GameBoard {
             }
             requestAnimationFrame(draw);
         }
-        
         let interval = setInterval( () => {
             counter++;
             drawFrame(counter/frames);
         }, 256 / pushesRocksConstants.cellWidth );
-        
         setTimeout(() => {
             clearInterval(interval);
             drawFrame(1);
@@ -322,7 +256,6 @@ class GameInstance {
         this.scaleGameBoard();
         this.eventListeners();
     }
-    
     processInput(key) {
         let keyvalue = key.keyCode;
         let xy = [ (this.game.sprite.x / pushesRocksConstants.cellWidth), (this.game.sprite.y / pushesRocksConstants.cellWidth) ];
@@ -347,7 +280,6 @@ class GameInstance {
             }
         }
     }
-    
     scaleGameBoard() {
         const buffer = ( $('header').height() + $('footer').height() ) * 2;
         const frameHeight = $(window).height() - buffer;
@@ -362,14 +294,65 @@ class GameInstance {
             this.$anchor.parent().css( 'transform', 'scale( ' + scale + ', ' + scale + ')');
         }
     }
-    
     eventListeners() {
         window.addEventListener("keydown", this.processInputHandler, false);
         window.addEventListener("resize",  this.scaleGameBoardHandler, false );
     }
-    
     destroy() {
         window.removeEventListener("keydown", this.processInputHandler, false);
         window.removeEventListener("resize",  this.scaleGameBoardHandler, false );
     }
 }
+
+/* //move local storage to guest controller
+function User() {
+    this.currentLevel = 0;
+    this.levelScores = { easy: [ ], hard: [ ] };
+    this.difficulty = "easy";
+
+    this.saveData = function() {
+        // localStorage.setItem("Name", JSON.stringify( this.name ) );
+        localStorage.setItem("Level", JSON.stringify( this.currentLevel ) );
+        localStorage.setItem("Scores", JSON.stringify( this.levelScores ) );
+        localStorage.setItem("Difficulty", JSON.stringify(this.difficulty ) );
+        localStorage.setItem("Initialized", JSON.stringify( 'true' ) );
+    };
+
+    this.loadData = function() {
+        this.name = JSON.parse( localStorage.getItem( "Name" ) );
+        this.currentLevel = JSON.parse( localStorage.getItem( "Level" ) );
+        this.levelScores = JSON.parse( localStorage.getItem( "Scores" ) );
+        this.difficulty = JSON.parse( localStorage.getItem( "Difficulty" ) );
+    };
+
+
+    this.init = function() {
+        // My attempt to use Boolean() to cast our localStorage string
+        // was returning true regardless of the value so I wrote my own.
+        function castToBool(stringToCast) {
+            if( stringToCast === "true" ) {
+                return true;
+            } else if( stringToCast === "false" ) {
+                return false;
+            } else {
+                console.log("Your attempt to cast " + castToBool + " to a boolean failed." );
+            }
+        }
+
+        this.isInitialized = castToBool( JSON.parse(localStorage.getItem("Initialized") ) );
+
+        if ( !this.isInitialized ) {
+            console.log("false = " + this.isInitialized + " I'm not initialized.");
+            for( let ii=0; ii < oldLevelData.easy.length; ii++ ) {
+                this.levelScores.easy[ii] = 0;
+            }
+            for( let ii=0; ii < oldLevelData.hard.length; ii++ ) {
+                this.levelScores.hard[ii] = 0;
+            }
+            this.saveData();
+        } else {
+            this.loadData();
+        }
+    };
+}
+*/
