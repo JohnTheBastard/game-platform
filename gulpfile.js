@@ -79,8 +79,7 @@ gulp.task( 'test-with-args', function() {
 
 
 gulp.task('build-boxer', () => {
-    console.log("yo");
-	return gulp.src('./src/www/public/js/pushesRocksGame/pushesRocksMonolith.js')
+	return gulp.src('./src/www/public/js/pushesRocksGame/*.js')
 			   .pipe( lint() )
 			   .pipe( sourcemaps.init() )
 			   .pipe( babel() )

@@ -4,8 +4,11 @@
  * CF401       March 2016  *
  * * * * * * * * * * * * * */
  
-'use strict';
-class GameInstance {
+import $ from 'jquery';
+import pushesRocksConstants from './pushesRocksConstants';
+import GameBoard from './gameBoard';
+
+export default class GameInstance {
     constructor(anchor, level) {
         this.$anchor = anchor;
         this.game = new GameBoard(level);
@@ -22,7 +25,8 @@ class GameInstance {
     }
     processInput(key) {
         let keyvalue = key.keyCode;
-        let xy = [ (this.game.sprite.x / pushesRocksConstants.cellWidth), (this.game.sprite.y / pushesRocksConstants.cellWidth) ];
+        let xy = [ (this.game.sprite.x / pushesRocksConstants.cellWidth), 
+                   (this.game.sprite.y / pushesRocksConstants.cellWidth) ];
         
         // Keep key input from scrolling
         key.preventDefault();

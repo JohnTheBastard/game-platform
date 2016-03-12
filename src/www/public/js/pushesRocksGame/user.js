@@ -3,8 +3,7 @@
  * Created by  John Hearn  *
  * CF401       March 2016  *
  * * * * * * * * * * * * * */
- 
-'use strict';
+
 /* //move local storage to guest controller
 function User() {
     this.currentLevel = 0;

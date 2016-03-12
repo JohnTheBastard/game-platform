@@ -1,7 +1,13 @@
-var boxApp = angular.module('boxxleApp', []);
+import $ from 'jquery';
+//window.jQuery = $
+import GameInstance from './GameInstance';
+import angular from 'angular';
+
+let boxApp = angular.module('boxxleApp', []);
 boxApp.controller('gameCtrl', function($scope, $element, $http) {
-    var anchor = $element.find('[data-gameBoard]');
-    var game;
+//    let anchor = $element.find('[data-gameBoard]');
+    let anchor = $($element.children()[1].children[0]);
+    let game;
 
     $scope.difficulty = 'easy';
     $scope.level = 1;
@@ -22,7 +28,7 @@ boxApp.controller('gameCtrl', function($scope, $element, $http) {
     function onDone( endData ) {
         $scope.saving = true;
         $http.post('/data', endData).then(function(res){
-            var newLevel = res.data;
+            let newLevel = res.data;
             $scope.saving = false;
             anchor.innerHTML="";
             game.destroy();

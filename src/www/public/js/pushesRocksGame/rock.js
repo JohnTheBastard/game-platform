@@ -3,9 +3,11 @@
  * Created by  John Hearn  *
  * CF401       March 2016  *
  * * * * * * * * * * * * * */
- 
-'use strict';
-class Rock {
+
+import $ from 'jquery';
+import pushesRocksConstants from './pushesRocksConstants';
+
+export default class Rock {
     constructor( xy ) {
         this.x = xy[0] * pushesRocksConstants.cellWidth;
         this.y = xy[1] * pushesRocksConstants.cellWidth;

@@ -4,8 +4,13 @@
  * CF401       March 2016  *
  * * * * * * * * * * * * * */
  
-'use strict';
-class GameBoard {
+import $ from 'jquery';
+import pushesRocksConstants from './pushesRocksConstants';
+import Coord from './coord';
+import Rock from './rock';
+import Sprite from './sprite';
+
+export default class GameBoard {
     constructor(levelData) {
         this.listenToKeystrokes = true;
         this.winCondition = false;

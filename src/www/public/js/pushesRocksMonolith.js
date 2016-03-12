@@ -7,27 +7,27 @@
 'use strict';
 const pushesRocksConstants = {
     urls: {
-        rock:      "../img/boulder.png",
-        rockOnDot: "../img/boulderondot.png",
-        wall:      "../img/dirt.png",
-        floor:     "../img/dirt2.png",
-        dot:       "../img/dirtDot.png",
-        sprite:    "../img/Sprite.gif"
+        rock:      '../img/boulder.png',
+        rockOnDot: '../img/boulderondot.png',
+        wall:      '../img/dirt.png',
+        floor:     '../img/dirt2.png',
+        dot:       '../img/dirtDot.png',
+        sprite:    '../img/Sprite.gif'
     },
     cellWidth: 32
 };
 
 class Coord {
     constructor( tileType, tileURL ) {
-        this.$div = $( '<div></div>' );
-        this.$img = $( '<img></img>' );
+        this.$div = $( "<div></div>" );
+        this.$img = $( "<img></img>" );
         this.tile = tileType;
-        this.$img.attr( 'src', tileURL );
+        this.$img.attr( "src", tileURL );
         this.$div.append( this.$img );
         this.hasRock = false;
     }
     isADot() {
-        if ( this.tile === "dot" ) return true;
+        if ( this.tile === 'dot' ) return true;
         else return false;
     }
 }
@@ -37,7 +37,7 @@ class Rock {
         this.x = xy[0] * pushesRocksConstants.cellWidth;
         this.y = xy[1] * pushesRocksConstants.cellWidth;
         this.onDot = false;
-        this.$rockImg = $('<img></img>').attr('src', pushesRocksConstants.urls.rock );
+        this.$rockImg = $( "<img></img>" ).attr( "src", pushesRocksConstants.urls.rock );
     }
 } 
 
@@ -45,7 +45,7 @@ class Sprite {
     constructor( xy ) {
         this.x = xy[0] * pushesRocksConstants.cellWidth;
         this.y = xy[1] * pushesRocksConstants.cellWidth;
-        this.$img = $('<img></img>').attr('src', pushesRocksConstants.urls.sprite );
+        this.$img = $( "<img></img>" ).attr( "src", pushesRocksConstants.urls.sprite );
         this.stepCount = 0;
     }
 }
@@ -57,41 +57,41 @@ class GameBoard {
         this.coordinates = [];
         this.rocks = [];
         
-        this.$canvasJQ = $('<canvas></canvas>');
+        this.$canvasJQ = $( "<canvas></canvas>");
         this.canvas = this.$canvasJQ[0];
-        this.context = this.canvas.getContext("2d");
+        this.context = this.canvas.getContext( "2d" );
         
-        this.$elementJQ = $('<section></section>').attr( 'id', "container" );
-        this.$elementJQ.addClass('container-class');
+        this.$elementJQ = $( "<section></section>" ).attr( "id", "container" );
+        this.$elementJQ.addClass( "container-class" );
         this.element = this.$elementJQ[0];
-        this.element.style.position = "absolute";
+        this.element.style.position = 'absolute';
         
         this.boardData = levelData;
         this.boardDimensionInPixels = this.boardData.dimension * pushesRocksConstants.cellWidth;
         this.canvas.width = this.boardDimensionInPixels;
         this.canvas.height = this.boardDimensionInPixels;
-        this.canvas.style.position = "absolute";
+        this.canvas.style.position = 'absolute';
         this.canvas.style.left = 0;
         this.canvas.style.top = 0;
-        this.canvas.style.zIndex = "10";
+        this.canvas.style.zIndex = '10';
         
         this.element.style.left = 0;
         this.element.style.top = 0;
-        this.element.style.zIndex = "0";
+        this.element.style.zIndex = '0';
         
         for ( let ii = 0; ii < this.boardData.dimension; ii++ ) {
             for ( let jj = 0; jj < this.boardData.dimension; jj++ ) {
                 this.coordinates.push( [ ] );
-                this.coordinates[jj].push( new Coord( "wall", pushesRocksConstants.urls.wall ) );
+                this.coordinates[jj].push( new Coord( 'wall', pushesRocksConstants.urls.wall ) );
                 this.$elementJQ.append( this.coordinates[jj][ii].$div );
             }
         }
         
         // update floor tiles
-        this.boardData.floor.forEach( tile => this.updateCell( tile, "floor", pushesRocksConstants.urls.floor, false ) );
+        this.boardData.floor.forEach( tile => this.updateCell( tile, 'floor', pushesRocksConstants.urls.floor, false ) );
 
         // update dot tiles
-        this.boardData.dots.forEach( tile => this.updateCell( tile, "dot", pushesRocksConstants.urls.dot, false ) );
+        this.boardData.dots.forEach( tile => this.updateCell( tile, 'dot', pushesRocksConstants.urls.dot, false ) );
 
         // make our rocks
         this.boardData.rocks.forEach( rock => {
@@ -99,7 +99,7 @@ class GameBoard {
             //TODO: fix model so coords are numbers not strings.
             rock.onDot = this.coordinates[ Number(rock[0]) ][ Number(rock[1]) ].isADot();
             this.coordinates[ Number(rock[0]) ][ Number(rock[1]) ].hasRock = true;
-            if( rock.onDot) rock.$rockImg.attr('src', pushesRocksConstants.urls.rockOnDot );
+            if( rock.onDot) rock.$rockImg.attr( "src", pushesRocksConstants.urls.rockOnDot );
         });
 
         // make a sprite
@@ -109,7 +109,7 @@ class GameBoard {
     // Probably no need for this anymore, but want to be sure we're not leaking memory
     clearTheBoard() {
         for ( let ii = 0; ii < this.coordinates.length; ii++ ) {
-            //console.log("clearing board");
+            //console.log('clearing board');
             delete this.coordinates[ii];
         }
         this.coordinates = [];
@@ -125,14 +125,14 @@ class GameBoard {
         xy[0] = Number( xy[0] );  //TODO: this should be fixed in the model
         xy[1] = Number( xy[1] );        
         this.coordinates[ xy[0] ][ xy[1] ].tile = tileType;
-        this.coordinates[ xy[0] ][ xy[1] ].$img.attr( 'src', tileURL );
+        this.coordinates[ xy[0] ][ xy[1] ].$img.attr( "src", tileURL );
         this.coordinates[ xy[0] ][ xy[1] ].hasRock = rockStatus;
     }
     findRock( xy ) {
         for ( let ii = 0; ii < this.rocks.length; ii++ ) {
             if ( xy[0] === this.rocks[ii].x && xy[1] === this.rocks[ii].y ) return ii;
         }
-        console.log("Error: rock not found.");
+        console.log('Error: rock not found.');
     }
     checkWinCondition() {
         let onDotCounter = 0;
@@ -149,10 +149,10 @@ class GameBoard {
         
         if( this.coordinates[ newPosition[0] ][ newPosition[1] ].isADot() ){
             this.rocks[rockIndex].onDot = true;
-            this.rocks[rockIndex].$rockImg.attr('src', pushesRocksConstants.urls.rockOnDot );
+            this.rocks[rockIndex].$rockImg.attr( "src", pushesRocksConstants.urls.rockOnDot );
         } else {
             this.rocks[rockIndex].onDot = false;
-            this.rocks[rockIndex].$rockImg.attr('src', pushesRocksConstants.urls.rock );
+            this.rocks[rockIndex].$rockImg.attr( "src", pushesRocksConstants.urls.rock );
         }
         
         this.winCondition = this.checkWinCondition();
@@ -182,22 +182,22 @@ class GameBoard {
             twoAway.exists = false;
         }
         
-        if( nextLocation.tile === "wall" ) {
+        if( nextLocation.tile === 'wall' ) {
             return;
         } else if( nextLocation.hasRock ) {
-            if( twoAway.exists && !twoAway.hasRock && twoAway.tile !== "wall" ) {
+            if( twoAway.exists && !twoAway.hasRock && twoAway.tile !== 'wall' ) {
                 // move with rock
                 this.sprite.stepCount++;
                 this.move(deltaXY, true);
             }
             return;
-        } else if( ( nextLocation.tile === "floor" ) ||
-                    ( nextLocation.tile === "dot") ) {
+        } else if( ( nextLocation.tile === 'floor' ) ||
+                    ( nextLocation.tile === 'dot') ) {
             this.sprite.stepCount++;
             this.move(deltaXY, false);
             return;
         } else {
-            console.log("error");
+            console.log('error');
         }
     }
     move( deltaXY, withRock ) {
@@ -248,9 +248,9 @@ class GameInstance {
         this.$anchor.empty();
         this.$anchor.append( this.game.$elementJQ );
         this.$anchor.append( this.game.$canvasJQ );
-        $('#game').css( { 'width': this.game.boardDimensionInPixels - 10,
-                         'height': this.game.boardDimensionInPixels - 25 } );
-        $('#container').css( 'width', this.game.boardDimensionInPixels );
+        $( "#game" ).css( { "width": this.game.boardDimensionInPixels - 10,
+                            "height": this.game.boardDimensionInPixels - 25 } );
+        $( "#container" ).css( "width", this.game.boardDimensionInPixels );
         this.processInputHandler = this.processInput.bind(this);
         this.scaleGameBoardHandler = this.scaleGameBoard.bind(this);    
         this.scaleGameBoard();
@@ -264,7 +264,7 @@ class GameInstance {
         key.preventDefault();
         
         if ( this.game.winCondition ) {
-            this.onDone({"goo":"gob"});            //TODO: do something useful
+            this.onDone({'goo':'gob'});            //TODO: do something useful
             this.game.clearTheBoard();
 
         } else if ( this.game.listenToKeystrokes ) {
@@ -281,9 +281,9 @@ class GameInstance {
         }
     }
     scaleGameBoard() {
-        const buffer = ( $('header').height() + $('footer').height() ) * 2;
-        const frameHeight = $(window).height() - buffer;
-        const frameWidth = $(window).width();
+        const buffer = ( $("header").height() + $( "footer" ).height() ) * 2;
+        const frameHeight = $( window ).height() - buffer;
+        const frameWidth = $( window ).width();
         const frameSize = Math.min( frameHeight, frameWidth );
         let scale;
 
@@ -291,15 +291,16 @@ class GameInstance {
             scale =  1;
         } else {
             scale = ( frameSize / this.game.boardDimensionInPixels ).toFixed(2);
-            this.$anchor.parent().css( 'transform', 'scale( ' + scale + ', ' + scale + ')');
+            this.$anchor.parent().css( "transform", "scale( " + scale + ", " + scale + ")" );
         }
     }
     eventListeners() {
-        window.addEventListener("keydown", this.processInputHandler, false);
-        window.addEventListener("resize",  this.scaleGameBoardHandler, false );
+        window.addEventListener('keydown', this.processInputHandler, false);
+        window.addEventListener('resize',  this.scaleGameBoardHandler, false );
     }
     destroy() {
-        window.removeEventListener("keydown", this.processInputHandler, false);
-        window.removeEventListener("resize",  this.scaleGameBoardHandler, false );
+        window.removeEventListener('keydown', this.processInputHandler, false);
+        window.removeEventListener('resize',  this.scaleGameBoardHandler, false );
     }
 }
+ 

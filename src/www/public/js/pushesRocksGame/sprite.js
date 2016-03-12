@@ -4,8 +4,10 @@
  * CF401       March 2016  *
  * * * * * * * * * * * * * */
  
-'use strict';
-class Sprite {
+import $ from 'jquery';
+import pushesRocksConstants from './pushesRocksConstants';
+
+export default class Sprite {
     constructor( xy ) {
         this.x = xy[0] * pushesRocksConstants.cellWidth;
         this.y = xy[1] * pushesRocksConstants.cellWidth;

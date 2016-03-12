@@ -3,9 +3,10 @@
  * Created by  John Hearn  *
  * CF401       March 2016  *
  * * * * * * * * * * * * * */
- 
-'use strict';
-class Coord {
+
+import $ from 'jquery';
+
+export default class Coord {
     constructor( tileType, tileURL ) {
         this.$div = $( '<div></div>' );
         this.$img = $( '<img></img>' );
